@@ -1705,13 +1705,13 @@ public final class LineageSettings {
 
         /**
          * Whether to allow one finger quick settings expansion on the side of the statusbar.
-         * 0 = 0ff, 1 = right, 2 = left
+         * 0 = 0ff, 1 = right, 2 = left, 3 = both
          */
         public static final String STATUS_BAR_QUICK_QS_PULLDOWN = "qs_quick_pulldown";
 
         /** @hide */
         public static final Validator STATUS_BAR_QUICK_QS_PULLDOWN_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 2);
+                new InclusiveIntegerRangeValidator(0, 3);
 
         /**
          * Whether to show the brightness slider in quick settings panel.

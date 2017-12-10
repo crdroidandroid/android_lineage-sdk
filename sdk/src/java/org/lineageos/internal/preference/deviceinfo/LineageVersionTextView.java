@@ -30,7 +30,7 @@ import org.lineageos.platform.internal.R;
 public class LineageVersionTextView extends TextView implements View.OnClickListener {
     private static final String TAG = "LineageVersionTextView";
 
-    private static final String KEY_LINEAGE_VERSION_PROP = "ro.lineage.version";
+    private static final String KEY_LINEAGE_VERSION_PROP = "ro.modversion";
 
     private static final String PLATLOGO_PACKAGE_NAME = "org.lineageos.lineageparts";
     private static final String PLATLOGO_ACTIVITY_CLASS =

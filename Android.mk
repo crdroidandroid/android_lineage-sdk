@@ -39,6 +39,7 @@ LOCAL_MODULE := org.lineageos.platform
 LOCAL_MODULE_TAGS := optional
 
 lineage_sdk_LOCAL_JAVA_LIBRARIES := \
+    android-support-annotations \
     android-support-v7-preference \
     android-support-v7-recyclerview \
     android-support-v14-preference
@@ -157,6 +158,9 @@ lineage_sdk_exclude_files := 'lineageos/library'
 LOCAL_JAR_EXCLUDE_PACKAGES := $(lineage_sdk_exclude_files)
 LOCAL_JAR_EXCLUDE_FILES := none
 
+LOCAL_JAVA_LIBRARIES := \
+    $(lineage_sdk_LOCAL_JAVA_LIBRARIES)
+
 LOCAL_STATIC_JAVA_LIBRARIES := org.lineageos.platform.sdk
 
 include $(BUILD_STATIC_JAVA_LIBRARY)
@@ -203,20 +207,23 @@ lineage_platform_docs_src_files := \
     $(call all-html-files-under, $(lineage_sdk_src))
 
 lineage_platform_docs_java_libraries := \
-    org.lineageos.platform.sdk
+    android-support-v4 \
+    org.lineageos.platform.sdk \
+    $(lineage_sdk_LOCAL_JAVA_LIBRARIES)
 
 # SDK version as defined
-lineage_platform_docs_SDK_VERSION := 14.0
+lineage_platform_docs_SDK_VERSION := 15.1
 
 # release version
-lineage_platform_docs_SDK_REL_ID := 7
+lineage_platform_docs_SDK_REL_ID := 8
 
 lineage_platform_docs_LOCAL_MODULE_CLASS := JAVA_LIBRARIES
 
 lineage_platform_docs_LOCAL_DROIDDOC_SOURCE_PATH := \
     $(lineage_platform_docs_src_files)
 
-intermediates.COMMON := $(call intermediates-dir-for,$(LOCAL_MODULE_CLASS),org.lineageos.platform.sdk,,COMMON)
+lineage_platform_docs_LOCAL_ADDITIONAL_JAVA_DIR := \
+    $(call intermediates-dir-for,JAVA_LIBRARIES,org.lineageos.platform.sdk,,COMMON)
 
 # ====  the api stubs and current.xml ===========================
 include $(CLEAR_VARS)
@@ -227,15 +234,17 @@ LOCAL_INTERMEDIATE_SOURCES:= $(lineage_platform_LOCAL_INTERMEDIATE_SOURCES)
 LOCAL_JAVA_LIBRARIES:= $(lineage_platform_docs_java_libraries)
 LOCAL_MODULE_CLASS:= $(lineage_platform_docs_LOCAL_MODULE_CLASS)
 LOCAL_DROIDDOC_SOURCE_PATH:= $(lineage_platform_docs_LOCAL_DROIDDOC_SOURCE_PATH)
-LOCAL_ADDITIONAL_JAVA_DIR:= $(intermediates.COMMON)/src
+LOCAL_ADDITIONAL_JAVA_DIR:= $(lineage_platform_docs_LOCAL_ADDITIONAL_JAVA_DIR)
 LOCAL_ADDITIONAL_DEPENDENCIES:= $(lineage_platform_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
 
 LOCAL_MODULE := lineage-api-stubs
 
 LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:= external/doclava/res/assets/templates-sdk
 
+LOCAL_DROIDDOC_STUB_OUT_DIR := $(TARGET_OUT_COMMON_INTERMEDIATES)/JAVA_LIBRARIES/lineage-sdk_stubs_current_intermediates/src
+
 LOCAL_DROIDDOC_OPTIONS:= \
-        -stubs $(TARGET_OUT_COMMON_INTERMEDIATES)/JAVA_LIBRARIES/lineage-sdk_stubs_current_intermediates/src \
+        -referenceonly \
         -stubpackages $(lineage_stub_packages) \
         -exclude org.lineageos.platform.internal \
         -api $(INTERNAL_LINEAGE_PLATFORM_API_FILE) \
@@ -262,7 +271,7 @@ LOCAL_MODULE_CLASS := JAVA_LIBRARIES
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_SRC_FILES := $(lineage_platform_docs_src_files)
-LOCAL_ADDITONAL_JAVA_DIR := $(intermediates.COMMON)/src
+LOCAL_ADDITONAL_JAVA_DIR := $(lineage_platform_docs_LOCAL_ADDITIONAL_JAVA_DIR)
 
 LOCAL_IS_HOST_MODULE := false
 LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR := vendor/lineage/build/tools/droiddoc/templates-lineage-sdk
@@ -273,6 +282,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := \
 LOCAL_JAVA_LIBRARIES := $(lineage_platform_docs_java_libraries)
 
 LOCAL_DROIDDOC_OPTIONS := \
+        -android \
         -offlinemode \
         -exclude org.lineageos.platform.internal \
         -hidePackage org.lineageos.platform.internal \
@@ -286,7 +296,8 @@ LOCAL_DROIDDOC_OPTIONS := \
         -since $(LINEAGE_SRC_API_DIR)/4.txt 4 \
         -since $(LINEAGE_SRC_API_DIR)/5.txt 5 \
         -since $(LINEAGE_SRC_API_DIR)/6.txt 6 \
-        -since $(LINEAGE_SRC_API_DIR)/7.txt 7
+        -since $(LINEAGE_SRC_API_DIR)/7.txt 7 \
+        -since $(LINEAGE_SRC_API_DIR)/8.txt 8
 
 $(full_target): $(lineage_framework_built) $(gen)
 include $(BUILD_DROIDDOC)
@@ -297,4 +308,4 @@ include $(call first-makefiles-under,$(LOCAL_PATH))
 # ===========================================================
 lineage_platform_docs_src_files :=
 lineage_platform_docs_java_libraries :=
-intermediates.COMMON :=
+lineage_platform_docs_LOCAL_ADDITIONAL_JAVA_DIR :=

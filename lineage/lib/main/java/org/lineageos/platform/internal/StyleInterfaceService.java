@@ -122,7 +122,7 @@ public class StyleInterfaceService extends LineageSystemService {
 
         try {
             mOverlayService.setEnabled(currentAccent, false, userId);
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Failed to disable current accent", e);
         }
 
@@ -136,7 +136,7 @@ public class StyleInterfaceService extends LineageSystemService {
             mOverlayService.setEnabled(pkgName, true, userId);
             return LineageSettings.System.putString(mContext.getContentResolver(),
                     LineageSettings.System.BERRY_CURRENT_ACCENT, pkgName);
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Failed to enable new accent", e);
         }
         return false;

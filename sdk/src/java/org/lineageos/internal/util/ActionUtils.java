@@ -38,7 +38,6 @@ public class ActionUtils {
 
     /**
      * Kills the top most / most recent user application, but leaves out the launcher.
-     * This is function governed by {@link Settings.Secure.KILL_APP_LONGPRESS_BACK}.
      *
      * @param context the current context, used to retrieve the package manager.
      * @param userId the ID of the currently active user

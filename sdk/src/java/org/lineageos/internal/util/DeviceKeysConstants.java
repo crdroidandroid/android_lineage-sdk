@@ -36,6 +36,7 @@ public class DeviceKeysConstants {
         SLEEP,
         LAST_APP,
         SPLIT_SCREEN,
+        CLOSE_APP,
         SINGLE_HAND_LEFT,
         SINGLE_HAND_RIGHT;
 

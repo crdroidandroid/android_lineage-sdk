@@ -1068,6 +1068,17 @@ public final class LineageSettings {
                 new InclusiveIntegerRangeValidator(0, 10);
 
         /**
+         * Action to perform when the home key is long-pressed.
+         * (Default can be configured via config_longPressOnBackBehavior)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
+         */
+        public static final String KEY_BACK_LONG_PRESS_ACTION = "key_back_long_press_action";
+
+        /** @hide */
+        public static final Validator KEY_BACK_LONG_PRESS_ACTION_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 10);
+
+        /**
          * Whether to wake the screen with the back key, the value is boolean.
          * 0 = 0ff, 1 = on
          */
@@ -2103,6 +2114,7 @@ public final class LineageSettings {
                 LineageSettings.System.NAV_BUTTONS,
                 LineageSettings.System.KEY_HOME_LONG_PRESS_ACTION,
                 LineageSettings.System.KEY_HOME_DOUBLE_TAP_ACTION,
+                LineageSettings.System.KEY_BACK_LONG_PRESS_ACTION,
                 LineageSettings.System.BACK_WAKE_SCREEN,
                 LineageSettings.System.MENU_WAKE_SCREEN,
                 LineageSettings.System.VOLUME_WAKE_SCREEN,
@@ -2228,6 +2240,7 @@ public final class LineageSettings {
                     NAVIGATION_BAR_MENU_ARROW_KEYS_VALIDATOR);
             VALIDATORS.put(KEY_HOME_LONG_PRESS_ACTION, KEY_HOME_LONG_PRESS_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_HOME_DOUBLE_TAP_ACTION, KEY_HOME_DOUBLE_TAP_ACTION_VALIDATOR);
+            VALIDATORS.put(KEY_BACK_LONG_PRESS_ACTION, KEY_BACK_LONG_PRESS_ACTION_VALIDATOR);
             VALIDATORS.put(BACK_WAKE_SCREEN, BACK_WAKE_SCREEN_VALIDATOR);
             VALIDATORS.put(MENU_WAKE_SCREEN, MENU_WAKE_SCREENN_VALIDATOR);
             VALIDATORS.put(VOLUME_ANSWER_CALL, VOLUME_ANSWER_CALL_VALIDATOR);

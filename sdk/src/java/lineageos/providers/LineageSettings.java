@@ -1344,6 +1344,11 @@ public final class LineageSettings {
                 sColorValidator;
 
         /**
+         * What color to use for the battery LED while charging - really full
+         */
+        public static final String BATTERY_LIGHT_REALLY_FULL_COLOR = "battery_light_really_full_color";
+
+        /**
          * Sprint MWI Quirk: Show message wait indicator notifications
          * @hide
          */
@@ -2128,6 +2133,7 @@ public final class LineageSettings {
                 LineageSettings.System.BATTERY_LIGHT_LOW_COLOR,
                 LineageSettings.System.BATTERY_LIGHT_MEDIUM_COLOR,
                 LineageSettings.System.BATTERY_LIGHT_FULL_COLOR,
+                LineageSettings.System.BATTERY_LIGHT_REALLY_FULL_COLOR,
                 LineageSettings.System.ENABLE_MWI_NOTIFICATION,
                 LineageSettings.System.PROXIMITY_ON_WAKE,
                 LineageSettings.System.ENABLE_FORWARD_LOOKUP,
@@ -2264,6 +2270,7 @@ public final class LineageSettings {
             VALIDATORS.put(BATTERY_LIGHT_LOW_COLOR, BATTERY_LIGHT_LOW_COLOR_VALIDATOR);
             VALIDATORS.put(BATTERY_LIGHT_MEDIUM_COLOR, BATTERY_LIGHT_MEDIUM_COLOR_VALIDATOR);
             VALIDATORS.put(BATTERY_LIGHT_FULL_COLOR, BATTERY_LIGHT_FULL_COLOR_VALIDATOR);
+            VALIDATORS.put(BATTERY_LIGHT_REALLY_FULL_COLOR, BATTERY_LIGHT_FULL_COLOR_VALIDATOR);
             VALIDATORS.put(ENABLE_MWI_NOTIFICATION, ENABLE_MWI_NOTIFICATION_VALIDATOR);
             VALIDATORS.put(PROXIMITY_ON_WAKE, PROXIMITY_ON_WAKE_VALIDATOR);
             VALIDATORS.put(BERRY_GLOBAL_STYLE, BERRY_GLOBAL_STYLE_VALIDATOR);

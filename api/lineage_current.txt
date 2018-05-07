@@ -797,6 +797,7 @@ package lineageos.providers {
     field public static final java.lang.String BATTERY_LIGHT_BRIGHTNESS_LEVEL = "battery_light_brightness_level";
     field public static final java.lang.String BATTERY_LIGHT_BRIGHTNESS_LEVEL_ZEN = "battery_light_brightness_level_zen";
     field public static final java.lang.String BATTERY_LIGHT_ENABLED = "battery_light_enabled";
+    field public static final java.lang.String BATTERY_LIGHT_REALLY_FULL_COLOR = "battery_light_really_full_color";
     field public static final java.lang.String BATTERY_LIGHT_FULL_COLOR = "battery_light_full_color";
     field public static final java.lang.String BATTERY_LIGHT_LOW_COLOR = "battery_light_low_color";
     field public static final java.lang.String BATTERY_LIGHT_MEDIUM_COLOR = "battery_light_medium_color";

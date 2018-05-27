@@ -3039,7 +3039,8 @@ public final class LineageSettings {
         public static final String NETWORK_TRAFFIC_AUTOHIDE = "network_traffic_autohide";
 
         /** @hide */
-        public static final Validator NETWORK_TRAFFIC_AUTOHIDE_VALIDATOR = sBooleanValidator;
+        public static final Validator NETWORK_TRAFFIC_AUTOHIDE_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 10000);
 
         /**
          * Measurement unit preference for network traffic

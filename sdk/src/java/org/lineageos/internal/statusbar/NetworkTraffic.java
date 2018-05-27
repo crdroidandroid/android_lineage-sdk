@@ -76,7 +76,6 @@ public class NetworkTraffic extends TextView {
     private long mLastUpdateTime;
     private int mTextSizeSingle;
     private int mTextSizeMulti;
-    private boolean mAutoHide;
     private long mAutoHideThreshold;
     private int mUnits;
     private boolean mShowUnits;
@@ -173,7 +172,7 @@ public class NetworkTraffic extends TextView {
                     mMode == MODE_UPSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
             final boolean showDownstream =
                     mMode == MODE_DOWNSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
-            final boolean shouldHide = mAutoHide && (!showUpstream || mTxKbps < mAutoHideThreshold)
+            final boolean shouldHide = mAutoHideThreshold > 0 && (!showUpstream || mTxKbps < mAutoHideThreshold)
                     && (!showDownstream || mRxKbps < mAutoHideThreshold);
 
             if (!enabled || shouldHide) {
@@ -302,30 +301,11 @@ public class NetworkTraffic extends TextView {
 
         mMode = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_MODE, 0, UserHandle.USER_CURRENT);
-        mAutoHide = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE, 0, UserHandle.USER_CURRENT) == 1;
+        mAutoHideThreshold = LineageSettings.Secure.getIntForUser(resolver,
+                LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE, 0, UserHandle.USER_CURRENT);
         mUnits = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_UNITS, /* Mbps */ 1,
                 UserHandle.USER_CURRENT);
-
-        switch (mUnits) {
-            case UNITS_KILOBITS:
-                mAutoHideThreshold = AUTOHIDE_THRESHOLD_KILOBITS;
-                break;
-            case UNITS_MEGABITS:
-                mAutoHideThreshold = AUTOHIDE_THRESHOLD_MEGABITS;
-                break;
-            case UNITS_KILOBYTES:
-                mAutoHideThreshold = AUTOHIDE_THRESHOLD_KILOBYTES;
-                break;
-            case UNITS_MEGABYTES:
-                mAutoHideThreshold = AUTOHIDE_THRESHOLD_MEGABYTES;
-                break;
-            default:
-                mAutoHideThreshold = 0;
-                break;
-        }
-
         mShowUnits = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_SHOW_UNITS, 1,
                 UserHandle.USER_CURRENT) == 1;

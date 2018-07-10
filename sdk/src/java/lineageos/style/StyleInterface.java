@@ -77,7 +77,11 @@ public class StyleInterface {
      * @see #setDarkOverlay
      * @hide
      */
-    public static final String OVERLAY_DARK_DEFAULT = "org.lineageos.overlay.dark";
+    public static final String[] OVERLAY_DARK_DEFAULT = {
+            "com.android.system.theme.dark",
+            "com.android.systemuix.theme.dark",
+            "com.android.settings.theme.dark",
+    };
 
     /**
      * Dark style: black
@@ -85,7 +89,11 @@ public class StyleInterface {
      * @see #setDarkOverlay
      * @hide
      */
-    public static final String OVERLAY_DARK_BLACK = "org.lineageos.overlay.black";
+    public static final String[] OVERLAY_DARK_BLACK = {
+            "com.android.system.theme.black",
+            "com.android.systemuix.theme.black",
+            "com.android.settings.theme.black",
+    };
 
     /**
      * Allows an application to change system style.
@@ -340,13 +348,13 @@ public class StyleInterface {
      */
     public String getDarkOverlay() {
         if (sService == null) {
-            return OVERLAY_DARK_DEFAULT;
+            return OVERLAY_DARK_DEFAULT[0];
         }
         try {
             return sService.getDarkOverlay();
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
-        return OVERLAY_DARK_DEFAULT;
+        return OVERLAY_DARK_DEFAULT[0];
     }
 }

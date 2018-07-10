@@ -185,8 +185,8 @@ public class StyleInterfaceService extends LineageSystemService {
     }
 
     private boolean setDarkOverlayInternal(String overlayName) {
-        boolean isDefault = StyleInterface.OVERLAY_DARK_DEFAULT.equals(overlayName);
-        boolean isBlack = StyleInterface.OVERLAY_DARK_BLACK.equals(overlayName);
+        boolean isDefault = StyleInterface.OVERLAY_DARK_DEFAULT[0].equals(overlayName);
+        boolean isBlack = StyleInterface.OVERLAY_DARK_BLACK[0].equals(overlayName);
         int userId = UserHandle.myUserId();
 
         if (!isDefault && !isBlack) {
@@ -197,11 +197,24 @@ public class StyleInterfaceService extends LineageSystemService {
         try {
             String currentDarkOverlay = LineageSettings.System.getString(
                     mContext.getContentResolver(), LineageSettings.System.BERRY_DARK_OVERLAY,
-                    StyleInterface.OVERLAY_DARK_DEFAULT);
+                    StyleInterface.OVERLAY_DARK_DEFAULT[0]);
             if (isEnabled(currentDarkOverlay)) {
-                // Swich dark overlays
-                mOverlayService.setEnabled(currentDarkOverlay, false, userId);
-                mOverlayService.setEnabled(overlayName, true, userId);
+                // Switch dark overlays
+                if (StyleInterface.OVERLAY_DARK_DEFAULT[0].equals(currentDarkOverlay)) {
+                    for (String overlay: StyleInterface.OVERLAY_DARK_DEFAULT) {
+                        mOverlayService.setEnabled(overlay, false, userId);
+                    }
+                    for (String overlay: StyleInterface.OVERLAY_DARK_BLACK) {
+                        mOverlayService.setEnabled(overlay, true, userId);
+                    }
+                } else {
+                    for (String overlay: StyleInterface.OVERLAY_DARK_BLACK) {
+                        mOverlayService.setEnabled(overlay, false, userId);
+                    }
+                    for (String overlay: StyleInterface.OVERLAY_DARK_DEFAULT) {
+                        mOverlayService.setEnabled(overlay, true, userId);
+                    }
+                }
             }
             return true;
         } catch (RemoteException e) {
@@ -212,7 +225,7 @@ public class StyleInterfaceService extends LineageSystemService {
 
     private String getDarkOverlayInternal() {
         return LineageSettings.System.getString(mContext.getContentResolver(),
-                LineageSettings.System.BERRY_DARK_OVERLAY, StyleInterface.OVERLAY_DARK_DEFAULT);
+                LineageSettings.System.BERRY_DARK_OVERLAY, StyleInterface.OVERLAY_DARK_DEFAULT[0]);
     }
 
     /* Utils */

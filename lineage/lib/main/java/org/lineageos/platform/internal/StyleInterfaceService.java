@@ -198,6 +198,8 @@ public class StyleInterfaceService extends LineageSystemService {
             String currentDarkOverlay = LineageSettings.System.getString(
                     mContext.getContentResolver(), LineageSettings.System.BERRY_DARK_OVERLAY,
                     StyleInterface.OVERLAY_DARK_DEFAULT[0]);
+            if (currentDarkOverlay == null)
+                currentDarkOverlay = StyleInterface.OVERLAY_DARK_DEFAULT[0];
             if (isEnabled(currentDarkOverlay)) {
                 // Switch dark overlays
                 if (StyleInterface.OVERLAY_DARK_DEFAULT[0].equals(currentDarkOverlay)) {

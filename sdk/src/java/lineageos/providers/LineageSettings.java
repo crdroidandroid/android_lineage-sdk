@@ -929,13 +929,14 @@ public final class LineageSettings {
          * 0: show the clock in the right position (LTR)
          * 1: show the clock in the center
          * 2: show the clock in the left position (LTR)
+         * 3: hide the clock
          * default: 0
          */
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /** @hide */
         public static final Validator STATUS_BAR_CLOCK_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 2);
+                new InclusiveIntegerRangeValidator(0, 3);
 
         /**
          * Whether to hide clock when launcher is visible

@@ -17,8 +17,8 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Label for the LineageOS system components when they are shown to the user. -->
-  <string name="lineageos_system_label">Σύστημα LineageOS</string>
+  <!-- Label for the crDroid system components when they are shown to the user. -->
+  <string name="lineageos_system_label">Σύστημα crDroid</string>
   <!-- Labels for the MODIFY_PROFILES permission. -->
   <string name="permlab_modifyProfiles">τροποποίηση προφίλ συστήματος</string>
   <string name="permdesc_modifyProfiles">Επιτρέπει σε μια εφαρμογή να τροποποιεί τα προφίλ του συστήματος.</string>
@@ -124,12 +124,12 @@
   <string name="permdesc_manageRemotePrefs">Επιτρέπει σε μια εφαρμογή να διαχειριστεί απομακρυσμένες ρυθμίσεις</string>
   <!-- About device screen, build date -->
   <string name="build_date">Ημερομηνία έκδοσης</string>
-  <!-- About device screen, LineageOS API Level -->
-  <string name="lineage_api_level">Επίπεδο LineageOS API</string>
-  <!-- About device screen, LineageOS updates -->
-  <string name="lineage_updates">Ενημερώσεις LineageOS</string>
-  <!-- About device screen, LineageOS version -->
-  <string name="lineage_version">Έκδοση LineageOS</string>
+  <!-- About device screen, crDroid API Level -->
+  <string name="lineage_api_level">Επίπεδο crDroid API</string>
+  <!-- About device screen, crDroid updates -->
+  <string name="lineage_updates">Ενημερώσεις crDroid</string>
+  <!-- About device screen, crDroid version -->
+  <string name="lineage_version">Έκδοση crDroid</string>
   <!-- About device screen, vendor security patch -->
   <string name="lineage_vendor_security_patch">Επίπεδο ενημέρωσης κώδικα ασφαλείας κατασκευαστή</string>
   <!-- General purpose use "unknown" string -->

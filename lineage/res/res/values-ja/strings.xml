@@ -17,20 +17,20 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Label for the LineageOS system components when they are shown to the user. -->
-  <string name="lineageos_system_label">LineageOS システム</string>
+  <!-- Label for the crDroid system components when they are shown to the user. -->
+  <string name="lineageos_system_label">crDroid システム</string>
   <!-- Labels for the MODIFY_PROFILES permission. -->
   <string name="permlab_modifyProfiles">システムプロファイルの変更</string>
   <string name="permdesc_modifyProfiles">システムプロファイルの変更をアプリに許可します。</string>
   <!-- Labels for the HARDWARE_ABSTRACTION_ACCESS permission. -->
   <string name="permlab_useHardwareFramework">ハードウェアフレームワークの使用</string>
-  <string name="permdesc_useHardwareFramework">LineageOS ハードウェアフレームワークへのアクセスをアプリに許可します。</string>
+  <string name="permdesc_useHardwareFramework">crDroid ハードウェアフレームワークへのアクセスをアプリに許可します。</string>
   <!-- Labels for the WRITE_SETTINGS permission -->
   <string name="permlab_writeSettings">lineageOS システム設定の変更</string>
-  <string name="permdesc_writeSettings">LineageOS システム設定の変更をアプリに許可します。</string>
+  <string name="permdesc_writeSettings">crDroid システム設定の変更をアプリに許可します。</string>
   <!-- Labels for the WRITE_SECURE_SETTINGS permission -->
   <string name="permlab_writeSecureSettings">lineageOS セキュアシステム設定の変更</string>
-  <string name="permdesc_writeSecureSettings">LineageOS セキュアシステム設定の変更をアプリに許可します。通常のアプリ用ではありません。</string>
+  <string name="permdesc_writeSecureSettings">crDroid セキュアシステム設定の変更をアプリに許可します。通常のアプリ用ではありません。</string>
   <!-- Labels for the PROTECTED_APP permission. -->
   <string name="permlab_protectedApp">アプリの保護へのアプリの追加と削除</string>
   <string name="permdesc_protectedApp">他のアプリを保護に設定してロックすることをアプリに許可します。</string>
@@ -124,12 +124,12 @@
   <string name="permdesc_manageRemotePrefs">リモートの設定を管理することをアプリに許可します。</string>
   <!-- About device screen, build date -->
   <string name="build_date">ビルド日時</string>
-  <!-- About device screen, LineageOS API Level -->
-  <string name="lineage_api_level">LineageOS API レベル</string>
-  <!-- About device screen, LineageOS updates -->
-  <string name="lineage_updates">LineageOS アップデート</string>
-  <!-- About device screen, LineageOS version -->
-  <string name="lineage_version">LineageOS バージョン</string>
+  <!-- About device screen, crDroid API Level -->
+  <string name="lineage_api_level">crDroid API レベル</string>
+  <!-- About device screen, crDroid updates -->
+  <string name="lineage_updates">crDroid アップデート</string>
+  <!-- About device screen, crDroid version -->
+  <string name="lineage_version">crDroid バージョン</string>
   <!-- About device screen, vendor security patch -->
   <string name="lineage_vendor_security_patch">ベンダーセキュリティパッチレベル</string>
   <!-- General purpose use "unknown" string -->

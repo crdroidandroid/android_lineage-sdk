@@ -17,7 +17,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Label for the LineageOS system components when they are shown to the user. -->
+  <!-- Label for the crDroid system components when they are shown to the user. -->
   <!-- Labels for the MODIFY_PROFILES permission. -->
   <string name="permlab_modifyProfiles">зміна системних профілів</string>
   <string name="permdesc_modifyProfiles">Дозволяє додатку змінювати системні профілі.</string>
@@ -115,9 +115,9 @@
   <string name="permlab_manageRemotePrefs">керування віддаленими параметрами</string>
   <string name="permdesc_manageRemotePrefs">Дозволяє застосункові керувати налаштуваннями віддаленого підключення</string>
   <!-- About device screen, build date -->
-  <!-- About device screen, LineageOS API Level -->
-  <!-- About device screen, LineageOS updates -->
-  <!-- About device screen, LineageOS version -->
+  <!-- About device screen, crDroid API Level -->
+  <!-- About device screen, crDroid updates -->
+  <!-- About device screen, crDroid version -->
   <!-- About device screen, vendor security patch -->
   <!-- General purpose use "unknown" string -->
   <!-- Long-press back kill application -->

@@ -17,8 +17,8 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Label for the LineageOS system components when they are shown to the user. -->
-  <string name="lineageos_system_label">Hệ thống LineageOS</string>
+  <!-- Label for the crDroid system components when they are shown to the user. -->
+  <string name="lineageos_system_label">Hệ thống crDroid</string>
   <!-- Labels for the MODIFY_PROFILES permission. -->
   <string name="permlab_modifyProfiles">sửa đổi cấu hình hệ thống</string>
   <string name="permdesc_modifyProfiles">Cho phép một ứng dụng sửa đổi cấu hình hệ thống.</string>
@@ -124,12 +124,12 @@
   <string name="permdesc_manageRemotePrefs">Cho phép một ứng dụng quản lý cài đặt từ xa</string>
   <!-- About device screen, build date -->
   <string name="build_date">Ngày dựng</string>
-  <!-- About device screen, LineageOS API Level -->
-  <string name="lineage_api_level">Cấp độ API LineageOS</string>
-  <!-- About device screen, LineageOS updates -->
-  <string name="lineage_updates">Cập nhật LineageOS</string>
-  <!-- About device screen, LineageOS version -->
-  <string name="lineage_version">Phiên bản LineageOS</string>
+  <!-- About device screen, crDroid API Level -->
+  <string name="lineage_api_level">Cấp độ API crDroid</string>
+  <!-- About device screen, crDroid updates -->
+  <string name="lineage_updates">Cập nhật crDroid</string>
+  <!-- About device screen, crDroid version -->
+  <string name="lineage_version">Phiên bản crDroid</string>
   <!-- About device screen, vendor security patch -->
   <string name="lineage_vendor_security_patch">Nhà cung cấp mức bản vá bảo mật</string>
   <!-- General purpose use "unknown" string -->

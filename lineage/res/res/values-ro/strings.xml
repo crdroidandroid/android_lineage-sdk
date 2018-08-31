@@ -17,8 +17,8 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <!-- Label for the LineageOS system components when they are shown to the user. -->
-  <string name="lineageos_system_label">Sistem LineageOS</string>
+  <!-- Label for the crDroid system components when they are shown to the user. -->
+  <string name="lineageos_system_label">Sistem crDroid</string>
   <!-- Labels for the MODIFY_PROFILES permission. -->
   <string name="permlab_modifyProfiles">modifică profiluri de sistem</string>
   <string name="permdesc_modifyProfiles">Permite unei aplicații să modifice profilurile de sistem.</string>
@@ -124,12 +124,12 @@
   <string name="permdesc_manageRemotePrefs">Permite unei aplicații să gestioneze setările de la distanţă</string>
   <!-- About device screen, build date -->
   <string name="build_date">Dată de compilare</string>
-  <!-- About device screen, LineageOS API Level -->
-  <string name="lineage_api_level">Nivel API LineageOS</string>
-  <!-- About device screen, LineageOS updates -->
-  <string name="lineage_updates">Actualizări LineageOS</string>
-  <!-- About device screen, LineageOS version -->
-  <string name="lineage_version">Versiune LineageOS</string>
+  <!-- About device screen, crDroid API Level -->
+  <string name="lineage_api_level">Nivel API crDroid</string>
+  <!-- About device screen, crDroid updates -->
+  <string name="lineage_updates">Actualizări crDroid</string>
+  <!-- About device screen, crDroid version -->
+  <string name="lineage_version">Versiune crDroid</string>
   <!-- About device screen, vendor security patch -->
   <string name="lineage_vendor_security_patch">Nivelul corecției de securitate a producătorului</string>
   <!-- General purpose use "unknown" string -->

@@ -17,18 +17,40 @@
 package lineageos.preference;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 
 import lineageos.providers.LineageSettings;
 
 
 public class LineageSystemSettingListPreference extends SelfRemovingListPreference {
+
+    private boolean mAutoSummary = false;
+
     public LineageSystemSettingListPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
     public LineageSystemSettingListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    @Override
+    public void setValue(String value) {
+        super.setValue(value);
+        if (mAutoSummary || TextUtils.isEmpty(getSummary())) {
+            setSummary(getEntry(), true);
+        }
+    }
+
+    @Override
+    public void setSummary(CharSequence summary) {
+        setSummary(summary, false);
+    }
+
+    private void setSummary(CharSequence summary, boolean autoSummary) {
+        mAutoSummary = autoSummary;
+        super.setSummary(summary);
     }
 
     public int getIntValue(int defValue) {

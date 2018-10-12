@@ -334,7 +334,7 @@ public class TrustInterfaceService extends LineageSystemService {
 
     private boolean hasOnboardedUser() {
         return LineageSettings.System.getInt(mContext.getContentResolver(),
-                LineageSettings.System.TRUST_INTERFACE_HINTED, 0) == 1;
+                LineageSettings.System.TRUST_INTERFACE_HINTED, 1) == 1;
     }
 
     private void registerLocaleChangedReceiver() {

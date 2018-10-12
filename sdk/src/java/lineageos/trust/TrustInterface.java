@@ -148,7 +148,7 @@ public class TrustInterface {
      *
      * @see #postNotificationForFeature
      */
-    public static final int TRUST_WARN_SELINUX = 1;
+    public static final int TRUST_WARN_SELINUX = 0;
 
     /**
      * Trust warning: Root access

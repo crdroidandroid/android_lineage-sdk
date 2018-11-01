@@ -37,6 +37,7 @@ public class DeviceKeysConstants {
         LAST_APP,
         SPLIT_SCREEN,
         CLOSE_APP,
+        TORCH,
         SINGLE_HAND_LEFT,
         SINGLE_HAND_RIGHT;
 

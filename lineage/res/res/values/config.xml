@@ -167,6 +167,7 @@
             9 - Toggle split screen
             10 - Kill foreground app
             11 - Torch
+            12 - Screenshot
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -185,6 +186,7 @@
             9 - Toggle split screen
             10 - Kill foreground app
             11 - Torch
+            12 - Screenshot
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -203,6 +205,7 @@
             9 - Toggle split screen
             10 - Kill foreground app
             11 - Torch
+            12 - Screenshot
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -221,6 +224,7 @@
             9 - Toggle split screen
             10 - Kill foreground app
             11 - Torch
+            12 - Screenshot
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -239,6 +243,7 @@
             9 - Toggle split screen
             10 - Kill foreground app
             11 - Torch
+            12 - Screenshot
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->

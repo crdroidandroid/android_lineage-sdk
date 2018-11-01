@@ -163,6 +163,7 @@
             8 - Last app
             9 - Toggle split screen
             10 - Close app
+            11 - Torch
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -180,6 +181,7 @@
             8 - Last app
             9 - Toggle split screen
             10 - Close app
+            11 - Torch
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -197,6 +199,7 @@
             8 - Last app
             9 - Toggle split screen
             10 - Close app
+            11 - Torch
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -214,6 +217,7 @@
             8 - Last app
             9 - Toggle split screen
             10 - Close app
+            11 - Torch
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -231,6 +235,7 @@
             8 - Last app
             9 - Toggle split screen
             10 - Close app
+            11 - Torch
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->

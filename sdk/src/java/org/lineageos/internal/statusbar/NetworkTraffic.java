@@ -40,6 +40,7 @@ import android.service.dreams.IDreamManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -183,6 +184,7 @@ public class NetworkTraffic extends TextView {
                 // Update view if there's anything new to show
                 if (!output.toString().contentEquals(getText())) {
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) textSize);
+                    setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
                     setText(output.toString());
                 }
             }

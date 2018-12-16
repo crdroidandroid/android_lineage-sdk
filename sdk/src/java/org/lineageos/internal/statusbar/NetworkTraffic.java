@@ -85,6 +85,8 @@ public class NetworkTraffic extends TextView {
     private SettingsObserver mObserver;
     private Drawable mDrawable;
 
+    private boolean mScreenOn = true;
+
     public NetworkTraffic(Context context) {
         this(context, null);
     }
@@ -137,8 +139,12 @@ public class NetworkTraffic extends TextView {
         manager.addDarkReceiver(mDarkReceiver);
         manager.addVisibilityReceiver(mVisibilityReceiver);
 
-        mContext.registerReceiver(mIntentReceiver,
-                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+
+        mContext.registerReceiver(mIntentReceiver, filter);
         mObserver.observe();
         updateSettings();
     }
@@ -253,8 +259,16 @@ public class NetworkTraffic extends TextView {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
+            if (action == null) return;
+
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) && mScreenOn) {
                 updateViewState();
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+                updateViewState();
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
+                clearHandlerCallbacks();
             }
         }
     };

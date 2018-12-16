@@ -32,7 +32,11 @@ import android.net.TrafficStats;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.os.Message;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.service.dreams.DreamService;
+import android.service.dreams.IDreamManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -86,6 +90,7 @@ public class NetworkTraffic extends TextView {
     private Drawable mDrawable;
 
     private boolean mScreenOn = true;
+    private IDreamManager mDreamManager;
 
     public NetworkTraffic(Context context) {
         this(context, null);
@@ -138,6 +143,9 @@ public class NetworkTraffic extends TextView {
                 LineageStatusBarItem.findManager((View) this);
         manager.addDarkReceiver(mDarkReceiver);
         manager.addVisibilityReceiver(mVisibilityReceiver);
+
+        mDreamManager = IDreamManager.Stub.asInterface(
+                ServiceManager.checkService(DreamService.DREAM_SERVICE));
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -264,14 +272,27 @@ public class NetworkTraffic extends TextView {
             if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) && mScreenOn) {
                 updateViewState();
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
-                mScreenOn = true;
-                updateViewState();
+                if (!isDozeMode()) {
+                    mScreenOn = true;
+                    updateViewState();
+                }
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
                 clearHandlerCallbacks();
             }
         }
     };
+
+    private boolean isDozeMode() {
+        try {
+            if (mDreamManager != null && mDreamManager.isDozing()) {
+                return true;
+            }
+        } catch (RemoteException e) {
+            return false;
+        }
+        return false;
+    }
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {

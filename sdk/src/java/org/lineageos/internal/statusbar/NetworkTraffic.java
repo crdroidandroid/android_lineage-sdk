@@ -83,8 +83,6 @@ public class NetworkTraffic extends TextView {
     private long mAutoHideThreshold;
     private int mUnits;
     private boolean mShowUnits;
-    private int mDarkModeFillColor;
-    private int mLightModeFillColor;
     private int mIconTint = Color.WHITE;
     private SettingsObserver mObserver;
     private Drawable mDrawable;
@@ -112,18 +110,6 @@ public class NetworkTraffic extends TextView {
         mObserver = new SettingsObserver(mTrafficHandler);
     }
 
-    private LineageStatusBarItem.DarkReceiver mDarkReceiver =
-            new LineageStatusBarItem.DarkReceiver() {
-        public void onDarkChanged(Rect area, float darkIntensity, int tint) {
-            mIconTint = tint;
-            setTextColor(mIconTint);
-            updateTrafficDrawableColor();
-        }
-        public void setFillColors(int darkColor, int lightColor) {
-            mDarkModeFillColor = darkColor;
-            mLightModeFillColor = lightColor;
-        }
-    };
 
     private LineageStatusBarItem.VisibilityReceiver mVisibilityReceiver =
             new LineageStatusBarItem.VisibilityReceiver() {
@@ -141,7 +127,6 @@ public class NetworkTraffic extends TextView {
 
         LineageStatusBarItem.Manager manager =
                 LineageStatusBarItem.findManager((View) this);
-        manager.addDarkReceiver(mDarkReceiver);
         manager.addVisibilityReceiver(mVisibilityReceiver);
 
         mDreamManager = IDreamManager.Stub.asInterface(
@@ -372,13 +357,10 @@ public class NetworkTraffic extends TextView {
             drawableResId = 0;
         }
         mDrawable = drawableResId != 0 ? getResources().getDrawable(drawableResId) : null;
-        setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
-        updateTrafficDrawableColor();
-    }
-
-    private void updateTrafficDrawableColor() {
         if (mDrawable != null) {
             mDrawable.setColorFilter(mIconTint, PorterDuff.Mode.MULTIPLY);
+            setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
         }
+        setTextColor(mIconTint);
     }
 }

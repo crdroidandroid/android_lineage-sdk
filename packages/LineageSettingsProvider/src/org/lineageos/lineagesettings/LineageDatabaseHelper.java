@@ -498,9 +498,6 @@ public class LineageDatabaseHelper extends SQLiteOpenHelper{
             stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
                     + " VALUES(?,?);");
             // System
-            loadIntegerSetting(stmt, LineageSettings.System.FORCE_SHOW_NAVBAR,
-                    R.integer.def_force_show_navbar);
-
             loadIntegerSetting(stmt, LineageSettings.System.STATUS_BAR_QUICK_QS_PULLDOWN,
                     R.integer.def_qs_quick_pulldown);
 

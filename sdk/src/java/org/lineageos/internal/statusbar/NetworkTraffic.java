@@ -50,10 +50,9 @@ import org.lineageos.platform.internal.R;
 public class NetworkTraffic extends TextView {
     private static final String TAG = "NetworkTraffic";
 
-    private static final int MODE_DISABLED = 0;
+    private static final int MODE_UPSTREAM_AND_DOWNSTREAM = 0;
     private static final int MODE_UPSTREAM_ONLY = 1;
     private static final int MODE_DOWNSTREAM_ONLY = 2;
-    private static final int MODE_UPSTREAM_AND_DOWNSTREAM = 3;
 
     private static final int MESSAGE_TYPE_PERIODIC_REFRESH = 0;
     private static final int MESSAGE_TYPE_UPDATE_VIEW = 1;
@@ -71,8 +70,10 @@ public class NetworkTraffic extends TextView {
     private static final long AUTOHIDE_THRESHOLD_KILOBYTES = 8;
     private static final long AUTOHIDE_THRESHOLD_MEGABYTES = 80;
 
-    private int mMode = MODE_DISABLED;
-    private boolean mNetworkTrafficIsVisible;
+    protected int mLocation = 0;
+    private int mMode = MODE_UPSTREAM_AND_DOWNSTREAM;
+    protected boolean mBelowThreshold;
+    protected boolean mConnectionAvailable;
     private long mTxKbps;
     private long mRxKbps;
     private long mLastTxBytesTotal;
@@ -83,7 +84,7 @@ public class NetworkTraffic extends TextView {
     private long mAutoHideThreshold;
     private int mUnits;
     private boolean mShowUnits;
-    private int mIconTint = Color.WHITE;
+    protected int mIconTint = Color.WHITE;
     private SettingsObserver mObserver;
     private Drawable mDrawable;
 
@@ -105,29 +106,12 @@ public class NetworkTraffic extends TextView {
         mTextSizeSingle = resources.getDimensionPixelSize(R.dimen.net_traffic_single_text_size);
         mTextSizeMulti = resources.getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
 
-        mNetworkTrafficIsVisible = false;
-
         mObserver = new SettingsObserver(mTrafficHandler);
     }
-
-
-    private LineageStatusBarItem.VisibilityReceiver mVisibilityReceiver =
-            new LineageStatusBarItem.VisibilityReceiver() {
-        public void onVisibilityChanged(boolean isVisible) {
-            if (mNetworkTrafficIsVisible != isVisible) {
-                mNetworkTrafficIsVisible = isVisible;
-                updateViewState();
-            }
-        }
-    };
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-        LineageStatusBarItem.Manager manager =
-                LineageStatusBarItem.findManager((View) this);
-        manager.addVisibilityReceiver(mVisibilityReceiver);
 
         mDreamManager = IDreamManager.Stub.asInterface(
                 ServiceManager.checkService(DreamService.DREAM_SERVICE));
@@ -166,18 +150,16 @@ public class NetworkTraffic extends TextView {
                 mLastRxBytesTotal += rxBytes;
             }
 
-            final boolean enabled = mMode != MODE_DISABLED && isConnectionAvailable();
+            final boolean enabled = mLocation != 0;
             final boolean showUpstream =
                     mMode == MODE_UPSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
             final boolean showDownstream =
                     mMode == MODE_DOWNSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
-            final boolean shouldHide = mAutoHideThreshold > 0 && (!showUpstream || mTxKbps < mAutoHideThreshold)
+            mBelowThreshold = mAutoHideThreshold > 0 && (!showUpstream || mTxKbps < mAutoHideThreshold)
                     && (!showDownstream || mRxKbps < mAutoHideThreshold);
+            mConnectionAvailable = isConnectionAvailable();
 
-            if (!enabled || shouldHide) {
-                setText("");
-                setVisibility(GONE);
-            } else {
+            if (enabled && mConnectionAvailable && !mBelowThreshold) {
                 // Get information for uplink ready so the line return can be added
                 StringBuilder output = new StringBuilder();
                 if (showUpstream) {
@@ -203,12 +185,12 @@ public class NetworkTraffic extends TextView {
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) textSize);
                     setText(output.toString());
                 }
-                setVisibility(VISIBLE);
             }
+            updateVisibility();
 
             // Schedule periodic refresh
             mTrafficHandler.removeMessages(MESSAGE_TYPE_PERIODIC_REFRESH);
-            if (enabled && mNetworkTrafficIsVisible) {
+            if (enabled) {
                 mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_PERIODIC_REFRESH,
                         REFRESH_INTERVAL);
             }
@@ -247,6 +229,17 @@ public class NetworkTraffic extends TextView {
             }
         }
     };
+
+    protected void updateVisibility() {
+        boolean enabled = mConnectionAvailable && !mBelowThreshold &&
+                (mLocation == 2);
+        if (enabled) {
+            setVisibility(VISIBLE);
+        } else {
+            setText("");
+            setVisibility(GONE);
+        }
+    }
 
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
@@ -287,6 +280,9 @@ public class NetworkTraffic extends TextView {
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
+                    LineageSettings.Secure.NETWORK_TRAFFIC_LOCATION),
+                    false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.NETWORK_TRAFFIC_MODE),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
@@ -319,8 +315,10 @@ public class NetworkTraffic extends TextView {
     private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
 
+        mLocation = LineageSettings.Secure.getIntForUser(resolver,
+                LineageSettings.Secure.NETWORK_TRAFFIC_LOCATION, 0, UserHandle.USER_CURRENT);
         mMode = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_MODE, 0, UserHandle.USER_CURRENT);
+                LineageSettings.Secure.NETWORK_TRAFFIC_MODE, MODE_UPSTREAM_AND_DOWNSTREAM, UserHandle.USER_CURRENT);
         mAutoHideThreshold = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE, 0, UserHandle.USER_CURRENT);
         mUnits = LineageSettings.Secure.getIntForUser(resolver,
@@ -330,9 +328,11 @@ public class NetworkTraffic extends TextView {
                 LineageSettings.Secure.NETWORK_TRAFFIC_SHOW_UNITS, 1,
                 UserHandle.USER_CURRENT) == 1;
 
-        if (mMode != MODE_DISABLED) {
+        if (mLocation != 0) {
             updateTrafficDrawable();
+            updateVisibility();
         }
+
         updateViewState();
     }
 
@@ -345,7 +345,7 @@ public class NetworkTraffic extends TextView {
         mTrafficHandler.removeMessages(MESSAGE_TYPE_UPDATE_VIEW);
     }
 
-    private void updateTrafficDrawable() {
+    protected void updateTrafficDrawable() {
         final int drawableResId;
         if (mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
             drawableResId = R.drawable.stat_sys_network_traffic_updown;
@@ -359,8 +359,8 @@ public class NetworkTraffic extends TextView {
         mDrawable = drawableResId != 0 ? getResources().getDrawable(drawableResId) : null;
         if (mDrawable != null) {
             mDrawable.setColorFilter(mIconTint, PorterDuff.Mode.MULTIPLY);
-            setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
         }
+        setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
         setTextColor(mIconTint);
     }
 }

@@ -91,6 +91,7 @@ public class NetworkTraffic extends TextView {
 
     private boolean mScreenOn = true;
     private IDreamManager mDreamManager;
+    private boolean mAttached;
 
     public NetworkTraffic(Context context) {
         this(context, null);
@@ -108,47 +109,55 @@ public class NetworkTraffic extends TextView {
         mTextSizeMulti = resources.getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
 
         mObserver = new SettingsObserver(mTrafficHandler);
+
+        mDreamManager = IDreamManager.Stub.asInterface(
+                ServiceManager.checkService(DreamService.DREAM_SERVICE));
+
+        updateSettings();
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
-        mDreamManager = IDreamManager.Stub.asInterface(
-                ServiceManager.checkService(DreamService.DREAM_SERVICE));
-
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(Intent.ACTION_SCREEN_ON);
-
-        mContext.registerReceiver(mIntentReceiver, filter);
-        mObserver.observe();
+        if (!mAttached) {
+            mAttached = true;
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            mContext.registerReceiver(mIntentReceiver, filter);
+            mObserver.observe();
+        }
         updateSettings();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mContext.unregisterReceiver(mIntentReceiver);
-        mObserver.unobserve();
+        if (mAttached) {
+            mContext.unregisterReceiver(mIntentReceiver);
+            mObserver.unobserve();
+            mAttached = false;
+        }
     }
 
     private Handler mTrafficHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            long now = SystemClock.elapsedRealtime();
-            long timeDelta = now - mLastUpdateTime;
-            if (msg.what == MESSAGE_TYPE_PERIODIC_REFRESH
-                    && timeDelta >= REFRESH_INTERVAL * 0.95f) {
-                // Update counters
-                mLastUpdateTime = now;
-                long txBytes = TrafficStats.getTotalTxBytes() - mLastTxBytesTotal;
-                long rxBytes = TrafficStats.getTotalRxBytes() - mLastRxBytesTotal;
-                mTxKbps = (long) (txBytes * 8f / (timeDelta / 1000f) / 1000f);
-                mRxKbps = (long) (rxBytes * 8f / (timeDelta / 1000f) / 1000f);
-                mLastTxBytesTotal += txBytes;
-                mLastRxBytesTotal += rxBytes;
+            if (msg.what == MESSAGE_TYPE_PERIODIC_REFRESH) {
+                long now = SystemClock.elapsedRealtime();
+                long timeDelta = now - mLastUpdateTime;
+
+                if (timeDelta >= REFRESH_INTERVAL * 0.95f) {
+                    // Update counters
+                    mLastUpdateTime = now;
+                    long txBytes = TrafficStats.getTotalTxBytes() - mLastTxBytesTotal;
+                    long rxBytes = TrafficStats.getTotalRxBytes() - mLastRxBytesTotal;
+                    mTxKbps = (long) (txBytes * 8f / (timeDelta / 1000f) / 1000f);
+                    mRxKbps = (long) (rxBytes * 8f / (timeDelta / 1000f) / 1000f);
+                    mLastTxBytesTotal += txBytes;
+                    mLastRxBytesTotal += rxBytes;
+                }
             }
 
             final boolean enabled = mLocation != 0;
@@ -249,15 +258,16 @@ public class NetworkTraffic extends TextView {
             String action = intent.getAction();
             if (action == null) return;
 
-            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) && mScreenOn) {
-                updateViewState();
-            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+            if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 if (!isDozeMode()) {
                     mScreenOn = true;
-                    updateViewState();
                 }
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
+            }
+            if (mScreenOn) {
+                updateViewState();
+            } else {
                 clearHandlerCallbacks();
             }
         }

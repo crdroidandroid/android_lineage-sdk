@@ -157,6 +157,9 @@ public class NetworkTraffic extends TextView {
                     mRxKbps = (long) (rxBytes * 8f / (timeDelta / 1000f) / 1000f);
                     mLastTxBytesTotal += txBytes;
                     mLastRxBytesTotal += rxBytes;
+
+                    // Remove pending periodic refreshes - we will schedule new one anyway
+                    mTrafficHandler.removeMessages(MESSAGE_TYPE_PERIODIC_REFRESH);
                 }
             }
 
@@ -199,9 +202,8 @@ public class NetworkTraffic extends TextView {
             }
             updateVisibility();
 
-            // Schedule periodic refresh
-            mTrafficHandler.removeMessages(MESSAGE_TYPE_PERIODIC_REFRESH);
             if (enabled) {
+                // Schedule periodic refresh
                 mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_PERIODIC_REFRESH,
                         REFRESH_INTERVAL);
             }

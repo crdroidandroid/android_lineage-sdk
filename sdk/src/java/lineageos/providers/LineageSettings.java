@@ -3123,6 +3123,12 @@ public final class LineageSettings {
         public static final String NETWORK_TRAFFIC_REFRESH_INTERVAL = "network_traffic_refresh_interval";
 
         /**
+         * Whether to hide arrows for network traffic
+         * @hide
+         */
+        public static final String NETWORK_TRAFFIC_HIDEARROW = "network_traffic_hidearrow";
+
+        /**
          * Enable displaying the Trust service's notifications
          * 0 = 0ff, 1 = on
          * @deprecated Rely on {@link lineageos.providers.TRUST_WARNINGS} instead

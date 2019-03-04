@@ -94,6 +94,7 @@ public class NetworkTraffic extends TextView {
     private boolean mScreenOn = true;
     private IDreamManager mDreamManager;
     protected boolean mAttached;
+    private boolean mHideArrows;
 
     public NetworkTraffic(Context context) {
         this(context, null);
@@ -316,6 +317,9 @@ public class NetworkTraffic extends TextView {
             resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.NETWORK_TRAFFIC_REFRESH_INTERVAL),
                     false, this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
+                    LineageSettings.Secure.NETWORK_TRAFFIC_HIDEARROW),
+                    false, this, UserHandle.USER_ALL);
         }
 
         void unobserve() {
@@ -352,6 +356,8 @@ public class NetworkTraffic extends TextView {
                 LineageSettings.Secure.NETWORK_TRAFFIC_SHOW_UNITS, 1, UserHandle.USER_CURRENT) != 0;
         mRefreshInterval = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_REFRESH_INTERVAL, 2, UserHandle.USER_CURRENT);
+        mHideArrows = LineageSettings.Secure.getIntForUser(resolver,
+                LineageSettings.Secure.NETWORK_TRAFFIC_HIDEARROW, 0, UserHandle.USER_CURRENT) == 1;
         mConnectionAvailable = isConnectionAvailable();
 
         if (mLocation != 0) {
@@ -372,11 +378,11 @@ public class NetworkTraffic extends TextView {
 
     protected void updateTrafficDrawable() {
         final int drawableResId;
-        if (mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
+        if (!mHideArrows && mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
             drawableResId = R.drawable.stat_sys_network_traffic_updown;
-        } else if (mMode == MODE_UPSTREAM_ONLY) {
+        } else if (!mHideArrows && mMode == MODE_UPSTREAM_ONLY) {
             drawableResId = R.drawable.stat_sys_network_traffic_up;
-        } else if (mMode == MODE_DOWNSTREAM_ONLY) {
+        } else if (!mHideArrows && mMode == MODE_DOWNSTREAM_ONLY) {
             drawableResId = R.drawable.stat_sys_network_traffic_down;
         } else {
             drawableResId = 0;

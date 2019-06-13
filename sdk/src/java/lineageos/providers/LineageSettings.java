@@ -932,7 +932,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator STATUS_BAR_BATTERY_STYLE_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 2);
+                new InclusiveIntegerRangeValidator(0, 6);
 
         /**
          * Status bar battery %

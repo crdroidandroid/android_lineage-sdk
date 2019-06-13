@@ -40,7 +40,7 @@
          * 1: Display the battery as a circle
          * 2: Display the battery as plain text
     -->
-    <integer name="def_battery_style">0</integer>
+    <integer name="def_battery_style">1</integer>
 
     <!-- Default for LineageSettings.Secure.LOCKSCREEN_VISUALIZER_ENABLED -->
     <bool name="def_lockscreen_visualizer">true</bool>

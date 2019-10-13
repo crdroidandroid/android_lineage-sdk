@@ -36,7 +36,11 @@ import android.net.TrafficStats;
 import android.os.Handler;
 import android.os.UserHandle;
 import android.os.Message;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.service.dreams.DreamService;
+import android.service.dreams.IDreamManager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
@@ -89,6 +93,7 @@ public class NetworkTraffic extends TextView {
     private Drawable mDrawable;
 
     private boolean mScreenOn = true;
+    private IDreamManager mDreamManager;
 
     private int mRefreshInterval = 2;
 
@@ -134,6 +139,9 @@ public class NetworkTraffic extends TextView {
                 .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
                 .build();
         mConnectivityManager.registerNetworkCallback(request, mNetworkCallback);
+
+        mDreamManager = IDreamManager.Stub.asInterface(
+                ServiceManager.checkService(DreamService.DREAM_SERVICE));
 
         updateSettings();
     }
@@ -289,7 +297,7 @@ public class NetworkTraffic extends TextView {
     };
 
     protected void updateVisibility() {
-       boolean enabled = mIsActive && !blank.contentEquals(getText()) && (mLocation == 2);
+        boolean enabled = mIsActive && !blank.contentEquals(getText()) && (mLocation == 2);
         if (enabled) {
             setVisibility(VISIBLE);
         } else {
@@ -306,7 +314,9 @@ public class NetworkTraffic extends TextView {
             if (action == null) return;
 
             if (action.equals(Intent.ACTION_SCREEN_ON)) {
-                mScreenOn = true;
+                if (!isDozeMode()) {
+                    mScreenOn = true;
+                }
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
             }
@@ -318,6 +328,17 @@ public class NetworkTraffic extends TextView {
             }
         }
     };
+
+    private boolean isDozeMode() {
+        try {
+            if (mDreamManager != null && mDreamManager.isDozing()) {
+                return true;
+            }
+        } catch (RemoteException e) {
+            return false;
+        }
+        return false;
+    }
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {

@@ -69,7 +69,7 @@ public abstract class SelfRemovingSwitchPreference extends SwitchPreferenceCompa
             if (defaultValue == null) {
                 return;
             }
-            checked = (boolean) defaultValue;
+            checked = getBoolean(getKey(), (boolean) defaultValue);
             if (shouldPersist()) {
                 persistBoolean(checked);
             }

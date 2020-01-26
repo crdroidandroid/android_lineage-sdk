@@ -28,10 +28,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
-import android.net.LinkProperties;
-import android.net.Network;
-import android.net.NetworkCapabilities;
-import android.net.NetworkRequest;
 import android.net.TrafficStats;
 import android.os.Handler;
 import android.os.UserHandle;
@@ -51,8 +47,6 @@ import android.widget.TextView;
 import lineageos.providers.LineageSettings;
 
 import org.lineageos.platform.internal.R;
-
-import java.util.HashMap;
 
 public class NetworkTraffic extends TextView {
     private static final String TAG = "NetworkTraffic";
@@ -100,22 +94,6 @@ public class NetworkTraffic extends TextView {
     protected boolean mAttached;
     private boolean mHideArrows;
 
-    // Network tracking related variables
-    final private ConnectivityManager mConnectivityManager;
-    final private HashMap<Network, NetworkState> mNetworkMap = new HashMap<>();
-    private boolean mNetworksChanged = true;
-
-    public class NetworkState {
-        public NetworkCapabilities mNetworkCapabilities;
-        public LinkProperties mLinkProperties;
-
-        public NetworkState(NetworkCapabilities networkCapabilities,
-                LinkProperties linkProperties) {
-            mNetworkCapabilities = networkCapabilities;
-            mLinkProperties = linkProperties;
-        }
-    };
-
     public NetworkTraffic(Context context) {
         this(context, null);
     }
@@ -132,13 +110,6 @@ public class NetworkTraffic extends TextView {
         mTextSizeMulti = resources.getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
 
         mObserver = new SettingsObserver(mTrafficHandler);
-
-        mConnectivityManager = getContext().getSystemService(ConnectivityManager.class);
-        final NetworkRequest request = new NetworkRequest.Builder()
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
-                .build();
-        mConnectivityManager.registerNetworkCallback(request, mNetworkCallback);
 
         mDreamManager = IDreamManager.Stub.asInterface(
                 ServiceManager.checkService(DreamService.DREAM_SERVICE));
@@ -182,34 +153,12 @@ public class NetworkTraffic extends TextView {
                 final long timeDelta = now - mLastUpdateTime; /* ms */
                 if (timeDelta >= mRefreshInterval * 1000 * 0.95f) {
                     // Update counters
-                    long txBytes = 0;
-                    long rxBytes = 0;
-                    // Sum stats from interfaces of interest
-                    for (NetworkState state : mNetworkMap.values()) {
-                        final String iface = state.mLinkProperties.getInterfaceName();
-                        if (iface == null) {
-                            continue;
-                        }
-                        if (DEBUG) {
-                            Log.d(TAG, "adding stats from interface " + iface);
-                        }
-                        txBytes += TrafficStats.getTxBytes(iface);
-                        rxBytes += TrafficStats.getRxBytes(iface);
-                    }
-
-                    final long txBytesDelta = txBytes - mLastTxBytes;
-                    final long rxBytesDelta = rxBytes - mLastRxBytes;
-
-                    if (!mNetworksChanged && timeDelta > 0 && txBytesDelta >= 0 && rxBytesDelta >= 0) {
-                        mTxKbps = (long) (txBytesDelta * 8f / 1000f / (timeDelta / 1000f));
-                        mRxKbps = (long) (rxBytesDelta * 8f / 1000f / (timeDelta / 1000f));
-                    } else if (mNetworksChanged) {
-                        mTxKbps = 0;
-                        mRxKbps = 0;
-                        mNetworksChanged = false;
-                    }
-                    mLastTxBytes = txBytes;
-                    mLastRxBytes = rxBytes;
+                    long txBytes = TrafficStats.getTotalTxBytes() - mLastTxBytes;
+                    long rxBytes = TrafficStats.getTotalRxBytes() - mLastRxBytes;
+                    mTxKbps = (long) (txBytes * 8f / (timeDelta / 1000f) / 1000f);
+                    mRxKbps = (long) (rxBytes * 8f / (timeDelta / 1000f) / 1000f);
+                    mLastTxBytes += txBytes;
+                    mLastRxBytes += rxBytes;
                     mLastUpdateTime = now;
                 }
             }
@@ -441,41 +390,4 @@ public class NetworkTraffic extends TextView {
         setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
         setTextColor(mIconTint);
     }
-
-    private ConnectivityManager.NetworkCallback mNetworkCallback =
-            new ConnectivityManager.NetworkCallback() {
-        @Override
-        public void onAvailable(Network network) {
-            mNetworkMap.put(network,
-                    new NetworkState(mConnectivityManager.getNetworkCapabilities(network),
-                    mConnectivityManager.getLinkProperties(network)));
-            mNetworksChanged = true;
-        }
-
-        @Override
-        public void onCapabilitiesChanged(Network network,
-                NetworkCapabilities networkCapabilities) {
-            if (mNetworkMap.containsKey(network)) {
-                mNetworkMap.put(network, new NetworkState(networkCapabilities,
-                        mConnectivityManager.getLinkProperties(network)));
-                mNetworksChanged = true;
-            }
-        }
-
-        @Override
-        public void onLinkPropertiesChanged(Network network, LinkProperties linkProperties) {
-            if (mNetworkMap.containsKey(network)) {
-                mNetworkMap.put(network,
-                        new NetworkState(mConnectivityManager.getNetworkCapabilities(network),
-                        linkProperties));
-                mNetworksChanged = true;
-            }
-        }
-
-        @Override
-        public void onLost(Network network) {
-            mNetworkMap.remove(network);
-            mNetworksChanged = true;
-        }
-    };
 }

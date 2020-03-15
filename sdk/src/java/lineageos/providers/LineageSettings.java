@@ -1198,7 +1198,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_EDGE_LONG_SWIPE_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 9);
+                new InclusiveIntegerRangeValidator(0, 12);
 
         /**
          * Whether to wake the screen with the home key, the value is boolean.

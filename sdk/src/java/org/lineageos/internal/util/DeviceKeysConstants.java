@@ -40,6 +40,7 @@ public class DeviceKeysConstants {
         TORCH,
         SCREENSHOT,
         VOLUME_PANEL,
+        CLEAR_ALL_NOTIFICATIONS,
         SINGLE_HAND_LEFT,
         SINGLE_HAND_RIGHT;
 

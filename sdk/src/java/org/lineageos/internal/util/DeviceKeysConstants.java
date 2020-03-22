@@ -41,6 +41,7 @@ public class DeviceKeysConstants {
         SCREENSHOT,
         VOLUME_PANEL,
         CLEAR_ALL_NOTIFICATIONS,
+        NOTIFICATIONS,
         SINGLE_HAND_LEFT,
         SINGLE_HAND_RIGHT;
 

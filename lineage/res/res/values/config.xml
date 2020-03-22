@@ -165,6 +165,7 @@
             12 - Screenshot
             13 - Volume Panel
             14 - Clear All Notifications
+            15 - Notifications
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -186,6 +187,7 @@
             12 - Screenshot
             13 - Volume Panel
             14 - Clear All Notifications
+            15 - Notifications
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -207,6 +209,7 @@
             12 - Screenshot
             13 - Volume Panel
             14 - Clear All Notifications
+            15 - Notifications
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -228,6 +231,7 @@
             12 - Screenshot
             13 - Volume Panel
             14 - Clear All Notifications
+            15 - Notifications
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -249,6 +253,7 @@
             12 - Screenshot
             13 - Volume Panel
             14 - Clear All Notifications
+            15 - Notifications
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->

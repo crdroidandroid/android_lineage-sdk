@@ -1050,14 +1050,15 @@ public final class LineageSettings {
          * 10 - Close app
          * 11 - Torch
          * 12 - Screenshot
-         * 13 - Single hand (left)
-         * 14 - Single hand (right)
+         * 13 - Volume Panel
+         * 14 - Single hand (left)
+         * 15 - Single hand (right)
          */
         public static final String KEY_HOME_LONG_PRESS_ACTION = "key_home_long_press_action";
 
         /** @hide */
         public static final Validator KEY_HOME_LONG_PRESS_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Action to perform when the home key is double-tapped.
@@ -1068,7 +1069,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_HOME_DOUBLE_TAP_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Action to perform when the home key is long-pressed.
@@ -1079,7 +1080,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_BACK_LONG_PRESS_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Whether to wake the screen with the back key, the value is boolean.
@@ -1128,7 +1129,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_MENU_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Action to perform when the menu key is long-pressed.
@@ -1139,7 +1140,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_MENU_LONG_PRESS_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Action to perform when the assistant (search) key is pressed. (Default is 3)
@@ -1149,7 +1150,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_ASSIST_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Action to perform when the assistant (search) key is long-pressed. (Default is 4)
@@ -1159,7 +1160,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_ASSIST_LONG_PRESS_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Action to perform when the app switch key is pressed. (Default is 2)
@@ -1169,7 +1170,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_APP_SWITCH_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Action to perform when the app switch key is long-pressed. (Default is 0)
@@ -1179,7 +1180,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_APP_SWITCH_LONG_PRESS_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Action to perform when the screen edge is long-swiped. (Default is 0)
@@ -1189,7 +1190,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_EDGE_LONG_SWIPE_ACTION_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 12);
+                new InclusiveIntegerRangeValidator(0, 13);
 
         /**
          * Whether to wake the screen with the home key, the value is boolean.

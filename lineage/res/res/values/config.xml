@@ -163,6 +163,7 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -182,6 +183,7 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -201,6 +203,7 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -220,6 +223,7 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -239,6 +243,7 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->

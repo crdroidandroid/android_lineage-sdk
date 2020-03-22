@@ -165,6 +165,11 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
+            14 - Clear All Notifications
+            15 - Notifications
+            16 - Toggle Qs Panel
+            17 - Ringer Modes
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -184,6 +189,11 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
+            14 - Clear All Notifications
+            15 - Notifications
+            16 - Toggle Qs Panel
+            17 - Ringer Modes
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -203,6 +213,11 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
+            14 - Clear All Notifications
+            15 - Notifications
+            16 - Toggle Qs Panel
+            17 - Ringer Modes
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -222,6 +237,11 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
+            14 - Clear All Notifications
+            15 - Notifications
+            16 - Toggle Qs Panel
+            17 - Ringer Modes
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
@@ -241,6 +261,11 @@
             10 - Close app
             11 - Torch
             12 - Screenshot
+            13 - Volume Panel
+            14 - Clear All Notifications
+            15 - Notifications
+            16 - Toggle Qs Panel
+            17 - Ringer Modes
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->

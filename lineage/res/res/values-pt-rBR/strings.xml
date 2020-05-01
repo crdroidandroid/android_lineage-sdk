@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Sistema LineageOS</string>
+    <string name="lineageos_system_label">Sistema crDroid</string>
     <string name="permlab_modifyProfiles">modificar os perfis de sistema</string>
     <string name="permdesc_modifyProfiles">Permite que um aplicativo modifique os perfis de sistema.</string>
     <string name="permlab_useHardwareFramework">usar o framework do hardware</string>

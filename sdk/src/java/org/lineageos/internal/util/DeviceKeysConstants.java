@@ -39,6 +39,11 @@ public class DeviceKeysConstants {
         CLOSE_APP,
         TORCH,
         SCREENSHOT,
+        VOLUME_PANEL,
+        CLEAR_ALL_NOTIFICATIONS,
+        NOTIFICATIONS,
+        QS_PANEL,
+        RINGER_MODES,
         SINGLE_HAND_LEFT,
         SINGLE_HAND_RIGHT;
 

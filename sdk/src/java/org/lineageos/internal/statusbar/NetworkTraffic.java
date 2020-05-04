@@ -28,19 +28,22 @@ import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
+import android.net.LinkProperties;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkRequest;
+import android.net.NetworkStats;
 import android.net.TrafficStats;
 import android.os.Handler;
-import android.os.UserHandle;
+import android.os.INetworkManagementService;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
-import android.service.dreams.DreamService;
-import android.service.dreams.IDreamManager;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -48,29 +51,36 @@ import lineageos.providers.LineageSettings;
 
 import org.lineageos.platform.internal.R;
 
+import java.util.HashMap;
+
 public class NetworkTraffic extends TextView {
     private static final String TAG = "NetworkTraffic";
 
     private static final boolean DEBUG = false;
 
-    private static final int MODE_UPSTREAM_AND_DOWNSTREAM = 0;
+    private static final int MODE_DISABLED = 0;
     private static final int MODE_UPSTREAM_ONLY = 1;
     private static final int MODE_DOWNSTREAM_ONLY = 2;
+    private static final int MODE_UPSTREAM_AND_DOWNSTREAM = 3;
 
     private static final int MESSAGE_TYPE_PERIODIC_REFRESH = 0;
     private static final int MESSAGE_TYPE_UPDATE_VIEW = 1;
+
+    private static final int REFRESH_INTERVAL = 2000;
 
     private static final int UNITS_KILOBITS = 0;
     private static final int UNITS_MEGABITS = 1;
     private static final int UNITS_KILOBYTES = 2;
     private static final int UNITS_MEGABYTES = 3;
 
-    protected static final String blank = "";
+    // Thresholds themselves are always defined in kbps
+    private static final long AUTOHIDE_THRESHOLD_KILOBITS  = 10;
+    private static final long AUTOHIDE_THRESHOLD_MEGABITS  = 100;
+    private static final long AUTOHIDE_THRESHOLD_KILOBYTES = 8;
+    private static final long AUTOHIDE_THRESHOLD_MEGABYTES = 80;
 
-    protected int mLocation = 0;
-    private int mMode = MODE_UPSTREAM_AND_DOWNSTREAM;
-    private boolean mConnectionAvailable;
-    protected boolean mIsActive;
+    private int mMode = MODE_DISABLED;
+    private boolean mNetworkTrafficIsVisible;
     private long mTxKbps;
     private long mRxKbps;
     private long mLastTxBytes;
@@ -82,17 +92,31 @@ public class NetworkTraffic extends TextView {
     private long mAutoHideThreshold;
     private int mUnits;
     private boolean mShowUnits;
-    protected int mIconTint = Color.WHITE;
+    private int mDarkModeFillColor;
+    private int mLightModeFillColor;
+    private int mIconTint = Color.WHITE;
     private SettingsObserver mObserver;
     private Drawable mDrawable;
 
-    private boolean mScreenOn = true;
-    private IDreamManager mDreamManager;
+    // Network tracking related variables
+    final private ConnectivityManager mConnectivityManager;
+    final private HashMap<Network, NetworkState> mNetworkMap = new HashMap<>();
+    // Used to indicate that the set of sources contributing
+    // to current stats have changed.
+    private boolean mNetworksChanged = true;
 
-    private int mRefreshInterval = 2;
+    public class NetworkState {
+        public NetworkCapabilities mNetworkCapabilities;
+        public LinkProperties mLinkProperties;
 
-    protected boolean mAttached;
-    private boolean mHideArrows;
+        public NetworkState(NetworkCapabilities networkCapabilities,
+                LinkProperties linkProperties) {
+            mNetworkCapabilities = networkCapabilities;
+            mLinkProperties = linkProperties;
+        }
+    };
+
+    private INetworkManagementService mNetworkManagementService;
 
     public NetworkTraffic(Context context) {
         this(context, null);
@@ -105,74 +129,136 @@ public class NetworkTraffic extends TextView {
     public NetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
+        mNetworkManagementService = INetworkManagementService.Stub.asInterface(
+                    ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE));
+
         final Resources resources = getResources();
         mTextSizeSingle = resources.getDimensionPixelSize(R.dimen.net_traffic_single_text_size);
         mTextSizeMulti = resources.getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
 
+        mNetworkTrafficIsVisible = false;
+
         mObserver = new SettingsObserver(mTrafficHandler);
 
-        mDreamManager = IDreamManager.Stub.asInterface(
-                ServiceManager.checkService(DreamService.DREAM_SERVICE));
-
-        updateSettings();
+        mConnectivityManager = getContext().getSystemService(ConnectivityManager.class);
+        final NetworkRequest request = new NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+                .build();
+        mConnectivityManager.registerNetworkCallback(request, mNetworkCallback);
     }
+
+    private LineageStatusBarItem.DarkReceiver mDarkReceiver =
+            new LineageStatusBarItem.DarkReceiver() {
+        public void onDarkChanged(Rect area, float darkIntensity, int tint) {
+            mIconTint = tint;
+            setTextColor(mIconTint);
+            updateTrafficDrawableColor();
+        }
+        public void setFillColors(int darkColor, int lightColor) {
+            mDarkModeFillColor = darkColor;
+            mLightModeFillColor = lightColor;
+        }
+    };
+
+    private LineageStatusBarItem.VisibilityReceiver mVisibilityReceiver =
+            new LineageStatusBarItem.VisibilityReceiver() {
+        public void onVisibilityChanged(boolean isVisible) {
+            if (mNetworkTrafficIsVisible != isVisible) {
+                mNetworkTrafficIsVisible = isVisible;
+                updateViewState();
+            }
+        }
+    };
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if (!mAttached) {
-            mAttached = true;
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
-            filter.addAction(Intent.ACTION_SCREEN_OFF);
-            filter.addAction(Intent.ACTION_SCREEN_ON);
+        LineageStatusBarItem.Manager manager =
+                LineageStatusBarItem.findManager((View) this);
+        manager.addDarkReceiver(mDarkReceiver);
+        manager.addVisibilityReceiver(mVisibilityReceiver);
 
-            mContext.registerReceiver(mIntentReceiver, filter);
-            mObserver.observe();
-        }
+        mContext.registerReceiver(mIntentReceiver,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        mObserver.observe();
         updateSettings();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (mAttached) {
-            mContext.unregisterReceiver(mIntentReceiver);
-            mObserver.unobserve();
-            mAttached = false;
-        }
+        mContext.unregisterReceiver(mIntentReceiver);
+        mObserver.unobserve();
     }
 
     private Handler mTrafficHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
-            if (msg.what == MESSAGE_TYPE_PERIODIC_REFRESH) {
-                final long now = SystemClock.elapsedRealtime();
-                final long timeDelta = now - mLastUpdateTime; /* ms */
-                if (timeDelta >= mRefreshInterval * 1000 * 0.95f) {
-                    // Update counters
-                    long txBytes = TrafficStats.getTotalTxBytes() - mLastTxBytes;
-                    long rxBytes = TrafficStats.getTotalRxBytes() - mLastRxBytes;
-                    mTxKbps = (long) (txBytes * 8f / (timeDelta / 1000f) / 1000f);
-                    mRxKbps = (long) (rxBytes * 8f / (timeDelta / 1000f) / 1000f);
-                    mLastTxBytes += txBytes;
-                    mLastRxBytes += rxBytes;
-                    mLastUpdateTime = now;
+            final long now = SystemClock.elapsedRealtime();
+            final long timeDelta = now - mLastUpdateTime; /* ms */
+            if (msg.what == MESSAGE_TYPE_PERIODIC_REFRESH
+                    && timeDelta >= REFRESH_INTERVAL * 0.95f) {
+                // Sum tx and rx bytes from all sources of interest
+                long txBytes = 0;
+                long rxBytes = 0;
+                // Add interface stats
+                for (NetworkState state : mNetworkMap.values()) {
+                    final String iface = state.mLinkProperties.getInterfaceName();
+                    if (iface == null) {
+                        continue;
+                    }
+                    final long ifaceTxBytes = TrafficStats.getTxBytes(iface);
+                    final long ifaceRxBytes = TrafficStats.getRxBytes(iface);
+                    if (DEBUG) {
+                        Log.d(TAG, "adding stats from interface " + iface
+                                + " txbytes " + ifaceTxBytes + " rxbytes " + ifaceRxBytes);
+                    }
+                    txBytes += ifaceTxBytes;
+                    rxBytes += ifaceRxBytes;
                 }
+
+                // Add tether hw offload counters since these are
+                // not included in netd interface stats.
+                final TetheringStats tetheringStats = getOffloadTetheringStats();
+                txBytes += tetheringStats.txBytes;
+                rxBytes += tetheringStats.rxBytes;
+
+                if (DEBUG) {
+                    Log.d(TAG, "mNetworksChanged = " + mNetworksChanged);
+                    Log.d(TAG, "tether hw offload txBytes: " + tetheringStats.txBytes
+                            + " rxBytes: " + tetheringStats.rxBytes);
+                }
+
+                final long txBytesDelta = txBytes - mLastTxBytes;
+                final long rxBytesDelta = rxBytes - mLastRxBytes;
+
+                if (!mNetworksChanged && timeDelta > 0 && txBytesDelta >= 0 && rxBytesDelta >= 0) {
+                    mTxKbps = (long) (txBytesDelta * 8f / 1000f / (timeDelta / 1000f));
+                    mRxKbps = (long) (rxBytesDelta * 8f / 1000f / (timeDelta / 1000f));
+                } else if (mNetworksChanged) {
+                    mTxKbps = 0;
+                    mRxKbps = 0;
+                    mNetworksChanged = false;
+                }
+                mLastTxBytes = txBytes;
+                mLastRxBytes = rxBytes;
+                mLastUpdateTime = now;
             }
 
-            final boolean enabled = mLocation != 0;
+            final boolean enabled = mMode != MODE_DISABLED && isConnectionAvailable();
             final boolean showUpstream =
                     mMode == MODE_UPSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
             final boolean showDownstream =
                     mMode == MODE_DOWNSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
-            final boolean aboveThreshold = (showUpstream && mTxKbps > mAutoHideThreshold)
-                    || (showDownstream && mRxKbps > mAutoHideThreshold);
-            mIsActive = mAttached && (!mAutoHide || (mConnectionAvailable && aboveThreshold));
+            final boolean shouldHide = mAutoHide && (!showUpstream || mTxKbps < mAutoHideThreshold)
+                    && (!showDownstream || mRxKbps < mAutoHideThreshold);
 
-            if (enabled && mIsActive) {
+            if (!enabled || shouldHide) {
+                setText("");
+                setVisibility(GONE);
+            } else {
                 // Get information for uplink ready so the line return can be added
                 StringBuilder output = new StringBuilder();
                 if (showUpstream) {
@@ -196,18 +282,16 @@ public class NetworkTraffic extends TextView {
                 // Update view if there's anything new to show
                 if (!output.toString().contentEquals(getText())) {
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) textSize);
-                    setGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
                     setText(output.toString());
                 }
-
+                setVisibility(VISIBLE);
             }
-            updateVisibility();
 
             // Schedule periodic refresh
             mTrafficHandler.removeMessages(MESSAGE_TYPE_PERIODIC_REFRESH);
-            if (enabled && mAttached) {
+            if (enabled && mNetworkTrafficIsVisible) {
                 mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_PERIODIC_REFRESH,
-                        mRefreshInterval * 1000);
+                        REFRESH_INTERVAL);
             }
         }
 
@@ -245,49 +329,15 @@ public class NetworkTraffic extends TextView {
         }
     };
 
-    protected void updateVisibility() {
-        boolean enabled = mIsActive && !blank.contentEquals(getText()) && (mLocation == 2);
-        if (enabled) {
-            setVisibility(VISIBLE);
-        } else {
-            setText(blank);
-            setVisibility(GONE);
-        }
-        updateTrafficDrawable(enabled);
-    }
-
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action == null) return;
-
-            if (action.equals(Intent.ACTION_SCREEN_ON)) {
-                if (!isDozeMode()) {
-                    mScreenOn = true;
-                }
-            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-                mScreenOn = false;
-            }
-            if (mScreenOn) {
-                mConnectionAvailable = isConnectionAvailable();
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
                 updateViewState();
-            } else {
-                clearHandlerCallbacks();
             }
         }
     };
-
-    private boolean isDozeMode() {
-        try {
-            if (mDreamManager != null && mDreamManager.isDozing()) {
-                return true;
-            }
-        } catch (RemoteException e) {
-            return false;
-        }
-        return false;
-    }
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -297,28 +347,16 @@ public class NetworkTraffic extends TextView {
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
-                    LineageSettings.Secure.NETWORK_TRAFFIC_LOCATION),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.NETWORK_TRAFFIC_MODE),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
-                    LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.NETWORK_TRAFFIC_UNITS),
                     false, this, UserHandle.USER_ALL);
             resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
                     LineageSettings.Secure.NETWORK_TRAFFIC_SHOW_UNITS),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
-                    LineageSettings.Secure.NETWORK_TRAFFIC_REFRESH_INTERVAL),
-                    false, this, UserHandle.USER_ALL);
-            resolver.registerContentObserver(LineageSettings.Secure.getUriFor(
-                    LineageSettings.Secure.NETWORK_TRAFFIC_HIDEARROW),
                     false, this, UserHandle.USER_ALL);
         }
 
@@ -338,28 +376,81 @@ public class NetworkTraffic extends TextView {
         return cm.getActiveNetworkInfo() != null;
     }
 
+    private class TetheringStats {
+        long txBytes;
+        long rxBytes;
+    }
+
+    private TetheringStats getOffloadTetheringStats() {
+        TetheringStats tetheringStats = new TetheringStats();
+
+        NetworkStats stats = null;
+        try {
+            // STATS_PER_UID returns hw offload and netd stats combined (as entry UID_TETHERING)
+            // STATS_PER_IFACE returns only hw offload stats (as entry UID_ALL)
+            stats = mNetworkManagementService.getNetworkStatsTethering(
+                    NetworkStats.STATS_PER_IFACE);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Unable to call getNetworkStatsTethering: " + e);
+        }
+        if (stats == null) {
+            // nothing we can do except return zero stats
+            return tetheringStats;
+        }
+
+        NetworkStats.Entry entry = null;
+        // Entries here are per tethered interface.
+        // Counters persist even after tethering has been disabled.
+        for (int i = 0; i < stats.size(); i++) {
+            entry = stats.getValues(i, entry);
+            if (DEBUG) {
+                Log.d(TAG, "tethering stats entry: " + entry);
+            }
+            // hw offload tether stats are reported under UID_ALL.
+            if (entry.uid == NetworkStats.UID_ALL) {
+                tetheringStats.txBytes += entry.txBytes;
+                tetheringStats.rxBytes += entry.rxBytes;
+            }
+        }
+        return tetheringStats;
+    }
+
     private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
 
-        mLocation = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_LOCATION, 0, UserHandle.USER_CURRENT);
         mMode = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_MODE, MODE_UPSTREAM_AND_DOWNSTREAM, UserHandle.USER_CURRENT);
+                LineageSettings.Secure.NETWORK_TRAFFIC_MODE, 0, UserHandle.USER_CURRENT);
         mAutoHide = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE, 1, UserHandle.USER_CURRENT) != 0;
-        mAutoHideThreshold = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, 0, UserHandle.USER_CURRENT);
+                LineageSettings.Secure.NETWORK_TRAFFIC_AUTOHIDE, 0, UserHandle.USER_CURRENT) == 1;
         mUnits = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_UNITS, /* Mbps */ 1,
                 UserHandle.USER_CURRENT);
-        mShowUnits = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_SHOW_UNITS, 1, UserHandle.USER_CURRENT) != 0;
-        mRefreshInterval = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_REFRESH_INTERVAL, 2, UserHandle.USER_CURRENT);
-        mHideArrows = LineageSettings.Secure.getIntForUser(resolver,
-                LineageSettings.Secure.NETWORK_TRAFFIC_HIDEARROW, 0, UserHandle.USER_CURRENT) == 1;
-        mConnectionAvailable = isConnectionAvailable();
 
+        switch (mUnits) {
+            case UNITS_KILOBITS:
+                mAutoHideThreshold = AUTOHIDE_THRESHOLD_KILOBITS;
+                break;
+            case UNITS_MEGABITS:
+                mAutoHideThreshold = AUTOHIDE_THRESHOLD_MEGABITS;
+                break;
+            case UNITS_KILOBYTES:
+                mAutoHideThreshold = AUTOHIDE_THRESHOLD_KILOBYTES;
+                break;
+            case UNITS_MEGABYTES:
+                mAutoHideThreshold = AUTOHIDE_THRESHOLD_MEGABYTES;
+                break;
+            default:
+                mAutoHideThreshold = 0;
+                break;
+        }
+
+        mShowUnits = LineageSettings.Secure.getIntForUser(resolver,
+                LineageSettings.Secure.NETWORK_TRAFFIC_SHOW_UNITS, 1,
+                UserHandle.USER_CURRENT) == 1;
+
+        if (mMode != MODE_DISABLED) {
+            updateTrafficDrawable();
+        }
         updateViewState();
     }
 
@@ -372,22 +463,62 @@ public class NetworkTraffic extends TextView {
         mTrafficHandler.removeMessages(MESSAGE_TYPE_UPDATE_VIEW);
     }
 
-    protected void updateTrafficDrawable(boolean enabled) {
+    private void updateTrafficDrawable() {
         final int drawableResId;
-        if (enabled && !mHideArrows && mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
+        if (mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
             drawableResId = R.drawable.stat_sys_network_traffic_updown;
-        } else if (enabled && !mHideArrows && mMode == MODE_UPSTREAM_ONLY) {
+        } else if (mMode == MODE_UPSTREAM_ONLY) {
             drawableResId = R.drawable.stat_sys_network_traffic_up;
-        } else if (enabled && !mHideArrows && mMode == MODE_DOWNSTREAM_ONLY) {
+        } else if (mMode == MODE_DOWNSTREAM_ONLY) {
             drawableResId = R.drawable.stat_sys_network_traffic_down;
         } else {
             drawableResId = 0;
         }
         mDrawable = drawableResId != 0 ? getResources().getDrawable(drawableResId) : null;
+        setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
+        updateTrafficDrawableColor();
+    }
+
+    private void updateTrafficDrawableColor() {
         if (mDrawable != null) {
             mDrawable.setColorFilter(mIconTint, PorterDuff.Mode.MULTIPLY);
         }
-        setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
-        setTextColor(mIconTint);
     }
+
+    private ConnectivityManager.NetworkCallback mNetworkCallback =
+            new ConnectivityManager.NetworkCallback() {
+        @Override
+        public void onAvailable(Network network) {
+            mNetworkMap.put(network,
+                    new NetworkState(mConnectivityManager.getNetworkCapabilities(network),
+                    mConnectivityManager.getLinkProperties(network)));
+            mNetworksChanged = true;
+        }
+
+        @Override
+        public void onCapabilitiesChanged(Network network,
+                NetworkCapabilities networkCapabilities) {
+            if (mNetworkMap.containsKey(network)) {
+                mNetworkMap.put(network, new NetworkState(networkCapabilities,
+                        mConnectivityManager.getLinkProperties(network)));
+                mNetworksChanged = true;
+            }
+        }
+
+        @Override
+        public void onLinkPropertiesChanged(Network network, LinkProperties linkProperties) {
+            if (mNetworkMap.containsKey(network)) {
+                mNetworkMap.put(network,
+                        new NetworkState(mConnectivityManager.getNetworkCapabilities(network),
+                        linkProperties));
+                mNetworksChanged = true;
+            }
+        }
+
+        @Override
+        public void onLost(Network network) {
+            mNetworkMap.remove(network);
+            mNetworksChanged = true;
+        }
+    };
 }

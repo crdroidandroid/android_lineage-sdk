@@ -1961,6 +1961,18 @@ public final class LineageSettings {
                 sBooleanValidator;
 
         /**
+         * Whether to use the default LED values for all apps
+         * 0 = 0ff, 1 = on
+         * @hide
+         */
+        public static final String NOTIFICATION_LIGHT_PULSE_OVERRIDE =
+                "notification_light_pulse_override";
+
+        /** @hide */
+        public static final Validator NOTIFICATION_LIGHT_PULSE_OVERRIDE_VALIDATOR =
+                sBooleanValidator;
+
+        /**
          * Whether auto brightness is applied one shot when screen is turned on
          */
         public static final String AUTO_BRIGHTNESS_ONE_SHOT = "auto_brightness_one_shot";
@@ -2307,6 +2319,8 @@ public final class LineageSettings {
                     NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES_VALIDATOR);
             VALIDATORS.put(NOTIFICATION_LIGHT_COLOR_AUTO,
                     NOTIFICATION_LIGHT_COLOR_AUTO_VALIDATOR);
+            VALIDATORS.put(NOTIFICATION_LIGHT_PULSE_OVERRIDE,
+                    NOTIFICATION_LIGHT_PULSE_OVERRIDE_VALIDATOR);
             VALIDATORS.put(AUTO_BRIGHTNESS_ONE_SHOT, AUTO_BRIGHTNESS_ONE_SHOT_VALIDATOR);
             VALIDATORS.put(HEADSET_CONNECT_PLAYER, HEADSET_CONNECT_PLAYER_VALIDATOR);
             VALIDATORS.put(ZEN_ALLOW_LIGHTS, ZEN_ALLOW_LIGHTS_VALIDATOR);

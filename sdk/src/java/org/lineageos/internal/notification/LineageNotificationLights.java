@@ -50,6 +50,7 @@ public final class LineageNotificationLights {
     private boolean mScreenOnEnabled;
     private boolean mZenAllowLights;
     private boolean mNotificationLedEnabled;
+    private boolean mOverrideNotificationLights;
     private int mNotificationLedBrightnessLevel;
     private int mNotificationLedBrightnessLevelZen;
     private int mDefaultNotificationColor;
@@ -325,7 +326,7 @@ public final class LineageNotificationLights {
                     ledValuesPkg.getOnMs() : mDefaultNotificationLedOn);
             ledValues.setOffMs(ledValuesPkg.getOffMs() >= 0 ?
                     ledValuesPkg.getOffMs() : mDefaultNotificationLedOff);
-        } else if (ledValues.getColor() == 0) {
+        } else if (ledValues.getColor() == 0 || mOverrideNotificationLights) {
             ledValues.setColor(generateLedColorForPackageName(packageName));
             ledValues.setOnMs(mDefaultNotificationLedOn);
             ledValues.setOffMs(mDefaultNotificationLedOff);
@@ -385,6 +386,9 @@ public final class LineageNotificationLights {
             resolver.registerContentObserver(LineageSettings.System.getUriFor(
                     LineageSettings.System.NOTIFICATION_LIGHT_COLOR_AUTO), false,
                     this, UserHandle.USER_ALL);
+            resolver.registerContentObserver(LineageSettings.System.getUriFor(
+                    LineageSettings.System.NOTIFICATION_LIGHT_PULSE_OVERRIDE),
+                    false, this, UserHandle.USER_ALL);
 
             if (mCanAdjustBrightness) {
                 resolver.registerContentObserver(LineageSettings.System.getUriFor(
@@ -469,6 +473,10 @@ public final class LineageNotificationLights {
             mZenAllowLights = LineageSettings.System.getIntForUser(resolver,
                         LineageSettings.System.ZEN_ALLOW_LIGHTS,
                         1, UserHandle.USER_CURRENT) != 0;
+
+            mOverrideNotificationLights = LineageSettings.System.getIntForUser(resolver,
+                        LineageSettings.System.NOTIFICATION_LIGHT_PULSE_OVERRIDE,
+                        0, UserHandle.USER_CURRENT) != 0;
 
             mLedUpdater.update();
         }

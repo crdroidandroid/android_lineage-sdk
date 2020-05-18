@@ -2044,6 +2044,18 @@ public final class LineageSettings {
                 sBooleanValidator;
 
         /**
+         * Whether to use the default LED values for all apps
+         * 0 = 0ff, 1 = on
+         * @hide
+         */
+        public static final String NOTIFICATION_LIGHT_PULSE_OVERRIDE =
+                "notification_light_pulse_override";
+
+        /** @hide */
+        public static final Validator NOTIFICATION_LIGHT_PULSE_OVERRIDE_VALIDATOR =
+                sBooleanValidator;
+
+        /**
          * Whether or not to launch default music player when headset is connected
          */
         public static final String HEADSET_CONNECT_PLAYER = "headset_connect_player";
@@ -2370,6 +2382,8 @@ public final class LineageSettings {
                     NOTIFICATION_LIGHT_PULSE_CUSTOM_VALUES_VALIDATOR);
             VALIDATORS.put(NOTIFICATION_LIGHT_COLOR_AUTO,
                     NOTIFICATION_LIGHT_COLOR_AUTO_VALIDATOR);
+            VALIDATORS.put(NOTIFICATION_LIGHT_PULSE_OVERRIDE,
+                    NOTIFICATION_LIGHT_PULSE_OVERRIDE_VALIDATOR);
             VALIDATORS.put(HEADSET_CONNECT_PLAYER, HEADSET_CONNECT_PLAYER_VALIDATOR);
             VALIDATORS.put(ZEN_ALLOW_LIGHTS, ZEN_ALLOW_LIGHTS_VALIDATOR);
             VALIDATORS.put(ZEN_PRIORITY_ALLOW_LIGHTS, ZEN_PRIORITY_ALLOW_LIGHTS_VALIDATOR);

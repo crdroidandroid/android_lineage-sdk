@@ -87,8 +87,6 @@ public class NetworkTraffic extends TextView {
     private long mLastTxBytes;
     private long mLastRxBytes;
     private long mLastUpdateTime;
-    private int mTextSizeSingle;
-    private int mTextSizeMulti;
     private boolean mAutoHide;
     private long mAutoHideThreshold;
     private int mUnits;
@@ -102,9 +100,6 @@ public class NetworkTraffic extends TextView {
     protected boolean mAttached;
     private boolean mHideArrows;
 
-    // Network tracking related variables
-    private final ConnectivityManager mConnectivityManager;
-    private final HashMap<Network, LinkProperties> mLinkPropertiesMap = new HashMap<>();
     // Used to indicate that the set of sources contributing
     // to current stats have changed.
     private boolean mNetworksChanged = true;
@@ -121,22 +116,6 @@ public class NetworkTraffic extends TextView {
 
     public NetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-
-        mNetworkManagementService = INetworkManagementService.Stub.asInterface(
-                    ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE));
-
-        final Resources resources = getResources();
-        mTextSizeSingle = resources.getDimensionPixelSize(R.dimen.net_traffic_single_text_size);
-        mTextSizeMulti = resources.getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
-
-        mObserver = new SettingsObserver(mTrafficHandler);
-
-        mConnectivityManager = getContext().getSystemService(ConnectivityManager.class);
-        final NetworkRequest request = new NetworkRequest.Builder()
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-                .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
-                .build();
-        mConnectivityManager.registerNetworkCallback(request, mNetworkCallback);
     }
 
     @Override
@@ -147,6 +126,7 @@ public class NetworkTraffic extends TextView {
             mAttached = true;
             mContext.registerReceiver(mIntentReceiver,
                     new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+            mObserver = new SettingsObserver(mTrafficHandler);
             mObserver.observe();
         }
         updateSettings();
@@ -172,21 +152,13 @@ public class NetworkTraffic extends TextView {
                 // Sum tx and rx bytes from all sources of interest
                 long txBytes = 0;
                 long rxBytes = 0;
-                // Add interface stats
-                for (LinkProperties linkProperties : mLinkPropertiesMap.values()) {
-                    final String iface = linkProperties.getInterfaceName();
-                    if (iface == null) {
-                        continue;
-                    }
-                    final long ifaceTxBytes = TrafficStats.getTxBytes(iface);
-                    final long ifaceRxBytes = TrafficStats.getRxBytes(iface);
-                    if (DEBUG) {
-                        Log.d(TAG, "adding stats from interface " + iface
-                                + " txbytes " + ifaceTxBytes + " rxbytes " + ifaceRxBytes);
-                    }
-                    txBytes += ifaceTxBytes;
-                    rxBytes += ifaceRxBytes;
-                }
+
+                // Add stats
+                final long newTxBytes = TrafficStats.getTotalTxBytes();
+                final long newRxBytes = TrafficStats.getTotalRxBytes();
+
+                txBytes += newTxBytes;
+                rxBytes += newRxBytes;
 
                 // Add tether hw offload counters since these are
                 // not included in netd interface stats.
@@ -234,12 +206,8 @@ public class NetworkTraffic extends TextView {
                 }
 
                 // Ensure text size is where it needs to be
-                int textSize;
                 if (showUpstream && showDownstream) {
                     output.append("\n");
-                    textSize = mTextSizeMulti;
-                } else {
-                    textSize = mTextSizeSingle;
                 }
 
                 // Add information for downlink if it's called for
@@ -249,7 +217,6 @@ public class NetworkTraffic extends TextView {
 
                 // Update view if there's anything new to show
                 if (!output.toString().contentEquals(getText())) {
-                    setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) textSize);
                     setText(output.toString());
                 }
             }
@@ -376,6 +343,12 @@ public class NetworkTraffic extends TextView {
         TetheringStats tetheringStats = new TetheringStats();
 
         NetworkStats stats = null;
+
+        if (mNetworkManagementService == null) {
+            mNetworkManagementService = INetworkManagementService.Stub.asInterface(
+                    ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE));
+        }
+
         try {
             // STATS_PER_UID returns hw offload and netd stats combined (as entry UID_TETHERING)
             // STATS_PER_IFACE returns only hw offload stats (as entry UID_ALL)
@@ -443,6 +416,9 @@ public class NetworkTraffic extends TextView {
 
     protected void updateTrafficDrawable(boolean enabled) {
         final int drawableResId;
+        final int textSizeId;
+        final Resources resources = getResources();
+
         if (enabled && !mHideArrows && mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
             drawableResId = R.drawable.stat_sys_network_traffic_updown;
         } else if (enabled && !mHideArrows && mMode == MODE_UPSTREAM_ONLY) {
@@ -452,26 +428,20 @@ public class NetworkTraffic extends TextView {
         } else {
             drawableResId = 0;
         }
-        mDrawable = drawableResId != 0 ? getResources().getDrawable(drawableResId) : null;
+
+        if (mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
+            textSizeId = R.dimen.net_traffic_multi_text_size;
+        } else {
+            textSizeId = R.dimen.net_traffic_single_text_size;
+        }
+
+        mDrawable = drawableResId != 0 ? resources.getDrawable(drawableResId) : null;
         if (mDrawable != null) {
             mDrawable.setColorFilter(mIconTint, PorterDuff.Mode.MULTIPLY);
         }
         setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
+
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) resources.getDimensionPixelSize(textSizeId));
         setTextColor(mIconTint);
     }
-
-    private ConnectivityManager.NetworkCallback mNetworkCallback =
-            new ConnectivityManager.NetworkCallback() {
-        @Override
-        public void onLinkPropertiesChanged(Network network, LinkProperties linkProperties) {
-            mLinkPropertiesMap.put(network, linkProperties);
-            mNetworksChanged = true;
-        }
-
-        @Override
-        public void onLost(Network network) {
-            mLinkPropertiesMap.remove(network);
-            mNetworksChanged = true;
-        }
-    };
 }

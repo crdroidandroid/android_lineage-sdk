@@ -76,8 +76,6 @@ public class NetworkTraffic extends TextView {
     private static final long AUTOHIDE_THRESHOLD_KILOBYTES = 8;
     private static final long AUTOHIDE_THRESHOLD_MEGABYTES = 80;
 
-    protected static final String blank = "";
-
     protected int mLocation = 0;
     private int mMode = MODE_UPSTREAM_AND_DOWNSTREAM;
     private boolean mConnectionAvailable;
@@ -99,12 +97,18 @@ public class NetworkTraffic extends TextView {
 
     protected boolean mAttached;
     private boolean mHideArrows;
+    private float mTextSize = 0.0f;
 
     // Used to indicate that the set of sources contributing
     // to current stats have changed.
     private boolean mNetworksChanged = true;
 
     private INetworkManagementService mNetworkManagementService;
+
+    protected boolean mVisible = true;
+    protected boolean mScreenOn = true;
+
+    private ConnectivityManager mConnectivityManager;
 
     public NetworkTraffic(Context context) {
         this(context, null);
@@ -116,6 +120,12 @@ public class NetworkTraffic extends TextView {
 
     public NetworkTraffic(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mContext = context;
+        mConnectivityManager =
+                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        mObserver = new SettingsObserver(mTrafficHandler);
+        mObserver.observe();
+        updateSettings();
     }
 
     @Override
@@ -124,12 +134,12 @@ public class NetworkTraffic extends TextView {
 
         if (!mAttached) {
             mAttached = true;
-            mContext.registerReceiver(mIntentReceiver,
-                    new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-            mObserver = new SettingsObserver(mTrafficHandler);
-            mObserver.observe();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            mContext.registerReceiver(mIntentReceiver, filter, null, mTrafficHandler);
         }
-        updateSettings();
     }
 
     @Override
@@ -137,7 +147,6 @@ public class NetworkTraffic extends TextView {
         super.onDetachedFromWindow();
         if (mAttached) {
             mContext.unregisterReceiver(mIntentReceiver);
-            mObserver.unobserve();
             mAttached = false;
         }
     }
@@ -189,16 +198,16 @@ public class NetworkTraffic extends TextView {
             }
 
             mConnectionAvailable = isConnectionAvailable();
-            final boolean enabled = mLocation != 0;
+            final boolean enabled = mLocation != 0 && mScreenOn;
             final boolean showUpstream =
                     mMode == MODE_UPSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
             final boolean showDownstream =
                     mMode == MODE_DOWNSTREAM_ONLY || mMode == MODE_UPSTREAM_AND_DOWNSTREAM;
             final boolean aboveThreshold = (showUpstream && mTxKbps > mAutoHideThreshold)
                     || (showDownstream && mRxKbps > mAutoHideThreshold);
-            mIsActive = mAttached && (!mAutoHide || (mConnectionAvailable && aboveThreshold));
+            mIsActive = enabled && mAttached && (!mAutoHide || (mConnectionAvailable && aboveThreshold));
 
-            if (enabled && mIsActive) {
+            if (mIsActive) {
                 // Get information for uplink ready so the line return can be added
                 StringBuilder output = new StringBuilder();
                 if (showUpstream) {
@@ -265,22 +274,26 @@ public class NetworkTraffic extends TextView {
     };
 
     protected void updateVisibility() {
-        boolean enabled = mIsActive && !blank.contentEquals(getText()) && (mLocation == 2);
-        if (enabled) {
-            setVisibility(VISIBLE);
-        } else {
-            setText(blank);
-            setVisibility(GONE);
+        boolean enabled = mIsActive && (mLocation == 2) && mScreenOn;
+        if (enabled != mVisible) {
+            mVisible = enabled;
+            setVisibility(mVisible ? VISIBLE : GONE);
         }
-        updateTrafficDrawable(enabled);
     }
 
     private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
-                updateViewState();
+            if (action == null) return;
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION) && mScreenOn) {
+                updateViews();
+            } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+                mScreenOn = true;
+                updateViews();
+            } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
+                mScreenOn = false;
+                updateViews();
             }
         }
     };
@@ -329,9 +342,7 @@ public class NetworkTraffic extends TextView {
     }
 
     private boolean isConnectionAvailable() {
-        ConnectivityManager cm =
-                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null;
+        return mConnectivityManager.getActiveNetworkInfo() != null;
     }
 
     private class TetheringStats {
@@ -402,46 +413,67 @@ public class NetworkTraffic extends TextView {
         mHideArrows = LineageSettings.Secure.getIntForUser(resolver,
                 LineageSettings.Secure.NETWORK_TRAFFIC_HIDEARROW, 0, UserHandle.USER_CURRENT) == 1;
 
-        updateViewState();
+        setTrafficDrawable();
+        updateViews();
     }
 
-    private void updateViewState() {
-        mTrafficHandler.sendEmptyMessage(MESSAGE_TYPE_UPDATE_VIEW);
+    protected void updateViews() {
+        if (mLocation == 2 && mScreenOn) {
+            updateViewState();
+        } else {
+            clearHandlerCallbacks();
+            updateVisibility();
+        }
     }
 
-    private void clearHandlerCallbacks() {
+    protected void updateViewState() {
+        mTrafficHandler.removeMessages(MESSAGE_TYPE_UPDATE_VIEW);
+        mTrafficHandler.sendEmptyMessageDelayed(MESSAGE_TYPE_UPDATE_VIEW, 1000);
+
+    }
+
+    protected void clearHandlerCallbacks() {
         mTrafficHandler.removeMessages(MESSAGE_TYPE_PERIODIC_REFRESH);
         mTrafficHandler.removeMessages(MESSAGE_TYPE_UPDATE_VIEW);
     }
 
-    protected void updateTrafficDrawable(boolean enabled) {
+    protected void setTrafficDrawable() {
         final int drawableResId;
-        final int textSizeId;
+        final float textSize;
         final Resources resources = getResources();
+        final Drawable drawable;
 
-        if (enabled && !mHideArrows && mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
+        if (mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
+            textSize = (float) resources.getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
+        } else {
+            textSize = (float) resources.getDimensionPixelSize(R.dimen.net_traffic_single_text_size);
+        }
+        if (mTextSize != textSize) {
+            mTextSize = textSize;
+            setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
+        }
+
+        if (!mHideArrows && mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
             drawableResId = R.drawable.stat_sys_network_traffic_updown;
-        } else if (enabled && !mHideArrows && mMode == MODE_UPSTREAM_ONLY) {
+        } else if (!mHideArrows && mMode == MODE_UPSTREAM_ONLY) {
             drawableResId = R.drawable.stat_sys_network_traffic_up;
-        } else if (enabled && !mHideArrows && mMode == MODE_DOWNSTREAM_ONLY) {
+        } else if (!mHideArrows && mMode == MODE_DOWNSTREAM_ONLY) {
             drawableResId = R.drawable.stat_sys_network_traffic_down;
         } else {
             drawableResId = 0;
         }
-
-        if (mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
-            textSizeId = R.dimen.net_traffic_multi_text_size;
-        } else {
-            textSizeId = R.dimen.net_traffic_single_text_size;
+        drawable = drawableResId != 0 ? resources.getDrawable(drawableResId) : null;
+        if (mDrawable != drawable) {
+            mDrawable = drawable;
+            updateTrafficDrawable();
         }
+    }
 
-        mDrawable = drawableResId != 0 ? resources.getDrawable(drawableResId) : null;
+    protected void updateTrafficDrawable() {
         if (mDrawable != null) {
             mDrawable.setColorFilter(mIconTint, PorterDuff.Mode.MULTIPLY);
         }
         setCompoundDrawablesWithIntrinsicBounds(null, null, mDrawable, null);
-
-        setTextSize(TypedValue.COMPLEX_UNIT_PX, (float) resources.getDimensionPixelSize(textSizeId));
         setTextColor(mIconTint);
     }
 }

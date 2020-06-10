@@ -78,6 +78,7 @@ public class NetworkTraffic extends TextView {
 
     protected int mLocation = 0;
     private int mMode = MODE_UPSTREAM_AND_DOWNSTREAM;
+    private int mSubMode = MODE_UPSTREAM_AND_DOWNSTREAM;
     private boolean mConnectionAvailable;
     protected boolean mIsActive;
     private long mTxKbps;
@@ -206,28 +207,32 @@ public class NetworkTraffic extends TextView {
             final boolean aboveThreshold = (showUpstream && mTxKbps > mAutoHideThreshold)
                     || (showDownstream && mRxKbps > mAutoHideThreshold);
             mIsActive = enabled && mAttached && (!mAutoHide || (mConnectionAvailable && aboveThreshold));
+            int submode = MODE_UPSTREAM_AND_DOWNSTREAM;
 
             if (mIsActive) {
-                // Get information for uplink ready so the line return can be added
-                StringBuilder output = new StringBuilder();
-                if (showUpstream) {
-                    output.append(formatOutput(mTxKbps));
-                }
-
-                // Ensure text size is where it needs to be
+                String output = "";
                 if (showUpstream && showDownstream) {
-                    output.append("\n");
-                }
-
-                // Add information for downlink if it's called for
-                if (showDownstream) {
-                    output.append(formatOutput(mRxKbps));
+                    if (mTxKbps > mRxKbps) {
+                        output = formatOutput(mTxKbps);
+                        submode = MODE_UPSTREAM_ONLY;
+                    } else {
+                        output = formatOutput(mRxKbps);
+                        submode = MODE_DOWNSTREAM_ONLY;
+                    }
+                } else if (showDownstream) {
+                    output = formatOutput(mRxKbps);
+                } else if (showUpstream) {
+                    output = formatOutput(mTxKbps);
                 }
 
                 // Update view if there's anything new to show
-                if (!output.toString().contentEquals(getText())) {
-                    setText(output.toString());
+                if (!output.contentEquals(getText())) {
+                    setText(output);
                 }
+            }
+            if (mSubMode != submode) {
+                mSubMode = submode;
+                setTrafficDrawable();
             }
             updateVisibility();
 
@@ -443,18 +448,20 @@ public class NetworkTraffic extends TextView {
         final Resources resources = getResources();
         final Drawable drawable;
 
-        if (mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
-            textSize = (float) resources.getDimensionPixelSize(R.dimen.net_traffic_multi_text_size);
-        } else {
-            textSize = (float) resources.getDimensionPixelSize(R.dimen.net_traffic_single_text_size);
-        }
+        textSize = (float) resources.getDimensionPixelSize(R.dimen.net_traffic_single_text_size);
         if (mTextSize != textSize) {
             mTextSize = textSize;
             setTextSize(TypedValue.COMPLEX_UNIT_PX, mTextSize);
         }
 
         if (!mHideArrows && mMode == MODE_UPSTREAM_AND_DOWNSTREAM) {
-            drawableResId = R.drawable.stat_sys_network_traffic_updown;
+            if (mSubMode == MODE_DOWNSTREAM_ONLY) {
+                drawableResId = R.drawable.stat_sys_network_traffic_down;
+            } else if (mSubMode == MODE_UPSTREAM_ONLY) {
+                drawableResId = R.drawable.stat_sys_network_traffic_up;
+            } else {
+                drawableResId = R.drawable.stat_sys_network_traffic_updown;
+            }
         } else if (!mHideArrows && mMode == MODE_UPSTREAM_ONLY) {
             drawableResId = R.drawable.stat_sys_network_traffic_up;
         } else if (!mHideArrows && mMode == MODE_DOWNSTREAM_ONLY) {

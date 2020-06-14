@@ -257,11 +257,11 @@ public class NetworkTraffic extends TextView {
                 decimalFormat = new DecimalFormat("0.00");
                 formatSpeed =  decimalFormat.format(speed / (float)GB);
             } else if (speed >= 100 * MB) {
-                decimalFormat = new DecimalFormat("000");
+                decimalFormat = new DecimalFormat("###0");
                 unit = "MB";
                 formatSpeed =  decimalFormat.format(speed / (float)MB);
             } else if (speed >= 10 * MB) {
-                decimalFormat = new DecimalFormat("00.0");
+                decimalFormat = new DecimalFormat("#0.0");
                 unit = "MB";
                 formatSpeed =  decimalFormat.format(speed / (float)MB);
             } else if (speed >= MB) {
@@ -269,11 +269,11 @@ public class NetworkTraffic extends TextView {
                 unit = "MB";
                 formatSpeed =  decimalFormat.format(speed / (float)MB);
             } else if (speed >= 100 * KB) {
-                decimalFormat = new DecimalFormat("000");
+                decimalFormat = new DecimalFormat("##0");
                 unit = "KB";
                 formatSpeed =  decimalFormat.format(speed / (float)KB);
             } else if (speed >= 10 * KB) {
-                decimalFormat = new DecimalFormat("00.0");
+                decimalFormat = new DecimalFormat("#0.0");
                 unit = "KB";
                 formatSpeed =  decimalFormat.format(speed / (float)KB);
             } else {

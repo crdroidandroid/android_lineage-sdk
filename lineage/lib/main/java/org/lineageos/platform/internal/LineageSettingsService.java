@@ -45,7 +45,14 @@ public class LineageSettingsService extends LineageSystemService {
             // Load custom hostname
             String hostname = LineageSettings.Secure.getString(mContext.getContentResolver(),
                     LineageSettings.Secure.DEVICE_HOSTNAME);
-            SystemProperties.set("net.hostname", hostname);
+            if (hostname != null && hostname.length() > 0) {
+                SystemProperties.set("net.hostname", hostname);
+            } else {
+                String name = SystemProperties.get("ro.product.name");
+                if (name != null && name.length() > 0) {
+                    SystemProperties.set("net.hostname", name);
+                }
+            }
         }
     }
 

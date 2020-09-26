@@ -5,7 +5,7 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">سیستم LineageOS</string>
+    <string name="lineageos_system_label">سیستم crDroid</string>
     <string name="permlab_modifyProfiles">تغییر پروفایل‌های سیستم</string>
     <string name="permdesc_modifyProfiles">به برنامه اجازه می‌دهد تا پروفایل‌های سیستم را تغییر دهد.</string>
     <string name="permlab_useHardwareFramework">استفاده از چارچوب سخت‌افزار</string>
@@ -56,9 +56,9 @@
     <string name="permlab_manageRemotePrefs">کنترل تنظیمات از راه دور</string>
     <string name="permdesc_manageRemotePrefs">به برنامه اجازه میدهد تا تنظیمات از راه دور را کنترل کند</string>
     <string name="build_date">تاریخ ساخت</string>
-    <string name="lineage_api_level">سطح LineageOS API </string>
-    <string name="lineage_updates">به‌روزرسانی‌های LineageOS</string>
-    <string name="lineage_version">نگارش LineageOS</string>
+    <string name="lineage_api_level">سطح crDroid API </string>
+    <string name="lineage_updates">به‌روزرسانی‌های crDroid</string>
+    <string name="lineage_version">نگارش crDroid</string>
     <string name="lineage_vendor_security_patch">سطح وصله امنیتی فروشنده</string>
     <string name="unknown">ناشناخته</string>
     <string name="app_killed_message">برنامه بسته شد</string>

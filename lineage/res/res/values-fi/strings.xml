@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS Järjestelmä</string>
+    <string name="lineageos_system_label">crDroid Järjestelmä</string>
     <string name="permlab_modifyProfiles">muokkaa järjestelmän profiileja</string>
     <string name="permdesc_modifyProfiles">Sallii sovelluksen muokata järjestelmäprofiileja.</string>
     <string name="permlab_useHardwareFramework">käytä laitteiston kehystä</string>
-    <string name="permdesc_useHardwareFramework">Sallii sovelluksen pääsyn Lineage-laitteiston kehykseen.</string>
-    <string name="permlab_writeSettings">muokkaa Lineage-järjestelmän asetuksia</string>
-    <string name="permdesc_writeSettings">Sallii sovelluksen muokata Lineage-järjestelmän asetuksia.</string>
-    <string name="permlab_writeSecureSettings">muokkaa Lineage-turvallisuusjärjestelmän asetuksia</string>
-    <string name="permdesc_writeSecureSettings">Sallii sovelluksen muokata Lineage turvallisuusjärjestelmäasetuksia. Ei käytössä tavallisille sovelluksille.</string>
+    <string name="permdesc_useHardwareFramework">Sallii sovelluksen pääsyn crDroid-laitteiston kehykseen.</string>
+    <string name="permlab_writeSettings">muokkaa crDroid-järjestelmän asetuksia</string>
+    <string name="permdesc_writeSettings">Sallii sovelluksen muokata crDroid-järjestelmän asetuksia.</string>
+    <string name="permlab_writeSecureSettings">muokkaa crDroid-turvallisuusjärjestelmän asetuksia</string>
+    <string name="permdesc_writeSecureSettings">Sallii sovelluksen muokata crDroid turvallisuusjärjestelmäasetuksia. Ei käytössä tavallisille sovelluksille.</string>
     <string name="profileNameDefault">Oletus</string>
     <string name="profileNameWork">Työ</string>
     <string name="profileNameHome">Koti</string>
@@ -52,9 +52,9 @@
     <string name="permlab_manageRemotePrefs">hallitse etäkäytön asetuksia</string>
     <string name="permdesc_manageRemotePrefs">Sallii sovellluksen hallita etäasetuksia</string>
     <string name="build_date">Luontipäivä</string>
-    <string name="lineage_api_level">LineageOS API-taso</string>
-    <string name="lineage_updates">LineageOS-päivitykset</string>
-    <string name="lineage_version">LineageOS-versio</string>
+    <string name="lineage_api_level">crDroid API-taso</string>
+    <string name="lineage_updates">crDroid-päivitykset</string>
+    <string name="lineage_version">crDroid-versio</string>
     <string name="lineage_vendor_security_patch">Valmistajan tietoturvakorjauksen taso</string>
     <string name="unknown">Tuntematon</string>
     <string name="app_killed_message">Sovellus pysäytetty</string>

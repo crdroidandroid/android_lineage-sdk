@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2011-2015 CyanogenMod Project
- *               2017-2020 LineageOS Project
+ *               2017-2020 crDroid Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

@@ -16,15 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS kerfi</string>
+    <string name="lineageos_system_label">crDroid kerfi</string>
     <string name="permlab_modifyProfiles">breyta kerfissniðum</string>
     <string name="permdesc_modifyProfiles">Gerir forriti kleift að breyta kerfissniðum.</string>
     <string name="permlab_useHardwareFramework">fá aðgang að vélbúnaðarkerfum</string>
-    <string name="permdesc_useHardwareFramework">Gerir forriti kleift að fá aðgang að vélbúnaðarkerfum LineageOS.</string>
-    <string name="permlab_writeSettings">breyta kerfisstillingum LineageOS</string>
-    <string name="permdesc_writeSettings">Gerir forriti kleift að breyta kerfisstillingum LineageOS.</string>
-    <string name="permlab_writeSecureSettings">breyta öruggum kerfisstillingum LineageOS</string>
-    <string name="permdesc_writeSecureSettings">Gerir forriti kleift að breyta öryggisstillingum LineageOS. Notist ekki af venjulegum forritum.</string>
+    <string name="permdesc_useHardwareFramework">Gerir forriti kleift að fá aðgang að vélbúnaðarkerfum crDroid.</string>
+    <string name="permlab_writeSettings">breyta kerfisstillingum crDroid</string>
+    <string name="permdesc_writeSettings">Gerir forriti kleift að breyta kerfisstillingum crDroid.</string>
+    <string name="permlab_writeSecureSettings">breyta öruggum kerfisstillingum crDroid</string>
+    <string name="permdesc_writeSecureSettings">Gerir forriti kleift að breyta öryggisstillingum crDroid. Notist ekki af venjulegum forritum.</string>
     <string name="profileNameDefault">Sjálfgefið</string>
     <string name="profileNameWork">Vinna</string>
     <string name="profileNameHome">Heim</string>
@@ -63,9 +63,9 @@
     <string name="permlab_manageRemotePrefs">sýsla með fjartengdar stillingar</string>
     <string name="permdesc_manageRemotePrefs">Gerir forriti kleift að sýsla með fjartengdar stillingar</string>
     <string name="build_date">Byggingardagsetning</string>
-    <string name="lineage_api_level">LineageOS API-stig</string>
-    <string name="lineage_updates">LineageOS uppfærslur</string>
-    <string name="lineage_version">LineageOS útgáfa</string>
+    <string name="lineage_api_level">crDroid API-stig</string>
+    <string name="lineage_updates">crDroid uppfærslur</string>
+    <string name="lineage_version">crDroid útgáfa</string>
     <string name="lineage_vendor_security_patch">Stig öryggisviðbóta framleiðanda</string>
     <string name="unknown">Óþekkt</string>
     <string name="app_killed_message">Forrit drepið</string>

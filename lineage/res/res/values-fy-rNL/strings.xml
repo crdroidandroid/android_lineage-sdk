@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS-systeem</string>
+    <string name="lineageos_system_label">crDroid-systeem</string>
     <string name="permlab_modifyProfiles">systeemprofilen wizigje</string>
     <string name="permdesc_modifyProfiles">Hjirmei kin de app systeemprofilen wizigje.</string>
     <string name="permlab_useHardwareFramework">hardware-framework brûke</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">ynstellingen foar behear op ôfstân</string>
     <string name="permdesc_manageRemotePrefs">Hjirmei kin de app ynstellingen foar behear op ôfstân beheare</string>
     <string name="build_date">Build-datum</string>
-    <string name="lineage_api_level">LineageOS-API-Nivo</string>
-    <string name="lineage_updates">LineageOS-fernijingen</string>
-    <string name="lineage_version">LineageOS-ferzje</string>
+    <string name="lineage_api_level">crDroid-API-Nivo</string>
+    <string name="lineage_updates">crDroid-fernijingen</string>
+    <string name="lineage_version">crDroid-ferzje</string>
     <string name="lineage_vendor_security_patch">Leveransiers-befeiligingspatch-nivo</string>
     <string name="unknown">Unbekend</string>
     <string name="app_killed_message">App ôfsluten</string>

@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS 시스템</string>
+    <string name="lineageos_system_label">crDroid 시스템</string>
     <string name="permlab_modifyProfiles">시스템 프로필 수정</string>
     <string name="permdesc_modifyProfiles">앱이 시스템 프로필을 수정할 수 있도록 허용합니다.</string>
     <string name="permlab_useHardwareFramework">하드웨어 프레임워크 사용</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">원격 설정 관리</string>
     <string name="permdesc_manageRemotePrefs">앱이 원격 설정을 관리할 수 있도록 허용합니다.</string>
     <string name="build_date">빌드 날짜</string>
-    <string name="lineage_api_level">LineageOS API 수준</string>
-    <string name="lineage_updates">LineageOS 업데이트</string>
-    <string name="lineage_version">LineageOS 버전</string>
+    <string name="lineage_api_level">crDroid API 수준</string>
+    <string name="lineage_updates">crDroid 업데이트</string>
+    <string name="lineage_version">crDroid 버전</string>
     <string name="lineage_vendor_security_patch">공급업체 보안 패치 수준</string>
     <string name="unknown">알 수 없음</string>
     <string name="app_killed_message">애플리케이션 종료됨</string>

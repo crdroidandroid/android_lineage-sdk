@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Siostam LineageOS</string>
+    <string name="lineageos_system_label">Siostam crDroid</string>
     <string name="permlab_modifyProfiles">pròifilean an t-siostaim atharrachadh</string>
     <string name="permdesc_modifyProfiles">Leigidh seo le aplacaid pròifilean an t-siostaim atharrachadh.</string>
     <string name="permlab_useHardwareFramework">frèam-obrach bathair-chruaidh a chleachdadh</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">roghainnean cèine a stiùireadh</string>
     <string name="permdesc_manageRemotePrefs">Leigidh seo le aplacaid roghainnean cèine a stiùireadh</string>
     <string name="build_date">Ceann-là na togail</string>
-    <string name="lineage_api_level">Leibheil API LineageOS</string>
-    <string name="lineage_updates">Ùrachaidhean air LineageOS</string>
-    <string name="lineage_version">An tionndadh de LineageOS</string>
+    <string name="lineage_api_level">Leibheil API crDroid</string>
+    <string name="lineage_updates">Ùrachaidhean air crDroid</string>
+    <string name="lineage_version">An tionndadh de crDroid</string>
     <string name="lineage_vendor_security_patch">Leibheil brèide tèarainteachd an reiceadair</string>
     <string name="unknown">Chan eil fhios</string>
     <string name="app_killed_message">Chaidh aplacaid a mharbhadh</string>

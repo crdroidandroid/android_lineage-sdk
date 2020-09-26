@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Sistema LineageOS</string>
+    <string name="lineageos_system_label">Sistema crDroid</string>
     <string name="permlab_modifyProfiles">modifica profili sistema</string>
     <string name="permdesc_modifyProfiles">Consente all\'applicazione di modificare i profili di sistema.</string>
     <string name="permlab_useHardwareFramework">utilizza framework hardware</string>
@@ -24,7 +24,7 @@
     <string name="permlab_writeSettings">modifica le impostazioni di sistema di Lineage</string>
     <string name="permdesc_writeSettings">Consente all\'applicazione di modificare le impostazioni di sistema di Lineage.</string>
     <string name="permlab_writeSecureSettings">modifica le impostazioni sicure di sistema di Lineage</string>
-    <string name="permdesc_writeSecureSettings">Consente all\'applicazione di modificare le impostazioni sicure di sistema di LineageOS. Non utilizzato dalle app normali.</string>
+    <string name="permdesc_writeSecureSettings">Consente all\'applicazione di modificare le impostazioni sicure di sistema di crDroid. Non utilizzato dalle app normali.</string>
     <string name="profileNameDefault">Predefinito</string>
     <string name="profileNameWork">Lavoro</string>
     <string name="profileNameHome">Casa</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">gestisci impostazioni remote</string>
     <string name="permdesc_manageRemotePrefs">Consente all\'applicazione di gestire le impostazioni remote</string>
     <string name="build_date">Data build</string>
-    <string name="lineage_api_level">Livello API LineageOS</string>
-    <string name="lineage_updates">Aggiornamenti LineageOS</string>
-    <string name="lineage_version">Versione LineageOS</string>
+    <string name="lineage_api_level">Livello API crDroid</string>
+    <string name="lineage_updates">Aggiornamenti crDroid</string>
+    <string name="lineage_version">Versione crDroid</string>
     <string name="lineage_vendor_security_patch">Livello patch sicurezza produttore</string>
     <string name="unknown">Sconosciuto</string>
     <string name="app_killed_message">Applicazione chiusa</string>

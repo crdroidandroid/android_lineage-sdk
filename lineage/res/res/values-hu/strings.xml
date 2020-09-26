@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS-rendszer</string>
+    <string name="lineageos_system_label">crDroid-rendszer</string>
     <string name="permlab_modifyProfiles">rendszerprofilok módosítása</string>
     <string name="permdesc_modifyProfiles">Lehetővé teszi az alkalmazás számára a rendszerprofilok módosítását.</string>
     <string name="permlab_useHardwareFramework">hardver keretrendszert használ</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">távoli beállítások kezelése</string>
     <string name="permdesc_manageRemotePrefs">Lehetővé teszi az alkalmazások számára a távoli beállítások kezelését</string>
     <string name="build_date">A kiadás dátuma</string>
-    <string name="lineage_api_level">A LineageOS API-szintje</string>
-    <string name="lineage_updates">LineageOS-frissítések</string>
-    <string name="lineage_version">LineageOS-verzió</string>
+    <string name="lineage_api_level">A crDroid API-szintje</string>
+    <string name="lineage_updates">crDroid-frissítések</string>
+    <string name="lineage_version">crDroid-verzió</string>
     <string name="lineage_vendor_security_patch">Gyártói biztonsági hibajavítócsomag-szint</string>
     <string name="unknown">Ismeretlen</string>
     <string name="app_killed_message">Az alkalmazás leállítva</string>

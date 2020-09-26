@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS Sistemi</string>
+    <string name="lineageos_system_label">crDroid Sistemi</string>
     <string name="permlab_modifyProfiles">sistem profillərini dəyişdir</string>
     <string name="permdesc_modifyProfiles">Tətbiqin sistem profillərini dəyişdirməsinə icazə verir.</string>
     <string name="permlab_useHardwareFramework">avadanlıq bünövrəsindən istifadə et</string>
-    <string name="permdesc_useHardwareFramework">Tətbiqin Lineage avadanlıq bünövrəsinə müraciətinə icazə verir.</string>
-    <string name="permlab_writeSettings">Lineage sistem ayarlarını dəyişdir</string>
-    <string name="permdesc_writeSettings">Tətbiqin Lineage sistem ayarlarını dəyişdirməsinə icazə verir.</string>
-    <string name="permlab_writeSecureSettings">Lineage güvənli sistem ayarlarını dəyişdir</string>
-    <string name="permdesc_writeSecureSettings">Tətbiqin Lineage güvənli sistem ayarlarını dəyişdirməsinə icazə verir. Normal tətbiqlər tərəfindən istifadə olunmur.</string>
+    <string name="permdesc_useHardwareFramework">Tətbiqin crDroid avadanlıq bünövrəsinə müraciətinə icazə verir.</string>
+    <string name="permlab_writeSettings">crDroid sistem ayarlarını dəyişdir</string>
+    <string name="permdesc_writeSettings">Tətbiqin crDroid sistem ayarlarını dəyişdirməsinə icazə verir.</string>
+    <string name="permlab_writeSecureSettings">crDroid güvənli sistem ayarlarını dəyişdir</string>
+    <string name="permdesc_writeSecureSettings">Tətbiqin crDroid güvənli sistem ayarlarını dəyişdirməsinə icazə verir. Normal tətbiqlər tərəfindən istifadə olunmur.</string>
     <string name="profileNameDefault">İlkin</string>
     <string name="profileNameWork">İş</string>
     <string name="profileNameHome">Ev</string>
@@ -52,9 +52,9 @@
     <string name="permlab_manageRemotePrefs">uzaqdan bağlantı ayarlarını idarə et</string>
     <string name="permdesc_manageRemotePrefs">Tətbiqin uzaqdan bağlantı ayarlarını idarə etməsinə icazə verir</string>
     <string name="build_date">Quruluş tarixi</string>
-    <string name="lineage_api_level">LineageOS API səviyyəsi</string>
-    <string name="lineage_updates">LineageOS güncəlləmələri</string>
-    <string name="lineage_version">LineageOS versiyası</string>
+    <string name="lineage_api_level">crDroid API səviyyəsi</string>
+    <string name="lineage_updates">crDroid güncəlləmələri</string>
+    <string name="lineage_version">crDroid versiyası</string>
     <string name="lineage_vendor_security_patch">Vendor güvənlik yamaq səviyyəsi</string>
     <string name="unknown">Bilinmir</string>
     <string name="app_killed_message">Tətbiq bağlanıldı</string>

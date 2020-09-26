@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Sistema LineageOS</string>
+    <string name="lineageos_system_label">Sistema crDroid</string>
     <string name="permlab_modifyProfiles">modificar perfis do sistema</string>
     <string name="permdesc_modifyProfiles">Permite que um app modifique perfis do sistema.</string>
     <string name="permlab_useHardwareFramework">usar estrutura de hardware</string>
-    <string name="permdesc_useHardwareFramework">Permite que um app acesse a estrutura de hardware do sistema Lineage.</string>
-    <string name="permlab_writeSettings">modificar as configurações do sistema Lineage</string>
-    <string name="permdesc_writeSettings">Permite que um app modifique as configurações do sistema Lineage.</string>
-    <string name="permlab_writeSecureSettings">modificar as configurações seguras do sistema Lineage</string>
-    <string name="permdesc_writeSecureSettings">Permite que um app modifique as configurações do sistema seguro Lineage. Não é utilizado por apps normais.</string>
+    <string name="permdesc_useHardwareFramework">Permite que um app acesse a estrutura de hardware do sistema crDroid.</string>
+    <string name="permlab_writeSettings">modificar as configurações do sistema crDroid</string>
+    <string name="permdesc_writeSettings">Permite que um app modifique as configurações do sistema crDroid.</string>
+    <string name="permlab_writeSecureSettings">modificar as configurações seguras do sistema crDroid</string>
+    <string name="permdesc_writeSecureSettings">Permite que um app modifique as configurações do sistema seguro crDroid. Não é utilizado por apps normais.</string>
     <string name="profileNameDefault">Padrão</string>
     <string name="profileNameWork">Trabalho</string>
     <string name="profileNameHome">Casa</string>

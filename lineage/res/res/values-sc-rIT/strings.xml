@@ -5,11 +5,11 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Sistema LineageOS</string>
+    <string name="lineageos_system_label">Sistema crDroid</string>
     <string name="permlab_modifyProfiles">modìfica sos profilos de sistema</string>
     <string name="permdesc_modifyProfiles">Permitit a un\'aplicatzione de modificare sos profilos de sistema.</string>
-    <string name="permlab_writeSettings">modìfica sas impostatziones de sistema de Lineage</string>
-    <string name="permdesc_writeSettings">Permitit a un\'aplicatzione de modificare sas impostatziones de sistema de Lineage.</string>
+    <string name="permlab_writeSettings">modìfica sas impostatziones de sistema de crDroid</string>
+    <string name="permdesc_writeSettings">Permitit a un\'aplicatzione de modificare sas impostatziones de sistema de crDroid.</string>
     <string name="profileNameDefault">Predefinidu</string>
     <string name="profileNameWork">Traballu</string>
     <string name="profileNameHome">Domo</string>
@@ -40,6 +40,6 @@
     <string name="accessibility_quick_settings_live_display_changed_day">LiveDisplay: cambiadu in modalidade pro sa die.</string>
     <string name="accessibility_quick_settings_live_display_changed_night">LiveDisplay: cambiadu in modalidade pro sa note.</string>
     <string name="accessibility_quick_settings_live_display_changed_outdoor">LiveDisplay: cambiadu in modalidade a s\'àera aberta.</string>
-    <string name="lineage_api_level">Livellu de s\'API de LineageOS</string>
+    <string name="lineage_api_level">Livellu de s\'API de crDroid</string>
     <string name="unknown">Disconnotu</string>
 </resources>

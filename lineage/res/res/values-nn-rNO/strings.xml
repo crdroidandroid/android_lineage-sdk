@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS-system</string>
+    <string name="lineageos_system_label">crDroid-system</string>
     <string name="permlab_modifyProfiles">endra systemprofilar</string>
     <string name="permdesc_modifyProfiles">Lèt ein app endra systemprofilar.</string>
     <string name="permlab_useHardwareFramework">bruka rammeverk for maskinvare</string>
-    <string name="permdesc_useHardwareFramework">Lèt ein app få tilgang til Lineage-rammeverket for maskinvare.</string>
-    <string name="permlab_writeSettings">endra systeminnstillingar for Lineage</string>
-    <string name="permdesc_writeSettings">Lèt ein app endra systeminnstillingar for Lineage.</string>
-    <string name="permlab_writeSecureSettings">endra trygge systeminnstillingar for Lineage</string>
-    <string name="permdesc_writeSecureSettings">Lèt ein app endra trygge systeminnstillingar for Lineage. Ikkje for vanlege appar.</string>
+    <string name="permdesc_useHardwareFramework">Lèt ein app få tilgang til crDroid-rammeverket for maskinvare.</string>
+    <string name="permlab_writeSettings">endra systeminnstillingar for crDroid</string>
+    <string name="permdesc_writeSettings">Lèt ein app endra systeminnstillingar for crDroid.</string>
+    <string name="permlab_writeSecureSettings">endra trygge systeminnstillingar for crDroid</string>
+    <string name="permdesc_writeSecureSettings">Lèt ein app endra trygge systeminnstillingar for crDroid. Ikkje for vanlege appar.</string>
     <string name="profileNameDefault">Standard</string>
     <string name="profileNameWork">Arbeid</string>
     <string name="profileNameHome">Heim</string>
@@ -56,9 +56,9 @@
     <string name="permlab_manageRemotePrefs">styra eksterne innstillingar</string>
     <string name="permdesc_manageRemotePrefs">Lèt ein app styra eksterne innstillingar.</string>
     <string name="build_date">Byggjedato</string>
-    <string name="lineage_api_level">LineageOS API-nivå</string>
-    <string name="lineage_updates">LineageOS-oppdateringar</string>
-    <string name="lineage_version">LineageOS-versjon</string>
+    <string name="lineage_api_level">crDroid API-nivå</string>
+    <string name="lineage_updates">crDroid-oppdateringar</string>
+    <string name="lineage_version">crDroid-versjon</string>
     <string name="lineage_vendor_security_patch">Tryggleiksoppdatering frå leverandøren</string>
     <string name="unknown">Ukjend</string>
     <string name="app_killed_message">Programmet vart avslutta</string>

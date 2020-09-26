@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">سیستمی LineageOS</string>
+    <string name="lineageos_system_label">سیستمی crDroid</string>
     <string name="permlab_modifyProfiles">دەستکاریکردنی پرۆفایلەکانی سیستم</string>
     <string name="permdesc_modifyProfiles">ڕێگە بە بەرنامە دەدات کە پرۆفایلەکانی سیستم دەستکاری بکات.</string>
     <string name="permlab_useHardwareFramework">بەکارهێنانی چوارچێوەی ڕەقەکاڵا</string>
-    <string name="permdesc_useHardwareFramework">ڕێگە بە بەرنامە دەدات دەستی بگات بە چوارچێوەی ڕەقەکاڵای Lineage.</string>
-    <string name="permlab_writeSettings">دەستکاریکردنی ڕێکخستنەکانی سیستمی Lineage</string>
-    <string name="permdesc_writeSettings">ڕێگە بە بەرنامە دەدات ڕێکخستنەکانی سیستمی Lineage دەستکاری بکات.</string>
-    <string name="permlab_writeSecureSettings">دەستکاریکردنی ڕێکخستنە پارێزراوەکانی سیستمی Lineage</string>
-    <string name="permdesc_writeSecureSettings">ڕێگە بە بەرنامە دەدات ڕێکخستنە پارێزراوەکانی سیستمی Lineage دەستکاری بکات. بۆ بەرنامە ئاساییەکان نییە.</string>
+    <string name="permdesc_useHardwareFramework">ڕێگە بە بەرنامە دەدات دەستی بگات بە چوارچێوەی ڕەقەکاڵای crDroid.</string>
+    <string name="permlab_writeSettings">دەستکاریکردنی ڕێکخستنەکانی سیستمی crDroid</string>
+    <string name="permdesc_writeSettings">ڕێگە بە بەرنامە دەدات ڕێکخستنەکانی سیستمی crDroid دەستکاری بکات.</string>
+    <string name="permlab_writeSecureSettings">دەستکاریکردنی ڕێکخستنە پارێزراوەکانی سیستمی crDroid</string>
+    <string name="permdesc_writeSecureSettings">ڕێگە بە بەرنامە دەدات ڕێکخستنە پارێزراوەکانی سیستمی crDroid دەستکاری بکات. بۆ بەرنامە ئاساییەکان نییە.</string>
     <string name="profileNameDefault">بنەڕەتی</string>
     <string name="profileNameWork">کار</string>
     <string name="profileNameHome">ماڵەوە</string>
@@ -56,9 +56,9 @@
     <string name="permlab_manageRemotePrefs">بەڕێوەبردنی ڕێکخستنە دوورەکان</string>
     <string name="permdesc_manageRemotePrefs">ڕێگە بە بەرنامە دەدات ڕێکخستنە دوورەکان بەڕێوە ببات</string>
     <string name="build_date">ڕێکەوتی بنیاتنان</string>
-    <string name="lineage_api_level">ئاستی LineageOS API</string>
-    <string name="lineage_updates">نوێکارییەکانی LineageOS</string>
-    <string name="lineage_version">وەشانی LineageOS</string>
+    <string name="lineage_api_level">ئاستی crDroid API</string>
+    <string name="lineage_updates">نوێکارییەکانی crDroid</string>
+    <string name="lineage_version">وەشانی crDroid</string>
     <string name="lineage_vendor_security_patch">ئاستی پارچەی پاراستنی فرۆشیار</string>
     <string name="unknown">نادیار</string>
     <string name="app_killed_message">بەرنامەکە کوژێنرایەوە</string>

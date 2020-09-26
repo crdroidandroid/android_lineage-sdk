@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS سىستېمىسى</string>
+    <string name="lineageos_system_label">crDroid سىستېمىسى</string>
     <string name="permlab_modifyProfiles">سىستېما سەپلەنمىسىنى ئۆزگەرتىش</string>
     <string name="permdesc_modifyProfiles">ئەپنىڭ سىستېما سەپلەنمىسىنى ئۆزگەرتىشىگە يول قويۇش.</string>
     <string name="permlab_useHardwareFramework">قاتتىق دىتال جازىسىنى ئىشلىتىش</string>
-    <string name="permdesc_useHardwareFramework">ئەپنىڭ Lineage قاتتىق دېتال قۇرۇلمىسىنى زىيارەت قىلىشقا يو قويىدۇ.</string>
-    <string name="permlab_writeSettings">Lineage سىستېما تەڭشىكىنى ئۆزگەرتىدۇ</string>
-    <string name="permdesc_writeSettings">ئەپنىڭ Lineage سىستېما تەڭشىكىنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
-    <string name="permlab_writeSecureSettings">Lineage بىخەتەرلىك سىستېما تەڭشىكىنى ئۆزگەرتىدۇ</string>
-    <string name="permdesc_writeSecureSettings">ئەپنىڭ Lineage بىخەتەرلىك سىستېما تەڭشىكىنى ئۆزگەرتىشىگە يول قويىدۇ. ئادەتتىكى ئەپلەرنىڭ بۇنداق ھوقۇقى بولمايدۇ.</string>
+    <string name="permdesc_useHardwareFramework">ئەپنىڭ crDroid قاتتىق دېتال قۇرۇلمىسىنى زىيارەت قىلىشقا يو قويىدۇ.</string>
+    <string name="permlab_writeSettings">crDroid سىستېما تەڭشىكىنى ئۆزگەرتىدۇ</string>
+    <string name="permdesc_writeSettings">ئەپنىڭ crDroid سىستېما تەڭشىكىنى ئۆزگەرتىشىگە يول قويىدۇ.</string>
+    <string name="permlab_writeSecureSettings">crDroid بىخەتەرلىك سىستېما تەڭشىكىنى ئۆزگەرتىدۇ</string>
+    <string name="permdesc_writeSecureSettings">ئەپنىڭ crDroid بىخەتەرلىك سىستېما تەڭشىكىنى ئۆزگەرتىشىگە يول قويىدۇ. ئادەتتىكى ئەپلەرنىڭ بۇنداق ھوقۇقى بولمايدۇ.</string>
     <string name="profileNameDefault">كۆڭۈلدىكى</string>
     <string name="profileNameWork">ئىش</string>
     <string name="profileNameHome">باش ئېكران</string>
@@ -56,9 +56,9 @@
     <string name="permlab_manageRemotePrefs">يىراقتىكى تەڭشەكنى باشقۇرۇش</string>
     <string name="permdesc_manageRemotePrefs">ئەپچنىڭ يىراقتىكى تەڭشەكنى باشقۇرۇشىغا يول قويىدۇ</string>
     <string name="build_date">ھاسىللىغان چېسلا</string>
-    <string name="lineage_api_level">LineageOS API دەرىجىسى</string>
-    <string name="lineage_updates">LineageOS يېڭىلاش</string>
-    <string name="lineage_version">LineageOS نەشرى</string>
+    <string name="lineage_api_level">crDroid API دەرىجىسى</string>
+    <string name="lineage_updates">crDroid يېڭىلاش</string>
+    <string name="lineage_version">crDroid نەشرى</string>
     <string name="lineage_vendor_security_patch">تەمىنلىگۈچى سودىگەر بىخەتەرلىك ياماق دەرىجىسى</string>
     <string name="unknown">يوچۇن</string>
     <string name="app_killed_message">ئەپ ئاخىرلاشتۇرۇلدى</string>

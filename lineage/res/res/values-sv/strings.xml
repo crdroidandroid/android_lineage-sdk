@@ -16,15 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS-systemet</string>
+    <string name="lineageos_system_label">crDroid-systemet</string>
     <string name="permlab_modifyProfiles">ändra systemprofiler</string>
     <string name="permdesc_modifyProfiles">Tillåter att en app ändrar systemprofiler.</string>
     <string name="permlab_useHardwareFramework">använda hårdvaruramverk</string>
-    <string name="permdesc_useHardwareFramework">Ger en app åtkomst till LineageOS hårdvaruramverk.</string>
-    <string name="permlab_writeSettings">ändra Lineages systeminställningar</string>
-    <string name="permdesc_writeSettings">Tillåter en app att ändra Lineages systeminställningar.</string>
-    <string name="permlab_writeSecureSettings">ändra skyddade Lineage-inställningar</string>
-    <string name="permdesc_writeSecureSettings">Tillåter en app att ändra skyddade Lineage-inställningar. Ska inte användas av vanliga appar.</string>
+    <string name="permdesc_useHardwareFramework">Ger en app åtkomst till crDroid hårdvaruramverk.</string>
+    <string name="permlab_writeSettings">ändra crDroids systeminställningar</string>
+    <string name="permdesc_writeSettings">Tillåter en app att ändra crDroids systeminställningar.</string>
+    <string name="permlab_writeSecureSettings">ändra skyddade crDroid-inställningar</string>
+    <string name="permdesc_writeSecureSettings">Tillåter en app att ändra skyddade crDroid-inställningar. Ska inte användas av vanliga appar.</string>
     <string name="profileNameDefault">Standard</string>
     <string name="profileNameWork">Jobb</string>
     <string name="profileNameHome">Hemma</string>
@@ -63,9 +63,9 @@
     <string name="permlab_manageRemotePrefs">hantera fjärrinställningar</string>
     <string name="permdesc_manageRemotePrefs">Tillåter en app att hantera fjärrinställningar</string>
     <string name="build_date">Kompileringsdatum</string>
-    <string name="lineage_api_level">API-nivå för LineageOS</string>
-    <string name="lineage_updates">LineageOS-uppdateringar</string>
-    <string name="lineage_version">LineageOS-version</string>
+    <string name="lineage_api_level">API-nivå för crDroid</string>
+    <string name="lineage_updates">crDroid-uppdateringar</string>
+    <string name="lineage_version">crDroid-version</string>
     <string name="lineage_vendor_security_patch">Säkerhetsprogramvaruversion</string>
     <string name="unknown">Okänt</string>
     <string name="app_killed_message">Applikationen har tvångsavslutats</string>

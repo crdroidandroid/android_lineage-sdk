@@ -16,15 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Sistem LineageOS</string>
+    <string name="lineageos_system_label">Sistem crDroid</string>
     <string name="permlab_modifyProfiles">modifică profiluri de sistem</string>
     <string name="permdesc_modifyProfiles">Permite unei aplicații să modifice profilurile de sistem.</string>
     <string name="permlab_useHardwareFramework">folosește framework-ul hardware</string>
-    <string name="permdesc_useHardwareFramework">Permite unei aplicații să acceseze framework-ul Lineage hardware.</string>
-    <string name="permlab_writeSettings">modifică setările de sistem Lineage</string>
-    <string name="permdesc_writeSettings">Permite unei aplicații să modifice setările de sistem Lineage.</string>
-    <string name="permlab_writeSecureSettings">modifică setările de siguranță de sistem Lineage</string>
-    <string name="permdesc_writeSecureSettings">Permite unei aplicații să modifice setările de siguranță de sistem Lineage. Nu este utilizabilă de către aplicațiile normale.</string>
+    <string name="permdesc_useHardwareFramework">Permite unei aplicații să acceseze framework-ul crDroid hardware.</string>
+    <string name="permlab_writeSettings">modifică setările de sistem crDroid</string>
+    <string name="permdesc_writeSettings">Permite unei aplicații să modifice setările de sistem crDroid.</string>
+    <string name="permlab_writeSecureSettings">modifică setările de siguranță de sistem crDroid</string>
+    <string name="permdesc_writeSecureSettings">Permite unei aplicații să modifice setările de siguranță de sistem crDroid. Nu este utilizabilă de către aplicațiile normale.</string>
     <string name="profileNameDefault">Implicit</string>
     <string name="profileNameWork">Serviciu</string>
     <string name="profileNameHome">Acasă</string>
@@ -63,9 +63,9 @@
     <string name="permlab_manageRemotePrefs">gestionare setări la distanţă</string>
     <string name="permdesc_manageRemotePrefs">Permite unei aplicații să gestioneze setările de la distanţă</string>
     <string name="build_date">Dată de compilare</string>
-    <string name="lineage_api_level">Nivel API LineageOS</string>
-    <string name="lineage_updates">Actualizări LineageOS</string>
-    <string name="lineage_version">Versiune LineageOS</string>
+    <string name="lineage_api_level">Nivel API crDroid</string>
+    <string name="lineage_updates">Actualizări crDroid</string>
+    <string name="lineage_version">Versiune crDroid</string>
     <string name="lineage_vendor_security_patch">Nivelul corecției de securitate a producătorului</string>
     <string name="unknown">Necunoscut</string>
     <string name="app_killed_message">Aplicație închisă</string>

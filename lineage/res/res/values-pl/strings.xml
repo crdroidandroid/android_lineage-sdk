@@ -16,15 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">System LineageOS</string>
+    <string name="lineageos_system_label">System crDroid</string>
     <string name="permlab_modifyProfiles">modyfikuje profile systemowe</string>
     <string name="permdesc_modifyProfiles">Umożliwia aplikacji modyfikację profili systemowych.</string>
     <string name="permlab_useHardwareFramework">korzystaj z zasobów sprzętowych</string>
-    <string name="permdesc_useHardwareFramework">Zezwala aplikacji na dostęp do frameworka sprzętowego Lineage.</string>
-    <string name="permlab_writeSettings">modyfikacja ustawień systemu Lineage</string>
-    <string name="permdesc_writeSettings">Zezwól aplikacji na modyfikację ustawień systemu Lineage.</string>
-    <string name="permlab_writeSecureSettings">modyfikacja ustawień bezpieczeństwa systemu Lineage</string>
-    <string name="permdesc_writeSecureSettings">Zezwala aplikacji na modyfikację ustawień bezpieczeństwa systemu Lineage. Nieużywane przez zwykłe aplikacje.</string>
+    <string name="permdesc_useHardwareFramework">Zezwala aplikacji na dostęp do frameworka sprzętowego crDroid.</string>
+    <string name="permlab_writeSettings">modyfikacja ustawień systemu crDroid</string>
+    <string name="permdesc_writeSettings">Zezwól aplikacji na modyfikację ustawień systemu crDroid.</string>
+    <string name="permlab_writeSecureSettings">modyfikacja ustawień bezpieczeństwa systemu crDroid</string>
+    <string name="permdesc_writeSecureSettings">Zezwala aplikacji na modyfikację ustawień bezpieczeństwa systemu crDroid. Nieużywane przez zwykłe aplikacje.</string>
     <string name="profileNameDefault">Domyślny</string>
     <string name="profileNameWork">Praca</string>
     <string name="profileNameHome">Dom</string>
@@ -63,9 +63,9 @@
     <string name="permlab_manageRemotePrefs">zarządza zdalnymi ustawieniami</string>
     <string name="permdesc_manageRemotePrefs">Zezwala aplikacji na zarządzanie zdalnymi ustawieniami</string>
     <string name="build_date">Data kompilacji</string>
-    <string name="lineage_api_level">Poziom API LineageOS</string>
-    <string name="lineage_updates">Aktualizacje LineageOS</string>
-    <string name="lineage_version">Wersja LineageOS</string>
+    <string name="lineage_api_level">Poziom API crDroid</string>
+    <string name="lineage_updates">Aktualizacje crDroid</string>
+    <string name="lineage_version">Wersja crDroid</string>
     <string name="lineage_vendor_security_patch">Poziom poprawek zabezpieczeń producenta</string>
     <string name="unknown">Nieznane</string>
     <string name="app_killed_message">Aplikacja zatrzymana</string>

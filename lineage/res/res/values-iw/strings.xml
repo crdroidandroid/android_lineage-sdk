@@ -16,13 +16,13 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">מערכת LineageOS</string>
+    <string name="lineageos_system_label">מערכת crDroid</string>
     <string name="permlab_modifyProfiles">שנה פרופילי מערכת</string>
     <string name="permdesc_modifyProfiles">מאפשר ליישום לשנות פרופילי מערכת.</string>
     <string name="permlab_useHardwareFramework">השתמש במסגרת חומרה</string>
-    <string name="permdesc_useHardwareFramework">אפשר ליישומים גישה לתשתית החומרה של LineageOS.</string>
+    <string name="permdesc_useHardwareFramework">אפשר ליישומים גישה לתשתית החומרה של crDroid.</string>
     <string name="permlab_writeSettings">שינוי הגדרות המערכת</string>
-    <string name="permdesc_writeSettings">מאפשר ליישום לשנות את הגדרות מערכת LineageOS.</string>
+    <string name="permdesc_writeSettings">מאפשר ליישום לשנות את הגדרות מערכת crDroid.</string>
     <string name="permlab_writeSecureSettings">שינוי הגדרות אבטחה של המערכת</string>
     <string name="permdesc_writeSecureSettings">מאפשר ליישום לשנות הגדרות אבטחה של המערכת, לא נועד לשימוש ע\"י יישומים רגילים.</string>
     <string name="profileNameDefault">ברירת מחדל</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">נהל הגדרות מרחוק</string>
     <string name="permdesc_manageRemotePrefs">מאפשר ליישום לנהל הגדרות מרחוק</string>
     <string name="build_date">תאריך בנייה</string>
-    <string name="lineage_api_level">רמת ה־API של LineageOS</string>
-    <string name="lineage_updates">עדכוני LineageOS</string>
-    <string name="lineage_version">גרסת LineageOS</string>
+    <string name="lineage_api_level">רמת ה־API של crDroid</string>
+    <string name="lineage_updates">עדכוני crDroid</string>
+    <string name="lineage_version">גרסת crDroid</string>
     <string name="lineage_vendor_security_patch">‏רמת עדכוני אבטחה</string>
     <string name="unknown">לא ידוע</string>
     <string name="app_killed_message">היישום נסגר</string>

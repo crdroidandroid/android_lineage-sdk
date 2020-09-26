@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS Järjestelmä</string>
+    <string name="lineageos_system_label">crDroid Järjestelmä</string>
     <string name="permlab_modifyProfiles">muokkaa järjestelmän profiileja</string>
     <string name="permdesc_modifyProfiles">Sallii sovelluksen muokata järjestelmäprofiileja.</string>
     <string name="permlab_useHardwareFramework">käytä laitteiston kehystä</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">hallitse etäkäytön asetuksia</string>
     <string name="permdesc_manageRemotePrefs">Sallii sovellluksen hallita etäasetuksia</string>
     <string name="build_date">Luontipäivä</string>
-    <string name="lineage_api_level">LineageOS API-taso</string>
-    <string name="lineage_updates">LineageOS-päivitykset</string>
-    <string name="lineage_version">LineageOS-versio</string>
+    <string name="lineage_api_level">crDroid API-taso</string>
+    <string name="lineage_updates">crDroid-päivitykset</string>
+    <string name="lineage_version">crDroid-versio</string>
     <string name="lineage_vendor_security_patch">Valmistajan tietoturvakorjauksen taso</string>
     <string name="unknown">Tuntematon</string>
     <string name="app_killed_message">Sovellus pysäytetty</string>

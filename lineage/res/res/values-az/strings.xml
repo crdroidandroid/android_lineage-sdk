@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS Sistemi</string>
+    <string name="lineageos_system_label">crDroid Sistemi</string>
     <string name="permlab_modifyProfiles">sistem profillərini dəyişdir</string>
     <string name="permdesc_modifyProfiles">Tətbiqetməyə sistem profillərini dəyişdirmə icazəsi verər.</string>
     <string name="permlab_useHardwareFramework">avadanlıq bünövrəsindən istifadə et</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">uzaqdan bağlantı tənzimləmələri</string>
     <string name="permdesc_manageRemotePrefs">Tətbiqetməyə uzaqdan bağlantı tənzimləmələrini dəyişdirmək icazəsi verər</string>
     <string name="build_date">Quruluş tarixi</string>
-    <string name="lineage_api_level">LineageOS API səviyyəsi</string>
-    <string name="lineage_updates">LineageOS yeniləmələri</string>
-    <string name="lineage_version">LineageOS versiyası</string>
+    <string name="lineage_api_level">crDroid API səviyyəsi</string>
+    <string name="lineage_updates">crDroid yeniləmələri</string>
+    <string name="lineage_version">crDroid versiyası</string>
     <string name="lineage_vendor_security_patch">Vendor təhlükəsizlik yamaq səviyyəsi</string>
     <string name="unknown">Bilinmir</string>
     <string name="app_killed_message">Tətbiqetmə bağlanıldı</string>

@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS sistema</string>
+    <string name="lineageos_system_label">crDroid sistema</string>
     <string name="permlab_modifyProfiles">aldatu sistemaren profilak</string>
     <string name="permdesc_modifyProfiles">Sistemaren profilak aldatzea ahalbidetzen dio aplikazioari.</string>
     <string name="permlab_useHardwareFramework">hardware markoa erabili</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">urruneko ezarpenak kudeatu</string>
     <string name="permdesc_manageRemotePrefs">Urruneko ezarpenak kudeatzea ahalbidetzen dio aplikazioari</string>
     <string name="build_date">Konpilatze data</string>
-    <string name="lineage_api_level">LineageOS API maila</string>
-    <string name="lineage_updates">LineageOS eguneraketak</string>
-    <string name="lineage_version">LineageOS bertsioa</string>
+    <string name="lineage_api_level">crDroid API maila</string>
+    <string name="lineage_updates">crDroid eguneraketak</string>
+    <string name="lineage_version">crDroid bertsioa</string>
     <string name="lineage_vendor_security_patch">Ekoizlearen segurtasun partxe maila</string>
     <string name="unknown">Ezezaguna</string>
     <string name="app_killed_message">Aplikazioa erail da</string>

@@ -16,15 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">System LineageOS</string>
+    <string name="lineageos_system_label">System crDroid</string>
     <string name="permlab_modifyProfiles">addasu proffiliau system</string>
     <string name="permdesc_modifyProfiles">Mae\'n caniatáu i ap addasu proffiliau system.</string>
     <string name="permlab_useHardwareFramework">defnyddio fframwaith caledwedd</string>
     <string name="permdesc_useHardwareFramework">Mae\'n caniatáu i ap gyrchu fframwaith caledwedd Lineage.</string>
     <string name="permlab_writeSettings">addasu gosodiadau system Lineage</string>
-    <string name="permdesc_writeSettings">Mae\'n caniatáu i ap addasu gosodiadau system LineageOS.</string>
+    <string name="permdesc_writeSettings">Mae\'n caniatáu i ap addasu gosodiadau system crDroid.</string>
     <string name="permlab_writeSecureSettings">addasu gosodiadau system ddiogel Lineage</string>
-    <string name="permdesc_writeSecureSettings">Mae\'n caniatáu i ap addasu gosodiadau system ddiogel LineageOS. Dim i\'w ddefnyddio gan apiau arferol.</string>
+    <string name="permdesc_writeSecureSettings">Mae\'n caniatáu i ap addasu gosodiadau system ddiogel crDroid. Dim i\'w ddefnyddio gan apiau arferol.</string>
     <string name="profileNameDefault">Rhagosodiad</string>
     <string name="profileNameWork">Gwaith</string>
     <string name="profileNameHome">Cartref</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">rheoli gosodiadau o bell</string>
     <string name="permdesc_manageRemotePrefs">Mae\'n caniatáu ap i reoli gosodiadau o bell.</string>
     <string name="build_date">Dyddiad adeiledd</string>
-    <string name="lineage_api_level">Lefel API LineageOS</string>
-    <string name="lineage_updates">Diweddariadau LineageOS</string>
-    <string name="lineage_version">Fersiwn LineageOS</string>
+    <string name="lineage_api_level">Lefel API crDroid</string>
+    <string name="lineage_updates">Diweddariadau crDroid</string>
+    <string name="lineage_version">Fersiwn crDroid</string>
     <string name="lineage_vendor_security_patch">Lefel patsh diogelwch gwneuthurwr</string>
     <string name="unknown">Anhysybys</string>
     <string name="app_killed_message">Lladdwyd yr ap</string>

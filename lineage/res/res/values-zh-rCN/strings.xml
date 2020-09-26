@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS 系统</string>
+    <string name="lineageos_system_label">crDroid 系统</string>
     <string name="permlab_modifyProfiles">修改系统配置</string>
     <string name="permdesc_modifyProfiles">允许应用修改系统配置文件。</string>
     <string name="permlab_useHardwareFramework">使用硬件框架</string>
@@ -77,9 +77,9 @@
     <string name="permlab_manageRemotePrefs">管理远程设置</string>
     <string name="permdesc_manageRemotePrefs">允许应用管理远程设置</string>
     <string name="build_date">编译日期</string>
-    <string name="lineage_api_level">LineageOS API 级别</string>
-    <string name="lineage_updates">LineageOS 更新</string>
-    <string name="lineage_version">LineageOS 版本</string>
+    <string name="lineage_api_level">crDroid API 级别</string>
+    <string name="lineage_updates">crDroid 更新</string>
+    <string name="lineage_version">crDroid 版本</string>
     <string name="lineage_vendor_security_patch">供应商安全补丁程序级别</string>
     <string name="unknown">未知</string>
     <string name="app_killed_message">应用程序已终止</string>

@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS System</string>
+    <string name="lineageos_system_label">crDroid System</string>
     <string name="permlab_modifyProfiles">ændre systemprofiler</string>
     <string name="permdesc_modifyProfiles">Tillader en app at ændre systemprofiler.</string>
     <string name="permlab_useHardwareFramework">brug udstyrs-programmingsplatform</string>
@@ -76,9 +76,9 @@
     <string name="permdesc_observe_audio_sessions">Tillader en app at observere når lyd streams bliver oprettet eller ødelagt.</string>
     <string name="permlab_manageRemotePrefs">håndtere fjernbetjeningsindstillinger</string>
     <string name="permdesc_manageRemotePrefs">Tillader en app at håndtere fjernbetjeningsindstillinger</string>
-    <string name="lineage_api_level">LineageOS API-niveau</string>
-    <string name="lineage_updates">LineageOS-opdateringer</string>
-    <string name="lineage_version">LineageOS-version</string>
+    <string name="lineage_api_level">crDroid API-niveau</string>
+    <string name="lineage_updates">crDroid-opdateringer</string>
+    <string name="lineage_version">crDroid-version</string>
     <string name="lineage_vendor_security_patch">Producent-sikkerhedsrettelsesniveau</string>
     <string name="kilobitspersecond_short">kb/s</string>
     <string name="trust_notification_action_manage">Håndtér advarsler</string>

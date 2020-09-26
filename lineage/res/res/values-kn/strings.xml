@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS ವ್ಯವಸ್ಥೆ</string>
+    <string name="lineageos_system_label">crDroid ವ್ಯವಸ್ಥೆ</string>
     <string name="permlab_modifyProfiles">ವ್ಯವಸ್ಥೆಯ ರೇಖಾಕೃತಿಗಳನ್ನು ಮಾರ್ಪಡಿಸು</string>
     <string name="permdesc_modifyProfiles">ವ್ಯವಸ್ಥೆಯ ರೇಖಾಕೃತಿಗಳನ್ನು ಮಾರ್ಪಡಿಸಲು ಒಂದು ಆಪ್ಗೆ ಅನುಮತಿಸುತ್ತದೆ.</string>
     <string name="permlab_useHardwareFramework">ಹಾರ್ಡ್‍ವೇರ್ ಫ್ರೇಮ್‍ವರ್ಕ್ ಉಪಯೋಗಿಸು</string>
-    <string name="permdesc_useHardwareFramework">Lineage ಯಂತ್ರಾಂಶ ಚೌಕಟ್ಟನ್ನು ಬಳಸಲು ಅಪ್ಗೆ ಅನುಮತಿಸುತ್ತದೆ.</string>
-    <string name="permlab_writeSettings">Lineage ವ್ಯವಸ್ಥೆಯ ಅಳವಡಿಕೆಗಳನ್ನು ಮಾರ್ಪಡಿಸು</string>
-    <string name="permdesc_writeSettings">Lineage ವ್ಯವಸ್ಥೆಯ ಅಳವಡಿಕೆಗಳನ್ನು ಮಾರ್ಪಡಿಸಲು ಆಪ್ಗೆ ಅನುಮತಿಸುತ್ತದೆ.</string>
-    <string name="permlab_writeSecureSettings">Lineage ವ್ಯವಸ್ಥೆಯ ಸುರಕ್ಷಿತ ಅಳವಡಿಕೆಗಳನ್ನು ಮಾರ್ಪಡಿಸು</string>
-    <string name="permdesc_writeSecureSettings">Lineage ವ್ಯವಸ್ಥೆಯ ಸುರಕ್ಷಿತ ಅಳವಡಿಕೆಗಳನ್ನು ಮಾರ್ಪಡಿಸಲು ಆಪ್ಗೆ ಅನುಮತಿಸುತ್ತದೆ. ಸಾಮಾನ್ಯ ಆಪ್ಗಳ ಬಳಕೆಗೆ ಅಲ್ಲ.</string>
+    <string name="permdesc_useHardwareFramework">crDroid ಯಂತ್ರಾಂಶ ಚೌಕಟ್ಟನ್ನು ಬಳಸಲು ಅಪ್ಗೆ ಅನುಮತಿಸುತ್ತದೆ.</string>
+    <string name="permlab_writeSettings">crDroid ವ್ಯವಸ್ಥೆಯ ಅಳವಡಿಕೆಗಳನ್ನು ಮಾರ್ಪಡಿಸು</string>
+    <string name="permdesc_writeSettings">crDroid ವ್ಯವಸ್ಥೆಯ ಅಳವಡಿಕೆಗಳನ್ನು ಮಾರ್ಪಡಿಸಲು ಆಪ್ಗೆ ಅನುಮತಿಸುತ್ತದೆ.</string>
+    <string name="permlab_writeSecureSettings">crDroid ವ್ಯವಸ್ಥೆಯ ಸುರಕ್ಷಿತ ಅಳವಡಿಕೆಗಳನ್ನು ಮಾರ್ಪಡಿಸು</string>
+    <string name="permdesc_writeSecureSettings">crDroid ವ್ಯವಸ್ಥೆಯ ಸುರಕ್ಷಿತ ಅಳವಡಿಕೆಗಳನ್ನು ಮಾರ್ಪಡಿಸಲು ಆಪ್ಗೆ ಅನುಮತಿಸುತ್ತದೆ. ಸಾಮಾನ್ಯ ಆಪ್ಗಳ ಬಳಕೆಗೆ ಅಲ್ಲ.</string>
     <string name="profileNameDefault">ಇದ್ದಾಯ್ಕೆ</string>
     <string name="profileNameWork">ಉದ್ಯೋಗ</string>
     <string name="profileNameHome">ತವರು</string>
@@ -52,9 +52,9 @@
     <string name="permlab_manageRemotePrefs">ಗೆಂಟಂಕೆಯ ಅಳವಡಿಕೆಗಳನ್ನು ನಿರ್ವಹಿಸು</string>
     <string name="permdesc_manageRemotePrefs">ಗೆಂಟಂಕೆ ಅಳವಡಿಕೆಗಳನ್ನು ನಿರ್ವಹಿಸಲು ಅಪ್ಗೆ ಅನುಮತಿಸುತ್ತದೆ</string>
     <string name="build_date">ನಿರ್ಮಾಣ ದಿನಾಂಕ</string>
-    <string name="lineage_api_level">LineageOS API ಮಟ್ಟ</string>
-    <string name="lineage_updates">LineageOS ನವೀಕರಣಗಳು</string>
-    <string name="lineage_version">LineageOS ಆವೃತ್ತಿ</string>
+    <string name="lineage_api_level">crDroid API ಮಟ್ಟ</string>
+    <string name="lineage_updates">crDroid ನವೀಕರಣಗಳು</string>
+    <string name="lineage_version">crDroid ಆವೃತ್ತಿ</string>
     <string name="lineage_vendor_security_patch">Android ಭದ್ರತಾ ತೇಪೆ ಮಟ್ಟ</string>
     <string name="unknown">ಅಜ್ಞಾತ</string>
     <string name="app_killed_message">ತಂತ್ರಾಂಶ ಸತ್ತಿತು</string>

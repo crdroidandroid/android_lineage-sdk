@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS அமைப்பு</string>
+    <string name="lineageos_system_label">crDroid அமைப்பு</string>
     <string name="permlab_modifyProfiles">முறைமைத் தனியமைப்புகளை மாற்றுக</string>
     <string name="permdesc_modifyProfiles">முறைமைத் தனியமைப்புகளை மாற்ற ஒரு செயலியை அனுமதிக்கிறது.</string>
     <string name="permlab_useHardwareFramework">வன்பொருள் கட்டமைப்பைப் பயன்படுத்துக</string>
-    <string name="permdesc_useHardwareFramework">Lineage வன்பொருள் கட்டமைப்பை அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
-    <string name="permlab_writeSettings">Lineage முறைமை அமைப்புகளை மாற்றுக</string>
-    <string name="permdesc_writeSettings">Lineage முறைமை அமைப்புகளை மாற்ற ஒரு செயலியை அனுமதிக்கிறது.</string>
-    <string name="permlab_writeSecureSettings">Lineage பாதுகாப்பு முறைமை அமைப்புகளை மாற்றுக</string>
-    <string name="permdesc_writeSecureSettings">Lineage பாதுகாப்பு முறைமை அமைப்புகளை மாற்ற ஒரு செயலியை அனுமதிக்கிறது. வழக்கமான செயலிகளால் பயன்படுத்த முடியாது.</string>
+    <string name="permdesc_useHardwareFramework">crDroid வன்பொருள் கட்டமைப்பை அணுக பயன்பாட்டை அனுமதிக்கிறது.</string>
+    <string name="permlab_writeSettings">crDroid முறைமை அமைப்புகளை மாற்றுக</string>
+    <string name="permdesc_writeSettings">crDroid முறைமை அமைப்புகளை மாற்ற ஒரு செயலியை அனுமதிக்கிறது.</string>
+    <string name="permlab_writeSecureSettings">crDroid பாதுகாப்பு முறைமை அமைப்புகளை மாற்றுக</string>
+    <string name="permdesc_writeSecureSettings">crDroid பாதுகாப்பு முறைமை அமைப்புகளை மாற்ற ஒரு செயலியை அனுமதிக்கிறது. வழக்கமான செயலிகளால் பயன்படுத்த முடியாது.</string>
     <string name="profileNameDefault">இயல்புநிலை</string>
     <string name="profileNameWork">பணி</string>
     <string name="profileNameHome">முகப்பு</string>
@@ -56,9 +56,9 @@
     <string name="permlab_manageRemotePrefs">தொலைநிலை அமைப்புகளை மேலாள்க</string>
     <string name="permdesc_manageRemotePrefs">தொலைநிலை அமைப்புகளை மேலாள ஒரு செயலியை அனுமதிக்கும்</string>
     <string name="build_date">கட்டிய நாள்</string>
-    <string name="lineage_api_level">LineageOS API நிலை</string>
-    <string name="lineage_updates">LineageOS புதுப்பிப்புகள்</string>
-    <string name="lineage_version">LineageOS பதிப்பு</string>
+    <string name="lineage_api_level">crDroid API நிலை</string>
+    <string name="lineage_updates">crDroid புதுப்பிப்புகள்</string>
+    <string name="lineage_version">crDroid பதிப்பு</string>
     <string name="lineage_vendor_security_patch">விற்குநர் பாதுகாப்புச் சீர் நிலை</string>
     <string name="unknown">அறியப்படா</string>
     <string name="app_killed_message">செயலி ஒழிந்தது</string>

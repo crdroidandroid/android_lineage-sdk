@@ -16,15 +16,15 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Σύστημα LineageOS</string>
+    <string name="lineageos_system_label">Σύστημα crDroid</string>
     <string name="permlab_modifyProfiles">τροποποίηση προφίλ συστήματος</string>
     <string name="permdesc_modifyProfiles">Επιτρέπει σε μια εφαρμογή να τροποποιεί τα προφίλ του συστήματος.</string>
     <string name="permlab_useHardwareFramework">χρήση του πλαισίου υλικού</string>
-    <string name="permdesc_useHardwareFramework">Επιτρέπει σε μια εφαρμογή την πρόσβαση στο πλαίσιο υλικού του Lineage.</string>
-    <string name="permlab_writeSettings">τροποποίηση ρυθμίσεων συστήματος Lineage</string>
-    <string name="permdesc_writeSettings">Επιτρέπει σε μια εφαρμογή να τροποποιεί τις ρυθμίσεις συστήματος Lineage.</string>
-    <string name="permlab_writeSecureSettings">τροποποίηση ασφαλών ρυθμίσεων συστήματος Lineage</string>
-    <string name="permdesc_writeSecureSettings">Επιτρέπει σε μια εφαρμογή να τροποποιεί τις ασφαλείς ρυθμίσεις συστήματος Lineage. Δεν χρησιμοποιείται από κανονικές εφαρμογές.</string>
+    <string name="permdesc_useHardwareFramework">Επιτρέπει σε μια εφαρμογή την πρόσβαση στο πλαίσιο υλικού του crDroid.</string>
+    <string name="permlab_writeSettings">τροποποίηση ρυθμίσεων συστήματος crDroid</string>
+    <string name="permdesc_writeSettings">Επιτρέπει σε μια εφαρμογή να τροποποιεί τις ρυθμίσεις συστήματος crDroid.</string>
+    <string name="permlab_writeSecureSettings">τροποποίηση ασφαλών ρυθμίσεων συστήματος crDroid</string>
+    <string name="permdesc_writeSecureSettings">Επιτρέπει σε μια εφαρμογή να τροποποιεί τις ασφαλείς ρυθμίσεις συστήματος crDroid. Δεν χρησιμοποιείται από κανονικές εφαρμογές.</string>
     <string name="profileNameDefault">Προεπιλογή</string>
     <string name="profileNameWork">Εργασία</string>
     <string name="profileNameHome">Σπίτι</string>
@@ -63,9 +63,9 @@
     <string name="permlab_manageRemotePrefs">διαχείριση απομακρυσμένων ρυθμίσεων</string>
     <string name="permdesc_manageRemotePrefs">Επιτρέπει σε μια εφαρμογή να διαχειριστεί απομακρυσμένες ρυθμίσεις</string>
     <string name="build_date">Ημερομηνία έκδοσης</string>
-    <string name="lineage_api_level">Επίπεδο LineageOS API</string>
-    <string name="lineage_updates">Ενημερώσεις LineageOS</string>
-    <string name="lineage_version">Έκδοση LineageOS</string>
+    <string name="lineage_api_level">Επίπεδο crDroid API</string>
+    <string name="lineage_updates">Ενημερώσεις crDroid</string>
+    <string name="lineage_version">Έκδοση crDroid</string>
     <string name="lineage_vendor_security_patch">Επίπεδο ενημέρωσης κώδικα ασφαλείας κατασκευαστή</string>
     <string name="unknown">Άγνωστο</string>
     <string name="app_killed_message">Η εφαρμογή τερματίστηκε</string>

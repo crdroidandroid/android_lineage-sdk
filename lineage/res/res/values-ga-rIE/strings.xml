@@ -5,15 +5,15 @@
      SPDX-License-Identifier: Apache-2.0
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Córas LineageOS</string>
+    <string name="lineageos_system_label">Córas crDroid</string>
     <string name="permlab_modifyProfiles">próifílí córais a mhodhnú</string>
     <string name="permdesc_modifyProfiles">Ligeann sé d\'aip próifílí córais a mhodhnú.</string>
     <string name="permlab_useHardwareFramework">úsáid creatlach crua-earraí</string>
-    <string name="permdesc_useHardwareFramework">Ligeann sé d’app rochtain a fháil ar chreat crua-earraí Lineage.</string>
-    <string name="permlab_writeSettings">athraigh socruithe an chórais Lineage</string>
-    <string name="permdesc_writeSettings">Ligeann sé d’aip socruithe córais Lineage a mhodhnú.</string>
-    <string name="permlab_writeSecureSettings">athraigh socruithe córas slán Lineage</string>
-    <string name="permdesc_writeSecureSettings">Ligeann sé d’aip socruithe córais slán Lineage a mhodhnú. Ní le húsáid ag gnáth-apps.</string>
+    <string name="permdesc_useHardwareFramework">Ligeann sé d’app rochtain a fháil ar chreat crua-earraí crDroid.</string>
+    <string name="permlab_writeSettings">athraigh socruithe an chórais crDroid</string>
+    <string name="permdesc_writeSettings">Ligeann sé d’aip socruithe córais crDroid a mhodhnú.</string>
+    <string name="permlab_writeSecureSettings">athraigh socruithe córas slán crDroid</string>
+    <string name="permdesc_writeSecureSettings">Ligeann sé d’aip socruithe córais slán crDroid a mhodhnú. Ní le húsáid ag gnáth-apps.</string>
     <string name="profileNameDefault">Réamhshocrú</string>
     <string name="profileNameWork">Obair</string>
     <string name="profileNameHome">Baile</string>
@@ -52,9 +52,9 @@
     <string name="permlab_manageRemotePrefs">socruithe cianda a bhainistiú</string>
     <string name="permdesc_manageRemotePrefs">Ligeann sé d’aip cianshocruithe a bhainistiú</string>
     <string name="build_date">Dáta tógála</string>
-    <string name="lineage_api_level">Leibhéal API LineageOS</string>
-    <string name="lineage_updates">Nuashonruithe do LineageOS</string>
-    <string name="lineage_version">LineageOS leagan</string>
+    <string name="lineage_api_level">Leibhéal API crDroid</string>
+    <string name="lineage_updates">Nuashonruithe do crDroid</string>
+    <string name="lineage_version">crDroid leagan</string>
     <string name="lineage_vendor_security_patch">Leibhéal paiste slándála díoltóir</string>
     <string name="unknown">Anaithnid</string>
     <string name="app_killed_message">Maraíodh an t-iarratas</string>

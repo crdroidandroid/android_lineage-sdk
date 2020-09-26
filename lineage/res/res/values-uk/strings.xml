@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">Система LineageOS</string>
+    <string name="lineageos_system_label">Система crDroid</string>
     <string name="permlab_modifyProfiles">зміна системних профілів</string>
     <string name="permdesc_modifyProfiles">Дозволяє додатку змінювати системні профілі.</string>
     <string name="permlab_useHardwareFramework">Взаємодія із обладнанням</string>
@@ -58,9 +58,9 @@
     <string name="permlab_manageRemotePrefs">керування віддаленими параметрами</string>
     <string name="permdesc_manageRemotePrefs">Дозволяє застосункові керувати налаштуваннями віддаленого підключення</string>
     <string name="build_date">Дата збірки</string>
-    <string name="lineage_api_level">Рівень API LineageOS</string>
-    <string name="lineage_updates">Оновлення LineageOS</string>
-    <string name="lineage_version">Версія LineageOS</string>
+    <string name="lineage_api_level">Рівень API crDroid</string>
+    <string name="lineage_updates">Оновлення crDroid</string>
+    <string name="lineage_version">Версія crDroid</string>
     <string name="lineage_vendor_security_patch">Рівень виправлень системи безпеки від виробника</string>
     <string name="unknown">Невідомо</string>
     <string name="kilobitspersecond_short">кбіт/с</string>

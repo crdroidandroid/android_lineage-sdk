@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineageos_system_label">LineageOS სისტემა</string>
+    <string name="lineageos_system_label">crDroid სისტემა</string>
     <string name="permlab_modifyProfiles">სისტემის პროფილების შესწორება</string>
     <string name="permdesc_modifyProfiles">პროგრამისთვის ნების დართვა, შეცვალოს სისტემის პროფილები.</string>
     <string name="permlab_useHardwareFramework">აპარატურული გარსის გამოყენება</string>
@@ -63,9 +63,9 @@
     <string name="permlab_manageRemotePrefs">დაშორებული პარამეტრების მართვა</string>
     <string name="permdesc_manageRemotePrefs">პროგრამისთვის ნების დართვა, რომ შეეძლოს დაშორებული პარამეტრების გამართვა </string>
     <string name="build_date">აწყობის თარიღი</string>
-    <string name="lineage_api_level">LineageOS-ის API-ს დონე</string>
-    <string name="lineage_updates">LineageOS-ის განახლებები</string>
-    <string name="lineage_version">LineageOS-ის ვერსია</string>
+    <string name="lineage_api_level">crDroid-ის API-ს დონე</string>
+    <string name="lineage_updates">crDroid-ის განახლებები</string>
+    <string name="lineage_version">crDroid-ის ვერსია</string>
     <string name="lineage_vendor_security_patch">მწარმოებლისგან უსაფრთხოების შესწორების დონე</string>
     <string name="unknown">უცნობი</string>
     <string name="app_killed_message">პროგრამა გაითიშა</string>

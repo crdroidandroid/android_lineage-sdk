@@ -1,6 +1,6 @@
 /**
- * Copyright (c) 2015, The CyanogenMod Project
- * Copyright (c) 2017, The LineageOS Project
+ * Copyright (C) 2015-2016 The CyanogenMod Project
+ *               2017-2021 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -519,6 +519,9 @@ public class LineageDatabaseHelper extends SQLiteOpenHelper{
             loadBooleanSetting(stmt, LineageSettings.Secure.LOCKSCREEN_VISUALIZER_ENABLED,
                     R.bool.def_lockscreen_visualizer);
 
+            loadBooleanSetting(stmt, LineageSettings.Secure.VOLUME_PANEL_ON_LEFT,
+                    R.bool.def_volume_panel_on_left);
+
             loadStringSetting(stmt,
                     LineageSettings.Secure.PROTECTED_COMPONENT_MANAGERS,
                     R.string.def_protected_component_managers);
@@ -550,15 +553,6 @@ public class LineageDatabaseHelper extends SQLiteOpenHelper{
 
             loadBooleanSetting(stmt, LineageSettings.System.SYSTEM_PROFILES_ENABLED,
                     R.bool.def_profiles_enabled);
-
-            loadIntegerSetting(stmt, LineageSettings.System.ENABLE_FORWARD_LOOKUP,
-                    R.integer.def_forward_lookup);
-
-            loadIntegerSetting(stmt, LineageSettings.System.ENABLE_PEOPLE_LOOKUP,
-                    R.integer.def_people_lookup);
-
-            loadIntegerSetting(stmt, LineageSettings.System.ENABLE_REVERSE_LOOKUP,
-                    R.integer.def_reverse_lookup);
 
             loadBooleanSetting(stmt, LineageSettings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE,
                     R.bool.def_notification_pulse_custom_enable);

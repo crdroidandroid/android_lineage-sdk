@@ -1722,7 +1722,7 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator QS_SHOW_BRIGHTNESS_SLIDER_VALIDATOR =
-                new InclusiveIntegerRangeValidator(0, 2);
+                new InclusiveIntegerRangeValidator(0, 3);
 
         /**
          * Whether or not volume button music controls should be enabled to seek media tracks
@@ -2699,6 +2699,12 @@ public final class LineageSettings {
          * @hide
          */
         public static final String QS_SHOW_BRIGHTNESS_SLIDER = "qs_show_brightness_slider";
+
+        /**
+         * Whether to show the brightness slider in quick settings panel.
+         * 0 = Top, 1 = Bottom
+         */
+        public static final String QS_BRIGHTNESS_SLIDER_POSITION = "qs_brightness_slider_position";
 
         /**
          * Whether to show the auto brightness icon in quick settings panel.

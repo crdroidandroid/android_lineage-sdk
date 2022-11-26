@@ -18,6 +18,7 @@
 package lineageos.preference;
 
 import android.content.Context;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 
 import lineageos.providers.LineageSettings;
@@ -43,12 +44,12 @@ public class LineageSecureSettingSwitchPreference extends SelfRemovingSwitchPref
 
     @Override
     protected void putBoolean(String key, boolean value) {
-        LineageSettings.Secure.putInt(getContext().getContentResolver(), key, value ? 1 : 0);
+        LineageSettings.Secure.putIntForUser(getContext().getContentResolver(), key, value ? 1 : 0, UserHandle.USER_CURRENT);
     }
 
     @Override
     protected boolean getBoolean(String key, boolean defaultValue) {
-        return LineageSettings.Secure.getInt(getContext().getContentResolver(),
-                key, defaultValue ? 1 : 0) != 0;
+        return LineageSettings.Secure.getIntForUser(getContext().getContentResolver(),
+                key, defaultValue ? 1 : 0, UserHandle.USER_CURRENT) != 0;
     }
 }

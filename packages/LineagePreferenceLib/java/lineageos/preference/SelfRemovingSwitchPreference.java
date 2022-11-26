@@ -77,10 +77,8 @@ public abstract class SelfRemovingSwitchPreference extends SwitchPreferenceCompa
     protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) {
         final boolean checked;
         if (!restorePersistedValue || !isPersisted()) {
-            if (defaultValue == null) {
-                return;
-            }
-            checked = getBoolean(getKey(), (boolean) defaultValue);
+            boolean defValue = defaultValue == null ? false : (boolean) defaultValue;
+            checked = getBoolean(getKey(), defValue);
             if (shouldPersist()) {
                 persistBoolean(checked);
             }

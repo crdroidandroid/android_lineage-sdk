@@ -6,6 +6,7 @@
 package lineageos.preference;
 
 import android.content.Context;
+import android.os.UserHandle;
 import android.util.AttributeSet;
 
 import androidx.preference.PreferenceDataStore;
@@ -35,13 +36,13 @@ public class LineageSystemSettingMainSwitchPreference extends MainSwitchPreferen
     private class DataStore extends PreferenceDataStore {
         @Override
         public void putBoolean(String key, boolean value) {
-            LineageSettings.System.putInt(getContext().getContentResolver(), key, value ? 1 : 0);
+            LineageSettings.System.putIntForUser(getContext().getContentResolver(), key, value ? 1 : 0, UserHandle.USER_CURRENT);
         }
 
         @Override
         public boolean getBoolean(String key, boolean defaultValue) {
-            return LineageSettings.System.getInt(getContext().getContentResolver(), key,
-                    defaultValue ? 1 : 0) != 0;
+            return LineageSettings.System.getIntForUser(getContext().getContentResolver(), key,
+                    defaultValue ? 1 : 0, UserHandle.USER_CURRENT) != 0;
         }
     }
 }

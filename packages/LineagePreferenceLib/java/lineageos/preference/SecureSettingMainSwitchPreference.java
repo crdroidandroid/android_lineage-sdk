@@ -6,6 +6,7 @@
 package lineageos.preference;
 
 import android.content.Context;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.util.AttributeSet;
 
@@ -33,13 +34,13 @@ public class SecureSettingMainSwitchPreference extends MainSwitchPreference {
     private class DataStore extends PreferenceDataStore {
         @Override
         public void putBoolean(String key, boolean value) {
-            Settings.Secure.putInt(getContext().getContentResolver(), key, value ? 1 : 0);
+            Settings.Secure.putIntForUser(getContext().getContentResolver(), key, value ? 1 : 0, UserHandle.USER_CURRENT);
         }
 
         @Override
         public boolean getBoolean(String key, boolean defaultValue) {
-            return Settings.Secure.getInt(getContext().getContentResolver(), key,
-                    defaultValue ? 1 : 0) != 0;
+            return Settings.Secure.getIntForUser(getContext().getContentResolver(), key,
+                    defaultValue ? 1 : 0, UserHandle.USER_CURRENT) != 0;
         }
     }
 }

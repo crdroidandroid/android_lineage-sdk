@@ -1133,6 +1133,17 @@ public final class LineageSettings {
                 new InclusiveIntegerRangeValidator(0, 17);
 
         /**
+         * Action to perform when the back key is double-tapped.
+         * (Default can be configured via config_doubleTapOnBackBehavior)
+         * (See KEY_BACK_DOUBLE_TAP_ACTION for valid values)
+         */
+        public static final String KEY_BACK_DOUBLE_TAP_ACTION = "key_back_double_tap_action";
+
+        /** @hide */
+        public static final Validator KEY_BACK_DOUBLE_TAP_ACTION_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 17);
+
+        /**
          * Whether to wake the screen with the back key, the value is boolean.
          * 0 = 0ff, 1 = on
          */
@@ -1193,6 +1204,17 @@ public final class LineageSettings {
                 new InclusiveIntegerRangeValidator(0, 17);
 
         /**
+         * Action to perform when the menu key is double-tapped.
+         * (Default can be configured via config_doubleTapOnMenuBehavior)
+         * (See KEY_MENU_DOUBLE_TAP_ACTION for valid values)
+         */
+        public static final String KEY_MENU_DOUBLE_TAP_ACTION = "key_menu_double_tap_action";
+
+        /** @hide */
+        public static final Validator KEY_MENU_DOUBLE_TAP_ACTION_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 17);
+
+        /**
          * Action to perform when the assistant (search) key is pressed. (Default is 3)
          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
          */
@@ -1213,6 +1235,17 @@ public final class LineageSettings {
                 new InclusiveIntegerRangeValidator(0, 17);
 
         /**
+         * Action to perform when the assist key is double-tapped.
+         * (Default can be configured via config_doubleTapOnAssistBehavior)
+         * (See KEY_ASSIST_DOUBLE_TAP_ACTION for valid values)
+         */
+        public static final String KEY_ASSIST_DOUBLE_TAP_ACTION = "key_assist_double_tap_action";
+
+        /** @hide */
+        public static final Validator KEY_ASSIST_DOUBLE_TAP_ACTION_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 17);
+
+        /**
          * Action to perform when the app switch key is pressed. (Default is 2)
          * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
          */
@@ -1230,6 +1263,17 @@ public final class LineageSettings {
 
         /** @hide */
         public static final Validator KEY_APP_SWITCH_LONG_PRESS_ACTION_VALIDATOR =
+                new InclusiveIntegerRangeValidator(0, 17);
+
+        /**
+         * Action to perform when the app switch key is double-tapped.
+         * (Default can be configured via config_doubleTapOnAppSwitchBehavior)
+         * (See KEY_APP_SWITCH_DOUBLE_TAP_ACTION for valid values)
+         */
+        public static final String KEY_APP_SWITCH_DOUBLE_TAP_ACTION = "key_app_switch_double_tap_action";
+
+        /** @hide */
+        public static final Validator KEY_APP_SWITCH_DOUBLE_TAP_ACTION_VALIDATOR =
                 new InclusiveIntegerRangeValidator(0, 17);
 
         /**
@@ -2164,6 +2208,7 @@ public final class LineageSettings {
                     NAVIGATION_BAR_MENU_ARROW_KEYS_VALIDATOR);
             VALIDATORS.put(NAVIGATION_BAR_HINT, NAVIGATION_BAR_HINT_VALIDATOR);
             VALIDATORS.put(KEY_BACK_LONG_PRESS_ACTION, KEY_BACK_LONG_PRESS_ACTION_VALIDATOR);
+            VALIDATORS.put(KEY_BACK_DOUBLE_TAP_ACTION, KEY_BACK_DOUBLE_TAP_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_HOME_LONG_PRESS_ACTION, KEY_HOME_LONG_PRESS_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_HOME_DOUBLE_TAP_ACTION, KEY_HOME_DOUBLE_TAP_ACTION_VALIDATOR);
             VALIDATORS.put(BACK_WAKE_SCREEN, BACK_WAKE_SCREEN_VALIDATOR);
@@ -2172,12 +2217,17 @@ public final class LineageSettings {
             VALIDATORS.put(VOLUME_WAKE_SCREEN, VOLUME_WAKE_SCREEN_VALIDATOR);
             VALIDATORS.put(KEY_MENU_ACTION, KEY_MENU_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_MENU_LONG_PRESS_ACTION, KEY_MENU_LONG_PRESS_ACTION_VALIDATOR);
+            VALIDATORS.put(KEY_MENU_DOUBLE_TAP_ACTION, KEY_MENU_DOUBLE_TAP_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_ASSIST_ACTION, KEY_ASSIST_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_ASSIST_LONG_PRESS_ACTION,
                     KEY_ASSIST_LONG_PRESS_ACTION_VALIDATOR);
+            VALIDATORS.put(KEY_ASSIST_DOUBLE_TAP_ACTION,
+                    KEY_ASSIST_DOUBLE_TAP_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_APP_SWITCH_ACTION, KEY_APP_SWITCH_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_APP_SWITCH_LONG_PRESS_ACTION,
                     KEY_APP_SWITCH_LONG_PRESS_ACTION_VALIDATOR);
+            VALIDATORS.put(KEY_APP_SWITCH_DOUBLE_TAP_ACTION,
+                    KEY_APP_SWITCH_DOUBLE_TAP_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_EDGE_LONG_SWIPE_ACTION, KEY_EDGE_LONG_SWIPE_ACTION_VALIDATOR);
             VALIDATORS.put(HOME_WAKE_SCREEN, HOME_WAKE_SCREEN_VALIDATOR);
             VALIDATORS.put(ASSIST_WAKE_SCREEN, ASSIST_WAKE_SCREEN_VALIDATOR);

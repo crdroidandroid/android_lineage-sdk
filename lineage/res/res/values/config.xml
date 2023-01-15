@@ -161,7 +161,7 @@
          This needs to match the enums in
          sdk/src/java/org/lineageos/internal/util/DeviceKeysConstants.java.
     -->
-    <integer name="config_longPressOnBackBehavior">0</integer>
+    <integer name="config_longPressOnBackBehavior">10</integer>
 
     <!-- Control the behavior when the user long presses the home button.
             0 - Nothing

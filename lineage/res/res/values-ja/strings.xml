@@ -20,11 +20,11 @@
     <string name="permlab_modifyProfiles">システムプロファイルの変更</string>
     <string name="permdesc_modifyProfiles">システムプロファイルの変更をアプリに許可します。</string>
     <string name="permlab_useHardwareFramework">ハードウェアフレームワークの使用</string>
-    <string name="permdesc_useHardwareFramework">crDroid ハードウェアフレームワークへのアクセスをアプリに許可します。</string>
+    <string name="permdesc_useHardwareFramework">LineageOS ハードウェアフレームワークへのアクセスをアプリに許可します。</string>
     <string name="permlab_writeSettings">lineageOS システム設定の変更</string>
-    <string name="permdesc_writeSettings">crDroid システム設定の変更をアプリに許可します。</string>
+    <string name="permdesc_writeSettings">LineageOS システム設定の変更をアプリに許可します。</string>
     <string name="permlab_writeSecureSettings">lineageOS セキュアシステム設定の変更</string>
-    <string name="permdesc_writeSecureSettings">crDroid セキュアシステム設定の変更をアプリに許可します。通常のアプリ用ではありません。</string>
+    <string name="permdesc_writeSecureSettings">LineageOS セキュアシステム設定の変更をアプリに許可します。通常のアプリ用ではありません。</string>
     <string name="permlab_protectedApp">アプリの保護へのアプリの追加と削除</string>
     <string name="permdesc_protectedApp">他のアプリを保護に設定してロックすることをアプリに許可します。</string>
     <string name="profileNameDefault">デフォルト</string>

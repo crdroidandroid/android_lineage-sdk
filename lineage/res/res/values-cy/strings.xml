@@ -22,9 +22,9 @@
     <string name="permlab_useHardwareFramework">defnyddio fframwaith caledwedd</string>
     <string name="permdesc_useHardwareFramework">Mae\'n caniatáu i ap gyrchu fframwaith caledwedd Lineage.</string>
     <string name="permlab_writeSettings">addasu gosodiadau system Lineage</string>
-    <string name="permdesc_writeSettings">Mae\'n caniatáu i ap addasu gosodiadau system crDroid.</string>
+    <string name="permdesc_writeSettings">Mae\'n caniatáu i ap addasu gosodiadau system LineageOS.</string>
     <string name="permlab_writeSecureSettings">addasu gosodiadau system ddiogel Lineage</string>
-    <string name="permdesc_writeSecureSettings">Mae\'n caniatáu i ap addasu gosodiadau system ddiogel crDroid. Dim i\'w ddefnyddio gan apiau arferol.</string>
+    <string name="permdesc_writeSecureSettings">Mae\'n caniatáu i ap addasu gosodiadau system ddiogel LineageOS. Dim i\'w ddefnyddio gan apiau arferol.</string>
     <string name="permlab_protectedApp">ychwanegu a thynnu apiau i\'r apiau wedi\'u gwarchod</string>
     <string name="permdesc_protectedApp">Mae\'n caniatáu i ap nodi apiau eraill fel wedi eu gwarchod ac i\'w cloi nhw.</string>
     <string name="profileNameDefault">Rhagosodiad</string>

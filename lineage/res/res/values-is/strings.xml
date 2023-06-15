@@ -20,11 +20,11 @@
     <string name="permlab_modifyProfiles">breyta kerfissniðum</string>
     <string name="permdesc_modifyProfiles">Gerir forriti kleift að breyta kerfissniðum.</string>
     <string name="permlab_useHardwareFramework">fá aðgang að vélbúnaðarkerfum</string>
-    <string name="permdesc_useHardwareFramework">Gerir forriti kleift að fá aðgang að vélbúnaðarkerfum crDroid.</string>
-    <string name="permlab_writeSettings">breyta kerfisstillingum crDroid</string>
-    <string name="permdesc_writeSettings">Gerir forriti kleift að breyta kerfisstillingum crDroid.</string>
-    <string name="permlab_writeSecureSettings">breyta öruggum kerfisstillingum crDroid</string>
-    <string name="permdesc_writeSecureSettings">Gerir forriti kleift að breyta öryggisstillingum crDroid. Notist ekki af venjulegum forritum.</string>
+    <string name="permdesc_useHardwareFramework">Gerir forriti kleift að fá aðgang að vélbúnaðarkerfum LineageOS.</string>
+    <string name="permlab_writeSettings">breyta kerfisstillingum LineageOS</string>
+    <string name="permdesc_writeSettings">Gerir forriti kleift að breyta kerfisstillingum LineageOS.</string>
+    <string name="permlab_writeSecureSettings">breyta öruggum kerfisstillingum LineageOS</string>
+    <string name="permdesc_writeSecureSettings">Gerir forriti kleift að breyta öryggisstillingum LineageOS. Notist ekki af venjulegum forritum.</string>
     <string name="permlab_protectedApp">bæta við og fjarlægja forrit til að vernda forrit</string>
     <string name="permdesc_protectedApp">Gerir forriti kleift að merkja önnur forrit sem vernduð og að læsa þeim.</string>
     <string name="profileNameDefault">Sjálfgefið</string>

@@ -20,9 +20,9 @@
     <string name="permlab_modifyProfiles">שנה פרופילי מערכת</string>
     <string name="permdesc_modifyProfiles">מאפשר ליישום לשנות פרופילי מערכת.</string>
     <string name="permlab_useHardwareFramework">השתמש במסגרת חומרה</string>
-    <string name="permdesc_useHardwareFramework">אפשר ליישומים גישה לתשתית החומרה של crDroid.</string>
+    <string name="permdesc_useHardwareFramework">אפשר ליישומים גישה לתשתית החומרה של LineageOS.</string>
     <string name="permlab_writeSettings">שינוי הגדרות המערכת</string>
-    <string name="permdesc_writeSettings">מאפשר ליישום לשנות את הגדרות מערכת crDroid.</string>
+    <string name="permdesc_writeSettings">מאפשר ליישום לשנות את הגדרות מערכת LineageOS.</string>
     <string name="permlab_writeSecureSettings">שינוי הגדרות אבטחה של המערכת</string>
     <string name="permdesc_writeSecureSettings">מאפשר ליישום לשנות הגדרות אבטחה של המערכת, לא נועד לשימוש ע\"י יישומים רגילים.</string>
     <string name="permlab_protectedApp">הוספה והסרה של יישומים מהיישומים המוגנים</string>

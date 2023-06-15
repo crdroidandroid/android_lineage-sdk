@@ -20,7 +20,7 @@
     <string name="permlab_modifyProfiles">мењање профила система</string>
     <string name="permdesc_modifyProfiles">Апликација може да мења подешавања системских профила.</string>
     <string name="permlab_useHardwareFramework">коришћење хардверског оквира</string>
-    <string name="permdesc_useHardwareFramework">Апликација може да приступа хардверском оквиру crDroid-а.</string>
+    <string name="permdesc_useHardwareFramework">Апликација може да приступа хардверском оквиру LineageOS-а.</string>
     <string name="permlab_writeSettings">измени Lineage системске поставке</string>
     <string name="permdesc_writeSettings">Дозвољава апликацији да мења Lineage системске поставке.</string>
     <string name="permlab_writeSecureSettings">измените Lineage сигурносне поставке система</string>

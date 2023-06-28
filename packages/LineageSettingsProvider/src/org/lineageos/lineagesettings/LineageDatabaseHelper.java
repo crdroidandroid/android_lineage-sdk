@@ -326,6 +326,26 @@ public class LineageDatabaseHelper extends SQLiteOpenHelper{
                 ConnectivitySettingsManager.setPrivateDnsHostname(mContext, "one.one.one.one");
                 ConnectivitySettingsManager.setPrivateDnsMode(mContext,
                         ConnectivitySettingsManager.PRIVATE_DNS_MODE_PROVIDER_HOSTNAME);
+            } else if ("adguard".equals(currentPrivateDnsMode)) {
+                // DoT, used at time of migration
+                ConnectivitySettingsManager.setPrivateDnsHostname(mContext, "dns.adguard.com");
+                ConnectivitySettingsManager.setPrivateDnsMode(mContext,
+                        ConnectivitySettingsManager.PRIVATE_DNS_MODE_PROVIDER_HOSTNAME);
+            } else if ("open_dns".equals(currentPrivateDnsMode)) {
+                // DoT, used at time of migration
+                ConnectivitySettingsManager.setPrivateDnsHostname(mContext, "dns.opendns.com");
+                ConnectivitySettingsManager.setPrivateDnsMode(mContext,
+                        ConnectivitySettingsManager.PRIVATE_DNS_MODE_PROVIDER_HOSTNAME);
+            } else if ("cleanbrowsing".equals(currentPrivateDnsMode)) {
+                // DoT, used at time of migration
+                ConnectivitySettingsManager.setPrivateDnsHostname(mContext, "security-filter-dns.cleanbrowsing.org");
+                ConnectivitySettingsManager.setPrivateDnsMode(mContext,
+                        ConnectivitySettingsManager.PRIVATE_DNS_MODE_PROVIDER_HOSTNAME);
+            } else if ("quad9".equals(currentPrivateDnsMode)) {
+                // DoT, used at time of migration
+                ConnectivitySettingsManager.setPrivateDnsHostname(mContext, "dns.quad9.net");
+                ConnectivitySettingsManager.setPrivateDnsMode(mContext,
+                        ConnectivitySettingsManager.PRIVATE_DNS_MODE_PROVIDER_HOSTNAME);
             }
             upgradeVersion = 20;
         }

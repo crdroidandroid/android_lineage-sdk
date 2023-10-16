@@ -326,6 +326,11 @@ public class LineageDatabaseHelper extends SQLiteOpenHelper{
         }
     }
 
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Do nothing.
+    }
+
     private void moveSettingsToNewTable(SQLiteDatabase db,
                                         String sourceTable, String destTable,
                                         String[] settingsToMove, boolean doIgnore) {

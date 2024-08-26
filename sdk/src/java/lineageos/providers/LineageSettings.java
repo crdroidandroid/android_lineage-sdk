@@ -1243,9 +1243,8 @@ public final class LineageSettings {
                 new InclusiveIntegerRangeValidator(0, 17);
 
         /**
-         * Action to perform when three fingers swipe action is detected.
-         * (Default can be configured via config_threeFingersSwipeBehavior)
-         * (See KEY_THREE_FINGERS_SWIPE_ACTION for valid values)
+         * Action to perform when three fingers swipe action is detected. (Default is 0)
+         * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
          */
         public static final String KEY_THREE_FINGERS_SWIPE_ACTION = "key_three_fingers_swipe_action";
 

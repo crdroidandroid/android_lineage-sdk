@@ -95,7 +95,6 @@
     <java-symbol type="integer" name="config_doubleTapOnHomeBehavior" />
     <java-symbol type="integer" name="config_longPressOnMenuBehavior" />
     <java-symbol type="integer" name="config_longPressOnAppSwitchBehavior" />
-    <java-symbol type="integer" name="config_threeFingersSwipeBehavior" />
 
     <!-- ATV remote custom keys handling -->
     <java-symbol type="array" name="keyhandler_keycodes" />

@@ -274,7 +274,7 @@ public class ChargingControlController extends LineageHealthFeature {
 
     @Override
     public void onStart() {
-        if (mChargingControl == null) {
+        if (mCurrentProvider == null || mChargingControl == null) {
             return;
         }
 
@@ -293,6 +293,10 @@ public class ChargingControlController extends LineageHealthFeature {
     }
 
     protected void resetInternalState() {
+        if (mCurrentProvider == null) {
+            return;
+        }
+
         mIsControlCancelledOnce = false;
         mChargingNotification.cancel();
 
@@ -300,6 +304,10 @@ public class ChargingControlController extends LineageHealthFeature {
     }
 
     protected void setChargingCancelledOnce() {
+        if (mCurrentProvider == null) {
+            return;
+        }
+
         mIsControlCancelledOnce = true;
 
         if (mCurrentProvider.requiresBatteryLevelMonitoring()) {
@@ -411,6 +419,10 @@ public class ChargingControlController extends LineageHealthFeature {
     }
 
     protected void updateChargeControl() {
+        if (mCurrentProvider == null) {
+            return;
+        }
+
         if (!isEnabled() || mIsControlCancelledOnce || !mIsPowerConnected) {
             mCurrentProvider.disable();
             mChargingNotification.cancel();
@@ -470,6 +482,10 @@ public class ChargingControlController extends LineageHealthFeature {
      *     - ${@link lineageos.health.HealthInterface#MODE_LIMIT}
      */
     private boolean isProvideSupportCCMode(int mode) {
+        if (mCurrentProvider == null) {
+            return false;
+        }
+
         return mCurrentProvider.isChargingControlModeSupported(mode);
     }
 
@@ -536,7 +552,9 @@ public class ChargingControlController extends LineageHealthFeature {
         pw.println("  mIsDoneNotification: " + mChargingNotification.isDoneNotification());
         pw.println("  mIsControlCancelledOnce: " + mIsControlCancelledOnce);
         pw.println();
-        mCurrentProvider.dump(pw);
+        if (mCurrentProvider != null) {
+            mCurrentProvider.dump(pw);
+        }
     }
 
     /* Battery Broadcast Receiver */

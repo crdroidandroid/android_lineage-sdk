@@ -22,6 +22,7 @@ public class SelfRemovingPreference extends Preference {
                                   int defStyle, int defStyleRes) {
         super(context, attrs, defStyle, defStyleRes);
         mConstraints = new ConstraintsHelper(context, attrs, this);
+        setVisible(mConstraints.isAvailable());
     }
 
     public SelfRemovingPreference(Context context, AttributeSet attrs, int defStyle) {

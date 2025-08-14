@@ -68,6 +68,8 @@ public class ActionUtils {
         final IActivityManager am = ActivityManagerNative.getDefault();
         am.forceStopPackage(packageName, foregroundTask.userId);
 
+	    am.removeTask(foregroundTask.taskId);
+
         new Handler(Looper.getMainLooper()).post(() -> {
             Toast.makeText(context, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
         });

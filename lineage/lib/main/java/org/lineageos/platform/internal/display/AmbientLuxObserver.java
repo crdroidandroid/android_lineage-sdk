@@ -60,7 +60,11 @@ public class AmbientLuxObserver {
         mRingBuffer = new TimedMovingAverageRingBuffer(thresholdDuration);
 
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-        mLightSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT);
+        mLightSensor = mSensorManager != null
+                ? mSensorManager.getDefaultSensor(Sensor.TYPE_LIGHT) : null;
+        if (mLightSensor == null) {
+            Log.w(TAG, "No light sensor available, automatic outdoor mode will be inactive");
+        }
         mLightSensorRate = context.getResources().getInteger(
                 com.android.internal.R.integer.config_autoBrightnessLightSensorRate);
     }
@@ -78,6 +82,9 @@ public class AmbientLuxObserver {
         public void handleMessage(Message msg) {
             int direction = 0;
             float lux = 0.0f;
+            TransitionListener callback = null;
+            int newState = LOW;
+            float ambientLux = 0.0f;
 
             synchronized (AmbientLuxObserver.this) {
                 switch (msg.what) {
@@ -100,9 +107,9 @@ public class AmbientLuxObserver {
                         direction = mAmbientLux >= threshold ? HIGH : LOW;
                         if (mState != direction) {
                             mState = direction;
-                            if (mCallback != null) {
-                                mCallback.onTransition(mState, mAmbientLux);
-                            }
+                            callback = mCallback;
+                            newState = mState;
+                            ambientLux = mAmbientLux;
                         }
 
                         // check again in case we didn't get any
@@ -113,6 +120,10 @@ public class AmbientLuxObserver {
                         }
                         break;
                 }
+            }
+
+            if (callback != null) {
+                callback.onTransition(newState, ambientLux);
             }
         }
 
@@ -147,9 +158,14 @@ public class AmbientLuxObserver {
 
     private void enableLightSensor(boolean enable) {
         if (enable && !mLightSensorEnabled) {
-            mLightSensorEnabled = true;
-            mSensorManager.registerListener(mListener, mLightSensor,
+            if (mLightSensor == null) {
+                return;
+            }
+            mLightSensorEnabled = mSensorManager.registerListener(mListener, mLightSensor,
                     mLightSensorRate * 1000, mLuxHandler);
+            if (!mLightSensorEnabled) {
+                Log.w(TAG, "Failed to register light sensor listener");
+            }
         } else if (!enable && mLightSensorEnabled) {
             mSensorManager.unregisterListener(mListener);
             mLuxHandler.clear();
@@ -160,9 +176,10 @@ public class AmbientLuxObserver {
         }
     }
 
-    public void dump(PrintWriter pw) {
+    public synchronized void dump(PrintWriter pw) {
         pw.println();
         pw.println("  AmbientLuxObserver State:");
+        pw.println("    mLightSensor=" + mLightSensor);
         pw.println("    mLightSensorEnabled=" + mLightSensorEnabled);
         pw.println("    mState=" + mState);
         pw.println("    mAmbientLux=" + mAmbientLux);

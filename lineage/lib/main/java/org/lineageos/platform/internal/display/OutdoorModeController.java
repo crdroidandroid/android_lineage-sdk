@@ -44,7 +44,8 @@ public class OutdoorModeController extends LiveDisplayFeature {
         super(context, handler);
 
         mHardware = LineageHardwareManager.getInstance(mContext);
-        mUseOutdoorMode = mHardware.isSupported(LineageHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT);
+        mUseOutdoorMode = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT);
 
         mDefaultOutdoorLux = mContext.getResources().getInteger(
                 org.lineageos.platform.internal.R.integer.config_outdoorAmbientLux);
@@ -99,7 +100,8 @@ public class OutdoorModeController extends LiveDisplayFeature {
         // face if they turn it back on in normal conditions
         if (!isScreenOn() && getMode() != MODE_OUTDOOR) {
             mIsOutdoor = false;
-            mHardware.set(LineageHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT, false);
+            setHardwareFeature(mHardware,
+                    LineageHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT, false);
         }
     }
 
@@ -119,9 +121,12 @@ public class OutdoorModeController extends LiveDisplayFeature {
         pw.println("    mAutoOutdoorMode=" + isAutomaticOutdoorModeEnabled());
         pw.println("    mIsOutdoor=" + mIsOutdoor);
         pw.println("    mIsNight=" + isNight());
-        pw.println("    hardware state=" +
-                mHardware.get(LineageHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT));
-        mLuxObserver.dump(pw);
+        pw.println("    hardware state=" + (mUseOutdoorMode && getHardwareFeature(mHardware,
+                LineageHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT)));
+        final AmbientLuxObserver luxObserver = mLuxObserver;
+        if (luxObserver != null) {
+            luxObserver.dump(pw);
+        }
     }
 
     private synchronized void updateSensorState() {
@@ -197,7 +202,8 @@ public class OutdoorModeController extends LiveDisplayFeature {
                     }
                 }
             }
-            mHardware.set(LineageHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT, enabled);
+            setHardwareFeature(mHardware,
+                    LineageHardwareManager.FEATURE_SUNLIGHT_ENHANCEMENT, enabled);
         }
     }
 

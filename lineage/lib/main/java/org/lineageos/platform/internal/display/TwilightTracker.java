@@ -65,7 +65,8 @@ public final class TwilightTracker {
         filter.addAction(Intent.ACTION_TIME_CHANGED);
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         filter.addAction(ACTION_UPDATE_TWILIGHT_STATE);
-        mContext.registerReceiver(mUpdateLocationReceiver, filter);
+        mContext.registerReceiver(mUpdateLocationReceiver, filter,
+                Context.RECEIVER_NOT_EXPORTED);
     }
 
     /**
@@ -180,9 +181,20 @@ public final class TwilightTracker {
 
         @Override
         public void handleMessage(Message msg) {
+            try {
+                handleMessageInner(msg);
+            } catch (RuntimeException e) {
+                Slog.e(TAG, "Failed to handle message " + msg.what, e);
+            }
+        }
+
+        private void handleMessageInner(Message msg) {
             switch (msg.what) {
                 case MSG_PROCESS_NEW_LOCATION: {
                     final Location location = (Location) msg.obj;
+                    if (location == null) {
+                        break;
+                    }
                     final boolean hasMoved = hasMoved(mLocation, location);
                     final boolean hasBetterAccuracy = mLocation == null
                             || location.getAccuracy() < mLocation.getAccuracy();
@@ -229,12 +241,17 @@ public final class TwilightTracker {
                         networkLocationEnabled = false;
                     }
                     if (!mNetworkListenerEnabled && networkLocationEnabled) {
-                        mNetworkListenerEnabled = true;
-                        mLastNetworkRegisterTime = SystemClock.elapsedRealtime();
-                        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
-                                LOCATION_UPDATE_MS, 0, mEmptyLocationListener);
+                        try {
+                            mLocationManager.requestLocationUpdates(
+                                    LocationManager.NETWORK_PROVIDER,
+                                    LOCATION_UPDATE_MS, 0, mEmptyLocationListener);
+                            mNetworkListenerEnabled = true;
+                            mLastNetworkRegisterTime = SystemClock.elapsedRealtime();
+                        } catch (RuntimeException e) {
+                            Slog.w(TAG, "Failed to request network location updates", e);
+                        }
 
-                        if (!mDidFirstInit) {
+                        if (mNetworkListenerEnabled && !mDidFirstInit) {
                             mDidFirstInit = true;
                             if (mLocation == null) {
                                 retrieveLocation();
@@ -255,9 +272,14 @@ public final class TwilightTracker {
                     }
 
                     if (!mPassiveListenerEnabled && passiveLocationEnabled) {
-                        mPassiveListenerEnabled = true;
-                        mLocationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER,
-                                0, LOCATION_UPDATE_DISTANCE_METER, mLocationListener);
+                        try {
+                            mLocationManager.requestLocationUpdates(
+                                    LocationManager.PASSIVE_PROVIDER,
+                                    0, LOCATION_UPDATE_DISTANCE_METER, mLocationListener);
+                            mPassiveListenerEnabled = true;
+                        } catch (RuntimeException e) {
+                            Slog.w(TAG, "Failed to request passive location updates", e);
+                        }
                     }
 
                     if (!(mNetworkListenerEnabled && mPassiveListenerEnabled)) {
@@ -287,8 +309,17 @@ public final class TwilightTracker {
         private Location getLastKnownLocation() {
             List<String> providers = mLocationManager.getAllProviders();
             Location bestLocation = null;
+            if (providers == null) {
+                return null;
+            }
             for (String provider : providers) {
-                Location lastKnownLocation = mLocationManager.getLastKnownLocation(provider);
+                Location lastKnownLocation;
+                try {
+                    lastKnownLocation = mLocationManager.getLastKnownLocation(provider);
+                } catch (RuntimeException e) {
+                    Slog.w(TAG, "getLastKnownLocation(" + provider + ") failed", e);
+                    continue;
+                }
                 if (lastKnownLocation != null) {
                     if (bestLocation == null ||
                             bestLocation.getElapsedRealtimeNanos() <
@@ -388,10 +419,15 @@ public final class TwilightTracker {
             }
 
             Intent updateIntent = new Intent(ACTION_UPDATE_TWILIGHT_STATE);
+            updateIntent.setPackage(mContext.getPackageName());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(
                     mContext, 0, updateIntent, PendingIntent.FLAG_IMMUTABLE);
-            mAlarmManager.cancel(pendingIntent);
-            mAlarmManager.setExact(AlarmManager.RTC, nextUpdate, pendingIntent);
+            try {
+                mAlarmManager.cancel(pendingIntent);
+                mAlarmManager.setExact(AlarmManager.RTC, nextUpdate, pendingIntent);
+            } catch (RuntimeException e) {
+                Slog.e(TAG, "Failed to schedule next twilight update", e);
+            }
         }
     }
 

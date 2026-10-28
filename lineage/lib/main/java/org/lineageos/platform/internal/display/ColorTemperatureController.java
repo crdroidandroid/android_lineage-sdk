@@ -65,9 +65,22 @@ public class ColorTemperatureController extends LiveDisplayFeature {
         mDisplayHardware = displayHardware;
         mHardware = LineageHardwareManager.getInstance(mContext);
 
-        mUseColorBalance = mHardware
-                .isSupported(LineageHardwareManager.FEATURE_COLOR_BALANCE);
-        mColorBalanceRange = mHardware.getColorBalanceRange();
+        boolean useColorBalance = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_COLOR_BALANCE);
+        Range<Integer> balanceRange = null;
+        try {
+            balanceRange = mHardware.getColorBalanceRange();
+        } catch (RuntimeException e) {
+            if (useColorBalance) {
+                Slog.w(TAG, "getColorBalanceRange failed, disabling color balance", e);
+            }
+        }
+        if (balanceRange == null) {
+            balanceRange = Range.create(0, 0);
+            useColorBalance = false;
+        }
+        mUseColorBalance = useColorBalance;
+        mColorBalanceRange = balanceRange;
 
         mUseTemperatureAdjustment = !mNightDisplayAvailable &&
                 (mUseColorBalance || mDisplayHardware.hasColorAdjustment());
@@ -122,7 +135,7 @@ public class ColorTemperatureController extends LiveDisplayFeature {
     }
 
     @Override
-    protected void onScreenStateChanged() {
+    protected synchronized void onScreenStateChanged() {
         if (mAnimator != null && mAnimator.isRunning() && !isScreenOn()) {
             mAnimator.cancel();
         } else {
@@ -167,6 +180,8 @@ public class ColorTemperatureController extends LiveDisplayFeature {
     }
 
     private synchronized void updateColorTemperature() {
+        mHandler.removeCallbacks(mTransitionRunnable);
+
         if (!mUseTemperatureAdjustment || !isScreenOn()) {
             return;
         }
@@ -200,7 +215,13 @@ public class ColorTemperatureController extends LiveDisplayFeature {
     private synchronized void animateColorBalance(int balance) {
 
         // always start with the current values in the hardware
-        int current = mHardware.getColorBalance();
+        final int current;
+        try {
+            current = mHardware.getColorBalance();
+        } catch (RuntimeException e) {
+            Slog.e(TAG, "getColorBalance failed", e);
+            return;
+        }
 
         if (current == balance) {
             return;
@@ -226,7 +247,12 @@ public class ColorTemperatureController extends LiveDisplayFeature {
             synchronized (ColorTemperatureController.this) {
                 if (isScreenOn()) {
                     int value = (int) animation.getAnimatedValue();
-                    mHardware.setColorBalance(value);
+                    try {
+                        mHardware.setColorBalance(value);
+                    } catch (RuntimeException e) {
+                        Slog.e(TAG, "setColorBalance failed, aborting animation", e);
+                        animation.cancel();
+                    }
                 }
             }
         });

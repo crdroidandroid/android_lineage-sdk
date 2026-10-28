@@ -32,16 +32,27 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
     private final boolean mUsePictureAdjustment;
     private final boolean mHasDisplayModes;
 
-    private List<Range<Float>> mRanges = new ArrayList<Range<Float>>();
+    private final List<Range<Float>> mRanges = new ArrayList<Range<Float>>();
 
     public PictureAdjustmentController(Context context, Handler handler) {
         super(context, handler);
         mHardware = LineageHardwareManager.getInstance(context);
-        mHasDisplayModes = mHardware.isSupported(LineageHardwareManager.FEATURE_DISPLAY_MODES);
+        mHasDisplayModes = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_DISPLAY_MODES);
 
-        boolean usePA = mHardware.isSupported(LineageHardwareManager.FEATURE_PICTURE_ADJUSTMENT);
+        boolean usePA = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_PICTURE_ADJUSTMENT);
         if (usePA) {
-            final List<Range<Float>> r = mHardware.getPictureAdjustmentRanges();
+            List<Range<Float>> r = null;
+            try {
+                // The HAL can advertise picture adjustment and still reject the range
+                // queries (EX_UNSUPPORTED_OPERATION from IPictureAdjustment.getHueRange()).
+                // That exception used to escape the constructor and kill system_server
+                // during PHASE_BOOT_COMPLETED.
+                r = mHardware.getPictureAdjustmentRanges();
+            } catch (RuntimeException e) {
+                Slog.w(TAG, "Failed to query picture adjustment ranges, disabling feature", e);
+            }
             if (r != null) {
                 mRanges.addAll(r);
             }
@@ -49,7 +60,8 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
                 usePA = false;
             } else {
                 for (Range<Float> range : mRanges) {
-                    if (range.getLower() == 0.0f && range.getUpper() == 0.0f) {
+                    if (range == null
+                            || (range.getLower() == 0.0f && range.getUpper() == 0.0f)) {
                         usePA = false;
                         break;
                     }
@@ -86,7 +98,14 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
         if (mUsePictureAdjustment && isScreenOn()) {
             final HSIC hsic = getPictureAdjustment();
             if (hsic != null) {
-                if (!mHardware.setPictureAdjustment(hsic)) {
+                boolean ok;
+                try {
+                    ok = mHardware.setPictureAdjustment(hsic);
+                } catch (RuntimeException e) {
+                    Slog.e(TAG, "setPictureAdjustment threw", e);
+                    ok = false;
+                }
+                if (!ok) {
                     Slog.e(TAG, "Failed to set picture adjustment! " + hsic.toString());
                 }
             }
@@ -117,35 +136,39 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
         return mUsePictureAdjustment;
     }
 
+    private Range<Float> getRange(int index) {
+        return mUsePictureAdjustment && mRanges.size() > index
+                ? mRanges.get(index) : Range.create(0.0f, 0.0f);
+    }
+
     Range<Float> getHueRange() {
-        return mUsePictureAdjustment && mRanges.size() > 0
-                ? mRanges.get(0) : Range.create(0.0f, 0.0f);
+        return getRange(0);
     }
 
     Range<Float> getSaturationRange() {
-        return mUsePictureAdjustment && mRanges.size() > 1
-                ? mRanges.get(1) : Range.create(0.0f, 0.0f);
+        return getRange(1);
     }
 
     Range<Float> getIntensityRange() {
-        return mUsePictureAdjustment && mRanges.size() > 2
-                ? mRanges.get(2) : Range.create(0.0f, 0.0f);
+        return getRange(2);
     }
 
     Range<Float> getContrastRange() {
-        return mUsePictureAdjustment && mRanges.size() > 3 ?
-                mRanges.get(3) : Range.create(0.0f, 0.0f);
+        return getRange(3);
     }
 
     Range<Float> getSaturationThresholdRange() {
-        return mUsePictureAdjustment && mRanges.size() > 4 ?
-                mRanges.get(4) : Range.create(0.0f, 0.0f);
+        return getRange(4);
     }
 
     HSIC getDefaultPictureAdjustment() {
         HSIC hsic = null;
         if (mUsePictureAdjustment) {
-            hsic = mHardware.getDefaultPictureAdjustment();
+            try {
+                hsic = mHardware.getDefaultPictureAdjustment();
+            } catch (RuntimeException e) {
+                Slog.w(TAG, "getDefaultPictureAdjustment failed", e);
+            }
         }
         if (hsic == null) {
             hsic = new HSIC(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -153,17 +176,23 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
         return hsic;
     }
 
+    private int getCurrentModeId() {
+        if (!mHasDisplayModes) {
+            return 0;
+        }
+        try {
+            final DisplayMode mode = mHardware.getCurrentDisplayMode();
+            return mode != null ? mode.id : 0;
+        } catch (RuntimeException e) {
+            Slog.w(TAG, "getCurrentDisplayMode failed", e);
+            return 0;
+        }
+    }
+
     HSIC getPictureAdjustment() {
         HSIC hsic = null;
         if (mUsePictureAdjustment) {
-            int modeID = 0;
-            if (mHasDisplayModes) {
-                DisplayMode mode = mHardware.getCurrentDisplayMode();
-                if (mode != null) {
-                    modeID = mode.id;
-                }
-            }
-            hsic = getPAForMode(modeID);
+            hsic = getPAForMode(getCurrentModeId());
         }
         if (hsic == null) {
             hsic = new HSIC(0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
@@ -173,14 +202,7 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
 
     boolean setPictureAdjustment(HSIC hsic) {
         if (mUsePictureAdjustment && hsic != null) {
-            int modeID = 0;
-            if (mHasDisplayModes) {
-                DisplayMode mode = mHardware.getCurrentDisplayMode();
-                if (mode != null) {
-                    modeID = mode.id;
-                }
-            }
-            setPAForMode(modeID, hsic);
+            setPAForMode(getCurrentModeId(), hsic);
             return true;
         }
         return false;
@@ -190,10 +212,8 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
 
     private HSIC getPAForMode(int mode) {
         final SparseArray<HSIC> prefs = unpackPreference();
-        if (prefs.indexOfKey(mode) >= 0) {
-            return prefs.get(mode);
-        }
-        return getDefaultPictureAdjustment();
+        final HSIC hsic = prefs.get(mode);
+        return hsic != null ? hsic : getDefaultPictureAdjustment();
     }
 
     private void setPAForMode(int mode, HSIC hsic) {
@@ -210,8 +230,18 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
             String[] byMode = TextUtils.split(pref, ",");
             for (String mode : byMode) {
                 String[] modePA = TextUtils.split(mode, ":");
-                if (modePA.length == 2) {
-                    ret.put(Integer.valueOf(modePA[0]), HSIC.unflattenFrom(modePA[1]));
+                if (modePA.length != 2) {
+                    continue;
+                }
+                // The setting is user-writable; a malformed value must not throw on the
+                // LiveDisplay handler thread (that would crash system_server).
+                try {
+                    final HSIC hsic = HSIC.unflattenFrom(modePA[1]);
+                    if (hsic != null) {
+                        ret.put(Integer.parseInt(modePA[0]), hsic);
+                    }
+                } catch (RuntimeException e) {
+                    Slog.w(TAG, "Ignoring malformed picture adjustment entry: " + mode, e);
                 }
             }
         }
@@ -221,12 +251,14 @@ public class PictureAdjustmentController extends LiveDisplayFeature {
     private void packPreference(final SparseArray<HSIC> modes) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < modes.size(); i++) {
-            int id = modes.keyAt(i);
-            HSIC m = modes.get(id);
-            if (i > 0) {
+            final HSIC m = modes.valueAt(i);
+            if (m == null) {
+                continue;
+            }
+            if (sb.length() > 0) {
                 sb.append(",");
             }
-            sb.append(id).append(":").append(m.flatten());
+            sb.append(modes.keyAt(i)).append(":").append(m.flatten());
         }
         putString(LineageSettings.System.DISPLAY_PICTURE_ADJUSTMENT, sb.toString());
     }

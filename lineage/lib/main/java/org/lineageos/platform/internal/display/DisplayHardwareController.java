@@ -72,40 +72,54 @@ public class DisplayHardwareController extends LiveDisplayFeature {
         super(context, handler);
 
         mHardware = LineageHardwareManager.getInstance(mContext);
-        mUseCABC = mHardware
-                .isSupported(LineageHardwareManager.FEATURE_ADAPTIVE_BACKLIGHT);
+        mUseCABC = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_ADAPTIVE_BACKLIGHT);
         mDefaultCABC = mContext.getResources().getBoolean(
                 org.lineageos.platform.internal.R.bool.config_defaultCABC);
 
-        mUseColorEnhancement = mHardware
-                .isSupported(LineageHardwareManager.FEATURE_COLOR_ENHANCEMENT);
+        mUseColorEnhancement = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_COLOR_ENHANCEMENT);
         mDefaultColorEnhancement = mContext.getResources().getBoolean(
                 org.lineageos.platform.internal.R.bool.config_defaultColorEnhancement);
 
-        mUseAutoContrast = mHardware
-                .isSupported(LineageHardwareManager.FEATURE_AUTO_CONTRAST);
+        mUseAutoContrast = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_AUTO_CONTRAST);
         mDefaultAutoContrast = mContext.getResources().getBoolean(
                 org.lineageos.platform.internal.R.bool.config_defaultAutoContrast);
 
-        mUseColorAdjustment = mHardware
-                .isSupported(LineageHardwareManager.FEATURE_DISPLAY_COLOR_CALIBRATION);
+        mUseDisplayModes = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_DISPLAY_MODES);
 
-        mUseDisplayModes = mHardware
-                .isSupported(LineageHardwareManager.FEATURE_DISPLAY_MODES);
+        mUseReaderMode = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_READING_ENHANCEMENT);
 
-        mUseReaderMode = mHardware
-                .isSupported(LineageHardwareManager.FEATURE_READING_ENHANCEMENT);
-
-        mUseAntiFlicker = mHardware
-                .isSupported(LineageHardwareManager.FEATURE_ANTI_FLICKER);
+        mUseAntiFlicker = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_ANTI_FLICKER);
         mDefaultAntiFlicker = mContext.getResources().getBoolean(
                 org.lineageos.platform.internal.R.bool.config_defaultAntiFlicker);
 
+        boolean useColorAdjustment = isHardwareSupported(mHardware,
+                LineageHardwareManager.FEATURE_DISPLAY_COLOR_CALIBRATION);
+        int maxColor = 0;
+        if (useColorAdjustment) {
+            try {
+                maxColor = mHardware.getDisplayColorCalibrationMax();
+            } catch (RuntimeException e) {
+                Slog.w(TAG, "getDisplayColorCalibrationMax failed", e);
+            }
+            if (maxColor <= 0) {
+                // Without a valid max we would divide by zero in animateDisplayColor().
+                Slog.w(TAG, "Invalid color calibration max " + maxColor
+                        + ", disabling color adjustment");
+                useColorAdjustment = false;
+                maxColor = 0;
+            }
+        }
+        mUseColorAdjustment = useColorAdjustment;
+        mMaxColor = maxColor;
+
         if (mUseColorAdjustment) {
-            mMaxColor = mHardware.getDisplayColorCalibrationMax();
             copyColors(getColorAdjustment(), mColorAdjustment);
-        } else {
-            mMaxColor = 0;
         }
     }
 
@@ -229,7 +243,14 @@ public class DisplayHardwareController extends LiveDisplayFeature {
         pw.println("    mCABC=" + isCABCEnabled());
         pw.println("    mColorAdjustment=" + Arrays.toString(mColorAdjustment));
         pw.println("    mAdditionalAdjustment=" + Arrays.toString(mAdditionalAdjustment));
-        pw.println("    hardware setting=" + Arrays.toString(mHardware.getDisplayColorCalibration()));
+        String hw;
+        try {
+            hw = mUseColorAdjustment
+                    ? Arrays.toString(mHardware.getDisplayColorCalibration()) : "n/a";
+        } catch (RuntimeException e) {
+            hw = "error: " + e;
+        }
+        pw.println("    hardware setting=" + hw);
     }
 
     /**
@@ -239,7 +260,8 @@ public class DisplayHardwareController extends LiveDisplayFeature {
         if (!mUseAutoContrast) {
             return;
         }
-        mHardware.set(LineageHardwareManager.FEATURE_AUTO_CONTRAST, isAutoContrastEnabled());
+        setHardwareFeature(mHardware, LineageHardwareManager.FEATURE_AUTO_CONTRAST,
+                isAutoContrastEnabled());
     }
 
     /**
@@ -249,7 +271,7 @@ public class DisplayHardwareController extends LiveDisplayFeature {
         if (!mUseColorEnhancement) {
             return;
         }
-        mHardware.set(LineageHardwareManager.FEATURE_COLOR_ENHANCEMENT,
+        setHardwareFeature(mHardware, LineageHardwareManager.FEATURE_COLOR_ENHANCEMENT,
                 (!isLowPowerMode() || mDefaultColorEnhancement) && isColorEnhancementEnabled());
     }
 
@@ -260,7 +282,8 @@ public class DisplayHardwareController extends LiveDisplayFeature {
         if (!mUseCABC) {
             return;
         }
-        mHardware.set(LineageHardwareManager.FEATURE_ADAPTIVE_BACKLIGHT, isCABCEnabled());
+        setHardwareFeature(mHardware, LineageHardwareManager.FEATURE_ADAPTIVE_BACKLIGHT,
+                isCABCEnabled());
     }
 
     private synchronized void updateColorAdjustment() {
@@ -291,7 +314,8 @@ public class DisplayHardwareController extends LiveDisplayFeature {
         if (!mUseAntiFlicker) {
             return;
         }
-        mHardware.set(LineageHardwareManager.FEATURE_ANTI_FLICKER, isAntiFlickerEnabled());
+        setHardwareFeature(mHardware, LineageHardwareManager.FEATURE_ANTI_FLICKER,
+                isAntiFlickerEnabled());
     }
 
     /**
@@ -300,7 +324,17 @@ public class DisplayHardwareController extends LiveDisplayFeature {
     private synchronized void animateDisplayColor(float[] targetColors) {
 
         // always start with the current values in the hardware
-        int[] currentInts = mHardware.getDisplayColorCalibration();
+        final int[] currentInts;
+        try {
+            currentInts = mHardware.getDisplayColorCalibration();
+        } catch (RuntimeException e) {
+            Slog.e(TAG, "getDisplayColorCalibration failed", e);
+            return;
+        }
+        if (currentInts == null || currentInts.length < 3 || mMaxColor <= 0) {
+            Slog.w(TAG, "Invalid display color calibration: " + Arrays.toString(currentInts));
+            return;
+        }
         float[] currentColors = new float[] {
                 (float)currentInts[0] / (float)mMaxColor,
                 (float)currentInts[1] / (float)mMaxColor,
@@ -312,7 +346,7 @@ public class DisplayHardwareController extends LiveDisplayFeature {
             return;
         }
 
-        // max 500 ms, scaled vs. the largest delta
+        // max 750 ms, scaled vs. the largest delta
         long duration = (long)(750 * (Math.max(Math.max(
                 Math.abs(currentColors[0] - targetColors[0]),
                 Math.abs(currentColors[1] - targetColors[1])),
@@ -336,12 +370,17 @@ public class DisplayHardwareController extends LiveDisplayFeature {
             synchronized (DisplayHardwareController.this) {
                 if (isScreenOn()) {
                     float[] value = (float[]) animation.getAnimatedValue();
-                    mHardware.setDisplayColorCalibration(new int[] {
-                            (int) (value[0] * mMaxColor),
-                            (int) (value[1] * mMaxColor),
-                            (int) (value[2] * mMaxColor)
-                    });
-                    screenRefresh();
+                    try {
+                        mHardware.setDisplayColorCalibration(new int[] {
+                                (int) (value[0] * mMaxColor),
+                                (int) (value[1] * mMaxColor),
+                                (int) (value[2] * mMaxColor)
+                        });
+                        screenRefresh();
+                    } catch (RuntimeException e) {
+                        Slog.e(TAG, "setDisplayColorCalibration failed, aborting animation", e);
+                        animation.cancel();
+                    }
                 }
             }
         });
@@ -353,16 +392,20 @@ public class DisplayHardwareController extends LiveDisplayFeature {
      * hardware registers for display calibration to have an immediate effect.
      */
     private void screenRefresh() {
+        Parcel data = null;
         try {
             final IBinder flinger = ServiceManager.getService("SurfaceFlinger");
             if (flinger != null) {
-                final Parcel data = Parcel.obtain();
+                data = Parcel.obtain();
                 data.writeInterfaceToken("android.ui.ISurfaceComposer");
                 flinger.transact(1004, data, null, 0);
+            }
+        } catch (RemoteException | RuntimeException ex) {
+            Slog.e(TAG, "Failed to refresh screen", ex);
+        } finally {
+            if (data != null) {
                 data.recycle();
             }
-        } catch (RemoteException ex) {
-            Slog.e(TAG, "Failed to refresh screen", ex);
         }
     }
 
@@ -378,6 +421,9 @@ public class DisplayHardwareController extends LiveDisplayFeature {
         }
 
         for (int i = 0; i < 3; i++) {
+            if (Float.isNaN(colors[i])) {
+                return false;
+            }
             colors[i] = MathUtils.constrain(colors[i], 0.0f, 1.0f);
         }
         return true;

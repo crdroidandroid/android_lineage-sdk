@@ -29,6 +29,9 @@ import java.util.List;
  */
 public class LiveDisplayConfig implements Parcelable {
 
+    private static final Range<Integer> EMPTY_INT_RANGE = Range.create(0, 0);
+    private static final Range<Float> EMPTY_FLOAT_RANGE = Range.create(0.0f, 0.0f);
+
     private final BitSet mCapabilities;
     private final BitSet mAllModes = new BitSet();
 
@@ -61,8 +64,9 @@ public class LiveDisplayConfig implements Parcelable {
             Range<Float> contrastRange,
             Range<Float> saturationThresholdRange) {
         super();
-        mCapabilities = (BitSet) capabilities.clone();
-        mAllModes.set(MODE_FIRST, MODE_LAST);
+        mCapabilities = capabilities != null ? (BitSet) capabilities.clone() : new BitSet();
+        // BitSet.set(from, to) is end-exclusive: +1 so MODE_DAY is counted as a mode.
+        mAllModes.set(MODE_FIRST, MODE_LAST + 1);
         mDefaultMode = defaultMode;
         mDefaultDayTemperature = defaultDayTemperature;
         mDefaultNightTemperature = defaultNightTemperature;
@@ -70,20 +74,38 @@ public class LiveDisplayConfig implements Parcelable {
         mDefaultAutoOutdoorMode = defaultAutoOutdoorMode;
         mDefaultCABC = defaultCABC;
         mDefaultColorEnhancement = defaultColorEnhancement;
-        mColorTemperatureRange = colorTemperatureRange;
-        mColorBalanceRange = colorBalanceRange;
-        mHueRange = hueRange;
-        mSaturationRange = saturationRange;
-        mIntensityRange = intensityRange;
-        mContrastRange = contrastRange;
-        mSaturationThresholdRange = saturationThresholdRange;
+        // Null ranges would NPE in writeToParcel when the config is sent to SystemUI/Settings.
+        mColorTemperatureRange = orEmptyInt(colorTemperatureRange);
+        mColorBalanceRange = orEmptyInt(colorBalanceRange);
+        mHueRange = orEmptyFloat(hueRange);
+        mSaturationRange = orEmptyFloat(saturationRange);
+        mIntensityRange = orEmptyFloat(intensityRange);
+        mContrastRange = orEmptyFloat(contrastRange);
+        mSaturationThresholdRange = orEmptyFloat(saturationThresholdRange);
+    }
+
+    private static Range<Integer> orEmptyInt(Range<Integer> r) {
+        return r != null ? r : EMPTY_INT_RANGE;
+    }
+
+    private static Range<Float> orEmptyFloat(Range<Float> r) {
+        return r != null ? r : EMPTY_FLOAT_RANGE;
+    }
+
+    /** Range.create() throws on lower > upper; never let a bad parcel crash the reader. */
+    private static Range<Integer> safeIntRange(int lower, int upper) {
+        return lower <= upper ? Range.create(lower, upper) : EMPTY_INT_RANGE;
+    }
+
+    private static Range<Float> safeFloatRange(float lower, float upper) {
+        return lower <= upper ? Range.create(lower, upper) : EMPTY_FLOAT_RANGE;
     }
 
     private LiveDisplayConfig(Parcel parcel) {
         float[] paRanges = new float[10];
 
         mCapabilities = BitSet.valueOf(new long[] { parcel.readLong() });
-        mAllModes.set(MODE_FIRST, MODE_LAST);
+        mAllModes.set(MODE_FIRST, MODE_LAST + 1);
         mDefaultMode = parcel.readInt();
         mDefaultDayTemperature = parcel.readInt();
         mDefaultNightTemperature = parcel.readInt();
@@ -91,14 +113,14 @@ public class LiveDisplayConfig implements Parcelable {
         mDefaultAutoOutdoorMode = parcel.readInt() == 1;
         mDefaultCABC = parcel.readInt() == 1;
         mDefaultColorEnhancement = parcel.readInt() == 1;
-        mColorTemperatureRange = Range.create(parcel.readInt(), parcel.readInt());
-        mColorBalanceRange = Range.create(parcel.readInt(), parcel.readInt());
+        mColorTemperatureRange = safeIntRange(parcel.readInt(), parcel.readInt());
+        mColorBalanceRange = safeIntRange(parcel.readInt(), parcel.readInt());
         parcel.readFloatArray(paRanges);
-        mHueRange = Range.create(paRanges[0], paRanges[1]);
-        mSaturationRange = Range.create(paRanges[2], paRanges[3]);
-        mIntensityRange = Range.create(paRanges[4], paRanges[5]);
-        mContrastRange = Range.create(paRanges[6], paRanges[7]);
-        mSaturationThresholdRange = Range.create(paRanges[8], paRanges[9]);
+        mHueRange = safeFloatRange(paRanges[0], paRanges[1]);
+        mSaturationRange = safeFloatRange(paRanges[2], paRanges[3]);
+        mIntensityRange = safeFloatRange(paRanges[4], paRanges[5]);
+        mContrastRange = safeFloatRange(paRanges[6], paRanges[7]);
+        mSaturationThresholdRange = safeFloatRange(paRanges[8], paRanges[9]);
     }
 
     @Override

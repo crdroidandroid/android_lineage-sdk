@@ -182,8 +182,16 @@ public class LiveDisplayManager {
      * @return true if service is valid
      */
     private boolean checkService() {
+        final ILiveDisplayService service = sService;
+        if (service == null || !service.asBinder().isBinderAlive()) {
+            if (service != null) {
+                mConfig = null;
+            }
+            sService = null;
+            getService();
+        }
         if (sService == null) {
-            Log.w(TAG, "not connected to LineageHardwareManagerService");
+            Log.w(TAG, "not connected to LiveDisplayService");
             return false;
         }
         return true;
@@ -480,12 +488,12 @@ public class LiveDisplayManager {
      * Determine whether night mode is enabled (be it automatic or manual)
      */
     public boolean isNightModeEnabled() {
-        // This method might be called before config has been set up
-        // so a NPE would have been thrown, just report night mode is disabled instead
+        // This method might be called before the service is ready; report disabled then.
+        if (getMode() == MODE_NIGHT) {
+            return true;
+        }
         try {
-            return getMode() == MODE_NIGHT || sService.isNight();
-        } catch (NullPointerException e) {
-            Log.w(TAG, "Can\'t check whether night mode is enabled because the service isn\'t ready");
+            return checkService() && sService.isNight();
         } catch (RemoteException ignored) {
         }
         return false;

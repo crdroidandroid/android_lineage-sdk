@@ -180,7 +180,8 @@ public final class LineageHardwareManager {
     private final ArrayMap<String, String> mDisplayModeMappings = new ArrayMap<String, String>();
     private final boolean mFilterDisplayModes;
 
-    private HashMap<Integer, IBinder> mAIDLMap = new HashMap<Integer, IBinder>();
+    private final Object mAIDLLock = new Object();
+    private final HashMap<Integer, IBinder> mAIDLMap = new HashMap<Integer, IBinder>();
 
     /**
      * @hide to prevent subclassing from outside of the framework
@@ -220,7 +221,7 @@ public final class LineageHardwareManager {
      * @param context
      * @return {@link LineageHardwareManager}
      */
-    public static LineageHardwareManager getInstance(Context context) {
+    public static synchronized LineageHardwareManager getInstance(Context context) {
         if (sLineageHardwareManagerInstance == null) {
             sLineageHardwareManagerInstance = new LineageHardwareManager(context);
         }
@@ -240,6 +241,10 @@ public final class LineageHardwareManager {
         return null;
     }
 
+    private static void logHalError(String what, Exception e) {
+        Log.w(TAG, what + " failed", e);
+    }
+
     /**
      * Determine if a Lineage Hardware feature is supported on this device
      *
@@ -252,10 +257,34 @@ public final class LineageHardwareManager {
     }
 
     private boolean isSupportedAIDL(int feature) {
-        if (!mAIDLMap.containsKey(feature)) {
-            mAIDLMap.put(feature, getAIDLService(feature));
+        return getAIDLBinder(feature) != null;
+    }
+
+    private IBinder getAIDLBinder(int feature) {
+        synchronized (mAIDLLock) {
+            if (mAIDLMap.containsKey(feature)) {
+                final IBinder cached = mAIDLMap.get(feature);
+                if (cached == null || cached.isBinderAlive()) {
+                    return cached;
+                }
+                Log.w(TAG, "HAL binder for feature 0x" + Integer.toHexString(feature)
+                        + " died, re-acquiring");
+                mAIDLMap.remove(feature);
+            }
         }
-        return mAIDLMap.get(feature) != null;
+        // waitForDeclaredService() may block; don't hold the lock while it does.
+        IBinder b = null;
+        try {
+            b = getAIDLService(feature);
+        } catch (RuntimeException e) {
+            logHalError("getAIDLService(0x" + Integer.toHexString(feature) + ")", e);
+        }
+        synchronized (mAIDLLock) {
+            if (!mAIDLMap.containsKey(feature)) {
+                mAIDLMap.put(feature, b);
+            }
+            return mAIDLMap.get(feature);
+        }
     }
 
     private boolean isSupportedHWC2(int feature) {
@@ -263,7 +292,8 @@ public final class LineageHardwareManager {
             if (checkService()) {
                 return feature == (sService.getSupportedFeatures() & feature);
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getSupportedFeatures", e);
         }
         return false;
     }
@@ -328,7 +358,7 @@ public final class LineageHardwareManager {
      * @hide
      */
     public boolean isSupported(String feature) {
-        if (!feature.startsWith("FEATURE_")) {
+        if (feature == null || !feature.startsWith("FEATURE_")) {
             return false;
         }
         try {
@@ -336,7 +366,7 @@ public final class LineageHardwareManager {
             if (f != null) {
                 return isSupported((int) f.get(null));
             }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
             Log.d(TAG, e.getMessage(), e);
         }
 
@@ -357,8 +387,8 @@ public final class LineageHardwareManager {
         }
 
         try {
-            if (isSupportedAIDL(feature)) {
-                IBinder b = mAIDLMap.get(feature);
+            final IBinder b = getAIDLBinder(feature);
+            if (b != null) {
                 switch (feature) {
                     case FEATURE_ADAPTIVE_BACKLIGHT:
                         return IAdaptiveBacklight.Stub.asInterface(b).getEnabled();
@@ -386,7 +416,8 @@ public final class LineageHardwareManager {
             } else if (checkService()) {
                 return sService.get(feature);
             }
-        } catch (Exception e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("get(0x" + Integer.toHexString(feature) + ")", e);
         }
         return false;
     }
@@ -407,8 +438,8 @@ public final class LineageHardwareManager {
         }
 
         try {
-            if (isSupportedAIDL(feature)) {
-                IBinder b = mAIDLMap.get(feature);
+            final IBinder b = getAIDLBinder(feature);
+            if (b != null) {
                 switch (feature) {
                     case FEATURE_ADAPTIVE_BACKLIGHT:
                         IAdaptiveBacklight.Stub.asInterface(b).setEnabled(enable);
@@ -448,7 +479,8 @@ public final class LineageHardwareManager {
             } else if (checkService()) {
                 return sService.set(feature, enable);
             }
-        } catch (Exception e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("set(0x" + Integer.toHexString(feature) + ", " + enable + ")", e);
         }
         return false;
     }
@@ -482,18 +514,22 @@ public final class LineageHardwareManager {
      */
     public static final int COLOR_CALIBRATION_MAX_INDEX = 4;
 
+    private IDisplayColorCalibration getDisplayColorCalibrationHal() {
+        final IBinder b = getAIDLBinder(FEATURE_DISPLAY_COLOR_CALIBRATION);
+        return b != null ? IDisplayColorCalibration.Stub.asInterface(b) : null;
+    }
+
     private int[] getDisplayColorCalibrationArray() {
         try {
-            if (isSupportedAIDL(FEATURE_DISPLAY_COLOR_CALIBRATION)) {
-                IDisplayColorCalibration displayColorCalibration =
-                        IDisplayColorCalibration.Stub.asInterface(
-                                mAIDLMap.get(FEATURE_DISPLAY_COLOR_CALIBRATION));
-                return displayColorCalibration.getCalibration();
+            final IDisplayColorCalibration hal = getDisplayColorCalibrationHal();
+            if (hal != null) {
+                return hal.getCalibration();
             }
             if (checkService()) {
                 return sService.getDisplayColorCalibration();
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getDisplayColorCalibration", e);
         }
         return null;
     }
@@ -513,13 +549,12 @@ public final class LineageHardwareManager {
      * @return The minimum value for all colors
      */
     public int getDisplayColorCalibrationMin() {
-        if (isSupportedAIDL(FEATURE_DISPLAY_COLOR_CALIBRATION)) {
-            IDisplayColorCalibration displayColorCalibration =
-                    IDisplayColorCalibration.Stub.asInterface(
-                            mAIDLMap.get(FEATURE_DISPLAY_COLOR_CALIBRATION));
+        final IDisplayColorCalibration hal = getDisplayColorCalibrationHal();
+        if (hal != null) {
             try {
-                return displayColorCalibration.getMinValue();
-            } catch (RemoteException e) {
+                return hal.getMinValue();
+            } catch (RemoteException | RuntimeException e) {
+                logHalError("getDisplayColorCalibrationMin", e);
                 return 0;
             }
         }
@@ -531,13 +566,12 @@ public final class LineageHardwareManager {
      * @return The maximum value for all colors
      */
     public int getDisplayColorCalibrationMax() {
-        if (isSupportedAIDL(FEATURE_DISPLAY_COLOR_CALIBRATION)) {
-            IDisplayColorCalibration displayColorCalibration =
-                    IDisplayColorCalibration.Stub.asInterface(
-                            mAIDLMap.get(FEATURE_DISPLAY_COLOR_CALIBRATION));
+        final IDisplayColorCalibration hal = getDisplayColorCalibrationHal();
+        if (hal != null) {
             try {
-                return displayColorCalibration.getMaxValue();
-            } catch (RemoteException e) {
+                return hal.getMaxValue();
+            } catch (RemoteException | RuntimeException e) {
+                logHalError("getDisplayColorCalibrationMax", e);
                 return 0;
             }
         }
@@ -555,20 +589,27 @@ public final class LineageHardwareManager {
      * @return true on success, false otherwise.
      */
     public boolean setDisplayColorCalibration(int[] rgb) {
+        if (rgb == null || rgb.length < 3) {
+            return false;
+        }
         try {
-            if (isSupportedAIDL(FEATURE_DISPLAY_COLOR_CALIBRATION)) {
-                IDisplayColorCalibration displayColorCalibration =
-                        IDisplayColorCalibration.Stub.asInterface(
-                                mAIDLMap.get(FEATURE_DISPLAY_COLOR_CALIBRATION));
-                displayColorCalibration.setCalibration(rgb);
+            final IDisplayColorCalibration hal = getDisplayColorCalibrationHal();
+            if (hal != null) {
+                hal.setCalibration(rgb);
                 return true;
             }
             if (checkService()) {
                 return sService.setDisplayColorCalibration(rgb);
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("setDisplayColorCalibration", e);
         }
         return false;
+    }
+
+    private IDisplayModes getDisplayModesHal() {
+        final IBinder b = getAIDLBinder(FEATURE_DISPLAY_MODES);
+        return b != null ? IDisplayModes.Stub.asInterface(b) : null;
     }
 
     /**
@@ -577,25 +618,24 @@ public final class LineageHardwareManager {
     public DisplayMode[] getDisplayModes() {
         DisplayMode[] modes = null;
         try {
-            if (isSupportedAIDL(FEATURE_DISPLAY_MODES)) {
-                IDisplayModes displayModes =
-                        IDisplayModes.Stub.asInterface(mAIDLMap.get(FEATURE_DISPLAY_MODES));
-                modes = AIDLHelper.fromAIDLModes(displayModes.getDisplayModes());
+            final IDisplayModes hal = getDisplayModesHal();
+            if (hal != null) {
+                modes = AIDLHelper.fromAIDLModes(hal.getDisplayModes());
             }
-        } catch (RemoteException e) {
-        } finally {
-            if (modes == null) {
-                return null;
-            }
-            final ArrayList<DisplayMode> remapped = new ArrayList<DisplayMode>();
-            for (DisplayMode mode : modes) {
-                DisplayMode r = remapDisplayMode(mode);
-                if (r != null) {
-                    remapped.add(r);
-                }
-            }
-            return remapped.toArray(new DisplayMode[0]);
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getDisplayModes", e);
         }
+        if (modes == null) {
+            return null;
+        }
+        final ArrayList<DisplayMode> remapped = new ArrayList<DisplayMode>();
+        for (DisplayMode mode : modes) {
+            DisplayMode r = remapDisplayMode(mode);
+            if (r != null) {
+                remapped.add(r);
+            }
+        }
+        return remapped.toArray(new DisplayMode[0]);
     }
 
     /**
@@ -604,15 +644,14 @@ public final class LineageHardwareManager {
     public DisplayMode getCurrentDisplayMode() {
         DisplayMode mode = null;
         try {
-            if (isSupportedAIDL(FEATURE_DISPLAY_MODES)) {
-                IDisplayModes displayModes =
-                        IDisplayModes.Stub.asInterface(mAIDLMap.get(FEATURE_DISPLAY_MODES));
-                mode = AIDLHelper.fromAIDLMode(displayModes.getCurrentDisplayMode());
+            final IDisplayModes hal = getDisplayModesHal();
+            if (hal != null) {
+                mode = AIDLHelper.fromAIDLMode(hal.getCurrentDisplayMode());
             }
-        } catch (RemoteException e) {
-        } finally {
-            return mode != null ? remapDisplayMode(mode) : null;
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getCurrentDisplayMode", e);
         }
+        return remapDisplayMode(mode);
     }
 
     /**
@@ -621,29 +660,31 @@ public final class LineageHardwareManager {
     public DisplayMode getDefaultDisplayMode() {
         DisplayMode mode = null;
         try {
-            if (isSupportedAIDL(FEATURE_DISPLAY_MODES)) {
-                IDisplayModes displayModes =
-                        IDisplayModes.Stub.asInterface(mAIDLMap.get(FEATURE_DISPLAY_MODES));
-                mode = AIDLHelper.fromAIDLMode(displayModes.getDefaultDisplayMode());
+            final IDisplayModes hal = getDisplayModesHal();
+            if (hal != null) {
+                mode = AIDLHelper.fromAIDLMode(hal.getDefaultDisplayMode());
             }
-        } catch (RemoteException e) {
-        } finally {
-            return mode != null ? remapDisplayMode(mode) : null;
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getDefaultDisplayMode", e);
         }
+        return remapDisplayMode(mode);
     }
 
     /**
      * @return true if setting the mode was successful
      */
     public boolean setDisplayMode(DisplayMode mode, boolean makeDefault) {
+        if (mode == null) {
+            return false;
+        }
         try {
-            if (isSupportedAIDL(FEATURE_DISPLAY_MODES)) {
-                IDisplayModes displayModes =
-                        IDisplayModes.Stub.asInterface(mAIDLMap.get(FEATURE_DISPLAY_MODES));
-                displayModes.setDisplayMode(mode.id, makeDefault);
+            final IDisplayModes hal = getDisplayModesHal();
+            if (hal != null) {
+                hal.setDisplayMode(mode.id, makeDefault);
                 return true;
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("setDisplayMode(" + mode.id + ")", e);
         }
         return false;
     }
@@ -661,17 +702,26 @@ public final class LineageHardwareManager {
         return null;
     }
 
+    private IColorBalance getColorBalanceHal() {
+        final IBinder b = getAIDLBinder(FEATURE_COLOR_BALANCE);
+        return b != null ? IColorBalance.Stub.asInterface(b) : null;
+    }
+
     /**
      * @return the available range for color temperature adjustments
      */
     public Range<Integer> getColorBalanceRange() {
         try {
-            if (isSupportedAIDL(FEATURE_COLOR_BALANCE)) {
-                IColorBalance colorBalance =
-                        IColorBalance.Stub.asInterface(mAIDLMap.get(FEATURE_COLOR_BALANCE));
-                return AIDLHelper.fromAIDLRange(colorBalance.getColorBalanceRange());
+            final IColorBalance hal = getColorBalanceHal();
+            if (hal != null) {
+                final Range<Integer> range =
+                        AIDLHelper.fromAIDLRange(hal.getColorBalanceRange());
+                if (range != null) {
+                    return range;
+                }
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getColorBalanceRange", e);
         }
         return new Range<Integer>(0, 0);
     }
@@ -681,12 +731,12 @@ public final class LineageHardwareManager {
      */
     public int getColorBalance() {
         try {
-            if (isSupportedAIDL(FEATURE_COLOR_BALANCE)) {
-                IColorBalance colorBalance =
-                        IColorBalance.Stub.asInterface(mAIDLMap.get(FEATURE_COLOR_BALANCE));
-                return colorBalance.getColorBalance();
+            final IColorBalance hal = getColorBalanceHal();
+            if (hal != null) {
+                return hal.getColorBalance();
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getColorBalance", e);
         }
         return 0;
     }
@@ -700,15 +750,20 @@ public final class LineageHardwareManager {
      */
     public boolean setColorBalance(int value) {
         try {
-            if (isSupportedAIDL(FEATURE_COLOR_BALANCE)) {
-                IColorBalance colorBalance =
-                        IColorBalance.Stub.asInterface(mAIDLMap.get(FEATURE_COLOR_BALANCE));
-                colorBalance.setColorBalance(value);
+            final IColorBalance hal = getColorBalanceHal();
+            if (hal != null) {
+                hal.setColorBalance(value);
                 return true;
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("setColorBalance(" + value + ")", e);
         }
         return false;
+    }
+
+    private IPictureAdjustment getPictureAdjustmentHal() {
+        final IBinder b = getAIDLBinder(FEATURE_PICTURE_ADJUSTMENT);
+        return b != null ? IPictureAdjustment.Stub.asInterface(b) : null;
     }
 
     /**
@@ -718,12 +773,12 @@ public final class LineageHardwareManager {
      */
     public HSIC getPictureAdjustment() {
         try {
-            if (isSupportedAIDL(FEATURE_PICTURE_ADJUSTMENT)) {
-                IPictureAdjustment pictureAdjustment = IPictureAdjustment.Stub.asInterface(
-                        mAIDLMap.get(FEATURE_PICTURE_ADJUSTMENT));
-                return AIDLHelper.fromAIDLHSIC(pictureAdjustment.getPictureAdjustment());
+            final IPictureAdjustment hal = getPictureAdjustmentHal();
+            if (hal != null) {
+                return AIDLHelper.fromAIDLHSIC(hal.getPictureAdjustment());
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getPictureAdjustment", e);
         }
         return null;
     }
@@ -735,12 +790,12 @@ public final class LineageHardwareManager {
      */
     public HSIC getDefaultPictureAdjustment() {
         try {
-            if (isSupportedAIDL(FEATURE_PICTURE_ADJUSTMENT)) {
-                IPictureAdjustment pictureAdjustment = IPictureAdjustment.Stub.asInterface(
-                        mAIDLMap.get(FEATURE_PICTURE_ADJUSTMENT));
-                return AIDLHelper.fromAIDLHSIC(pictureAdjustment.getDefaultPictureAdjustment());
+            final IPictureAdjustment hal = getPictureAdjustmentHal();
+            if (hal != null) {
+                return AIDLHelper.fromAIDLHSIC(hal.getDefaultPictureAdjustment());
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getDefaultPictureAdjustment", e);
         }
         return null;
     }
@@ -752,14 +807,17 @@ public final class LineageHardwareManager {
      * @return true if success
      */
     public boolean setPictureAdjustment(final HSIC hsic) {
+        if (hsic == null) {
+            return false;
+        }
         try {
-            if (isSupportedAIDL(FEATURE_PICTURE_ADJUSTMENT)) {
-                IPictureAdjustment pictureAdjustment = IPictureAdjustment.Stub.asInterface(
-                        mAIDLMap.get(FEATURE_PICTURE_ADJUSTMENT));
-                pictureAdjustment.setPictureAdjustment(AIDLHelper.toAIDLHSIC(hsic));
+            final IPictureAdjustment hal = getPictureAdjustmentHal();
+            if (hal != null) {
+                hal.setPictureAdjustment(AIDLHelper.toAIDLHSIC(hsic));
                 return true;
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("setPictureAdjustment", e);
         }
         return false;
     }
@@ -767,21 +825,25 @@ public final class LineageHardwareManager {
     /**
      * Get a list of ranges valid for picture adjustment.
      *
-     * @return range list
+     * @return range list, or null if unsupported or the HAL rejected any range query
      */
     public List<Range<Float>> getPictureAdjustmentRanges() {
         try {
-            if (isSupportedAIDL(FEATURE_PICTURE_ADJUSTMENT)) {
-                IPictureAdjustment pictureAdjustment = IPictureAdjustment.Stub.asInterface(
-                        mAIDLMap.get(FEATURE_PICTURE_ADJUSTMENT));
-                return Arrays.asList(
-                        AIDLHelper.fromAIDLRange(pictureAdjustment.getHueRange()),
-                        AIDLHelper.fromAIDLRange(pictureAdjustment.getSaturationRange()),
-                        AIDLHelper.fromAIDLRange(pictureAdjustment.getIntensityRange()),
-                        AIDLHelper.fromAIDLRange(pictureAdjustment.getContrastRange()),
-                        AIDLHelper.fromAIDLRange(pictureAdjustment.getSaturationThresholdRange()));
+            final IPictureAdjustment hal = getPictureAdjustmentHal();
+            if (hal != null) {
+                // Some HALs advertise IPictureAdjustment but answer these with
+                // EX_UNSUPPORTED_OPERATION (-> UnsupportedOperationException). That used to
+                // escape to LiveDisplayService and crash system_server at boot.
+                final List<Range<Float>> ranges = Arrays.asList(
+                        AIDLHelper.fromAIDLRange(hal.getHueRange()),
+                        AIDLHelper.fromAIDLRange(hal.getSaturationRange()),
+                        AIDLHelper.fromAIDLRange(hal.getIntensityRange()),
+                        AIDLHelper.fromAIDLRange(hal.getContrastRange()),
+                        AIDLHelper.fromAIDLRange(hal.getSaturationThresholdRange()));
+                return ranges.contains(null) ? null : ranges;
             }
-        } catch (RemoteException e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getPictureAdjustmentRanges", e);
         }
         return null;
     }
@@ -791,12 +853,13 @@ public final class LineageHardwareManager {
      */
     public TouchscreenGesture[] getTouchscreenGestures() {
         try {
-            if (isSupportedAIDL(FEATURE_TOUCHSCREEN_GESTURES)) {
-                ITouchscreenGesture touchscreenGesture = ITouchscreenGesture.Stub.asInterface(
-                        mAIDLMap.get(FEATURE_TOUCHSCREEN_GESTURES));
+            final IBinder b = getAIDLBinder(FEATURE_TOUCHSCREEN_GESTURES);
+            if (b != null) {
+                ITouchscreenGesture touchscreenGesture = ITouchscreenGesture.Stub.asInterface(b);
                 return AIDLHelper.fromAIDLGestures(touchscreenGesture.getSupportedGestures());
             }
-        } catch (Exception e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("getTouchscreenGestures", e);
         }
         return null;
     }
@@ -806,14 +869,18 @@ public final class LineageHardwareManager {
      */
     public boolean setTouchscreenGestureEnabled(
             TouchscreenGesture gesture, boolean state) {
+        if (gesture == null) {
+            return false;
+        }
         try {
-            if (isSupportedAIDL(FEATURE_TOUCHSCREEN_GESTURES)) {
-                ITouchscreenGesture touchscreenGesture = ITouchscreenGesture.Stub.asInterface(
-                        mAIDLMap.get(FEATURE_TOUCHSCREEN_GESTURES));
+            final IBinder b = getAIDLBinder(FEATURE_TOUCHSCREEN_GESTURES);
+            if (b != null) {
+                ITouchscreenGesture touchscreenGesture = ITouchscreenGesture.Stub.asInterface(b);
                 touchscreenGesture.setGestureEnabled(AIDLHelper.toAIDLGesture(gesture), state);
                 return true;
             }
-        } catch (Exception e) {
+        } catch (RemoteException | RuntimeException e) {
+            logHalError("setTouchscreenGestureEnabled(" + gesture.id + ")", e);
         }
         return false;
     }

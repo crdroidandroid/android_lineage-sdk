@@ -6,6 +6,7 @@
 
 package lineageos.providers;
 
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.IContentProvider;
 import android.database.Cursor;
@@ -374,12 +375,19 @@ public final class LineageSettings {
             new InclusiveIntegerRangeValidator(0, 86400);
 
     private static final Validator sHardwareKeyActionvalidator =
-            new InclusiveIntegerRangeValidator(0, 22);
+            new InclusiveIntegerRangeValidator(0, 23);
 
     private static final Validator sAlwaysTrueValidator = new Validator() {
         @Override
         public boolean validate(String value) {
             return true;
+        }
+    };
+
+    private static final Validator sComponentNameOrEmptyValidator = new Validator() {
+        @Override
+        public boolean validate(String value) {
+            return TextUtils.isEmpty(value) || ComponentName.unflattenFromString(value) != null;
         }
     };
 
@@ -1101,6 +1109,7 @@ public final class LineageSettings {
          * 20 - Power menu
          * 21 - Contextual search (Circle to Search)
          * 22 - Silence incoming call
+         * 23 - Open app or app shortcut (see KEY_ACTION_LAUNCH_APP_SUFFIX)
          */
         public static final String KEY_HOME_LONG_PRESS_ACTION = "key_home_long_press_action";
 
@@ -1282,6 +1291,42 @@ public final class LineageSettings {
         /** @hide */
         public static final Validator KEY_THREE_FINGERS_SWIPE_ACTION_VALIDATOR =
                 sHardwareKeyActionvalidator;
+
+        /**
+         * Suffix appended to a key action setting (one of KEY_ACTION_SETTINGS) to get the
+         * setting holding the app opened when that action is "Open app".
+         * The value is a flattened ComponentName of a launcher activity.
+         * @hide
+         */
+        public static final String KEY_ACTION_LAUNCH_APP_SUFFIX = "_launch_app";
+
+        /**
+         * Suffix appended to a key action setting (one of KEY_ACTION_SETTINGS) to get the
+         * setting holding the id of the app shortcut opened when that action is "Open app".
+         * Empty or unset opens the app itself.
+         * @hide
+         */
+        public static final String KEY_ACTION_LAUNCH_SHORTCUT_SUFFIX = "_launch_shortcut";
+
+        /**
+         * All key and gesture action settings that take the values of KEY_HOME_LONG_PRESS_ACTION.
+         * @hide
+         */
+        public static final String[] KEY_ACTION_SETTINGS = new String[] {
+            KEY_HOME_LONG_PRESS_ACTION,
+            KEY_HOME_DOUBLE_TAP_ACTION,
+            KEY_BACK_LONG_PRESS_ACTION,
+            KEY_MENU_ACTION,
+            KEY_MENU_LONG_PRESS_ACTION,
+            KEY_ASSIST_ACTION,
+            KEY_ASSIST_LONG_PRESS_ACTION,
+            KEY_APP_SWITCH_ACTION,
+            KEY_APP_SWITCH_DOUBLE_TAP_ACTION,
+            KEY_APP_SWITCH_LONG_PRESS_ACTION,
+            KEY_CORNER_LONG_SWIPE_ACTION,
+            KEY_EDGE_LONG_SWIPE_ACTION,
+            KEY_THREE_FINGERS_SWIPE_ACTION,
+        };
 
         /**
          * Whether to wake the screen with the home key, the value is boolean.
@@ -2229,6 +2274,12 @@ public final class LineageSettings {
                     KEY_CORNER_LONG_SWIPE_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_EDGE_LONG_SWIPE_ACTION, KEY_EDGE_LONG_SWIPE_ACTION_VALIDATOR);
             VALIDATORS.put(KEY_THREE_FINGERS_SWIPE_ACTION, KEY_THREE_FINGERS_SWIPE_ACTION_VALIDATOR);
+            for (String setting : KEY_ACTION_SETTINGS) {
+                VALIDATORS.put(setting + KEY_ACTION_LAUNCH_APP_SUFFIX,
+                        sComponentNameOrEmptyValidator);
+                VALIDATORS.put(setting + KEY_ACTION_LAUNCH_SHORTCUT_SUFFIX,
+                        sAlwaysTrueValidator);
+            }
             VALIDATORS.put(HOME_WAKE_SCREEN, HOME_WAKE_SCREEN_VALIDATOR);
             VALIDATORS.put(ASSIST_WAKE_SCREEN, ASSIST_WAKE_SCREEN_VALIDATOR);
             VALIDATORS.put(APP_SWITCH_WAKE_SCREEN, APP_SWITCH_WAKE_SCREEN_VALIDATOR);

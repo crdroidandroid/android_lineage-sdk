@@ -37,7 +37,8 @@ public class DeviceKeysConstants {
         QS_PANEL,
         POWER_MENU,
         CONTEXTUAL_SEARCH,
-        SILENCE_CALL;
+        SILENCE_CALL,
+        LAUNCH_APP;
 
         public static Action fromIntSafe(int id) {
             if (id < NOTHING.ordinal() || id >= Action.values().length) {
@@ -50,6 +51,22 @@ public class DeviceKeysConstants {
             return fromIntSafe(LineageSettings.System.getIntForUser(cr,
                     setting, def.ordinal(), UserHandle.USER_CURRENT));
         }
+    }
+
+    /**
+     * Setting holding the app (flattened ComponentName) opened when the action stored in
+     * {@code actionSetting} is {@link Action#LAUNCH_APP}.
+     */
+    public static String getLaunchAppSetting(String actionSetting) {
+        return actionSetting + LineageSettings.System.KEY_ACTION_LAUNCH_APP_SUFFIX;
+    }
+
+    /**
+     * Setting holding the shortcut id opened when the action stored in {@code actionSetting}
+     * is {@link Action#LAUNCH_APP}. Empty or unset opens the app itself.
+     */
+    public static String getLaunchShortcutSetting(String actionSetting) {
+        return actionSetting + LineageSettings.System.KEY_ACTION_LAUNCH_SHORTCUT_SUFFIX;
     }
 
     // Masks for checking presence of hardware keys.

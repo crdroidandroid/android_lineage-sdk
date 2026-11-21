@@ -38,6 +38,15 @@ public class Intent {
             "lineageos.intent.action.SCREEN_CAMERA_GESTURE";
 
     /**
+     * Broadcast action: the user performed the Quick Tap gesture (double tap on the back of
+     * the device). The system then performs the action set in
+     * {@link lineageos.providers.LineageSettings.System#KEY_QUICK_TAP_ACTION}.
+     * This is a protected broadcast, only the system can send it.
+     */
+    public static final String ACTION_QUICK_TAP =
+            "lineageos.intent.action.QUICK_TAP";
+
+    /**
      * Broadcast action: perform any initialization required for LineageHW services.
      * Runs when the service receives the signal the device has booted, but
      * should happen before {@link android.content.Intent#ACTION_BOOT_COMPLETED}.

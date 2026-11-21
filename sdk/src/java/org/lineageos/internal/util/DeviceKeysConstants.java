@@ -53,6 +53,35 @@ public class DeviceKeysConstants {
         }
     }
 
+    /** Action of the Quick Tap gesture when KEY_QUICK_TAP_ACTION is unset. */
+    public static final Action QUICK_TAP_DEFAULT_ACTION = Action.SCREENSHOT;
+
+    /**
+     * Whether the Quick Tap gesture can perform {@code action} while the screen is off.
+     */
+    public static boolean canQuickTapRunWithScreenOff(Action action) {
+        switch (action) {
+            case PLAY_PAUSE_MUSIC:
+            case CYCLE_RINGER_MODE:
+            case TORCH:
+            case SILENCE_CALL:
+            case SLEEP:
+            case LAUNCH_CAMERA:
+            case POWER_MENU:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Whether the Quick Tap gesture wakes the screen before performing {@code action}
+     * while the screen is off.
+     */
+    public static boolean doesQuickTapWakeForAction(Action action) {
+        return action == Action.LAUNCH_CAMERA || action == Action.POWER_MENU;
+    }
+
     /**
      * Setting holding the app (flattened ComponentName) opened when the action stored in
      * {@code actionSetting} is {@link Action#LAUNCH_APP}.

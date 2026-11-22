@@ -47,6 +47,14 @@ public class Intent {
             "lineageos.intent.action.QUICK_TAP";
 
     /**
+     * Optional int extra for {@link #ACTION_QUICK_TAP}: the predefined
+     * VibrationEffect id the system plays once the action is performed
+     * (one of EFFECT_TICK, EFFECT_DOUBLE_CLICK or EFFECT_HEAVY_CLICK).
+     */
+    public static final String EXTRA_QUICK_TAP_HAPTIC_EFFECT =
+            "lineageos.intent.extra.QUICK_TAP_HAPTIC_EFFECT";
+
+    /**
      * Broadcast action: perform any initialization required for LineageHW services.
      * Runs when the service receives the signal the device has booted, but
      * should happen before {@link android.content.Intent#ACTION_BOOT_COMPLETED}.
